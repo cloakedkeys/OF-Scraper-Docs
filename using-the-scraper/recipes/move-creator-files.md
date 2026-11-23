@@ -4,7 +4,7 @@ description: Move a creator's files to the folder of their current username
 
 # Move a Creator's Files
 
-> ℹ️ **In releases after 3.17.1.** Not in 3.17.1 and earlier.
+> ℹ️ **Since 3.18.0.** Not in 3.17.1 and earlier.
 
 The full recipe is also in [MOVING\_FILES.md](https://github.com/cloakedkeys/OF-Scraper-Community/blob/main/MOVING_FILES.md).
 

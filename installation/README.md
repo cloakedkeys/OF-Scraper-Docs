@@ -57,7 +57,7 @@ To use [PostgreSQL](../page/postgresql.md) instead of a database file per creato
 pip install "ofscraper-community[postgres]"
 ```
 
-The extra needs a release after 3.17.1; before one is out, use the GitHub install on the [PostgreSQL page](../page/postgresql.md#what-you-need).
+The extra needs 3.18.0 or later. See the [PostgreSQL page](../page/postgresql.md#what-you-need).
 
 > ℹ️ **Don't install `ofscraper` and `ofscraper-community` together with pip.** Both provide the `ofscraper` command, so they overwrite each other. Run `pip uninstall ofscraper` first. If you already have both, uninstall both and then install `ofscraper-community` again. `uv` and `pipx` keep each tool separate, so they don't have this problem.
 

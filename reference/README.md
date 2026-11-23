@@ -33,7 +33,7 @@ Set `file_options.save_location`, `dir_format` and `file_format` in [config.json
 See the [default folder layout](how-it-works.md#default-folder-layout).
 
 **Downloads are slow or keep getting rate-limited.**
-The retry and wait times are in [Rate-limit and backoff settings](env.md#rate-limit-and-backoff-settings).
+The retry and wait times are in [Network, retries and rate limits](env.md#network-retries-and-rate-limits).
 
 **What does this fork add?**
 See [Fork Changes](../fork-changes.md), or the short list in [Features added since 3.14.7](how-it-works.md#features-added-since-3.14.7).

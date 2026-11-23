@@ -4,7 +4,7 @@ description: What this fork changes compared with upstream OF-Scraper
 
 # Fork Changes
 
-These docs cover **cloakedkeys/OF-Scraper-Community**. Its releases start at **3.15.0**, and this page lists what changed from 3.14.7 through **3.17.1**. Upstream [datawhores/OF-Scraper](https://github.com/datawhores/OF-Scraper) now takes these changes too.
+These docs cover **cloakedkeys/OF-Scraper-Community**. Its releases start at **3.15.0**, and this page lists what changed from 3.14.7 through **3.18.0**. Upstream [datawhores/OF-Scraper](https://github.com/datawhores/OF-Scraper) now takes these changes too.
 
 > ℹ️ **`ofscraper` 3.14.7 and older on PyPI have none of the changes below.** Install `ofscraper-community`, or update `ofscraper`. See [Install](installation/).
 
@@ -34,6 +34,7 @@ These docs cover **cloakedkeys/OF-Scraper-Community**. Its releases start at **3
 * [Check table and creator picker (3.17.0)](#check-table-and-creator-picker-3.17.0)
 * [Settings, scans and labels (3.17.0)](#settings-scans-and-labels-3.17.0)
 * [Fansly links, rate limits and Python (3.17.1)](#fansly-links-rate-limits-and-python-3.17.1)
+* [PostgreSQL, renames and safer logins (3.18.0)](#postgresql-renames-and-safer-logins-3.18.0)
 * [Python](#python)
 * [Version check](#version-check)
 
@@ -211,6 +212,19 @@ See [Docker](installation/docker.md) for details.
 * **A Fansly link the CDN rejects** (403) is fetched again, up to 3 times, instead of failing the item. ([#537](https://github.com/cloakedkeys/OF-Scraper-Community/pull/537))
 * **The rate-limit backoff starts** when a minimum gap between requests is set, instead of staying at the gap after a 429. ([#535](https://github.com/cloakedkeys/OF-Scraper-Community/pull/535))
 * **Installing on a newer Python** gets the current release instead of an old one: there is no upper Python version limit any more. ([#533](https://github.com/cloakedkeys/OF-Scraper-Community/pull/533))
+
+## PostgreSQL, renames and safer logins (3.18.0)
+
+* **PostgreSQL (optional)** keeps every creator's data in one database instead of a `user_data.db` file per creator. See [PostgreSQL](page/postgresql.md). ([#612](https://github.com/cloakedkeys/OF-Scraper-Community/pull/612), [#614](https://github.com/cloakedkeys/OF-Scraper-Community/pull/614), [#641](https://github.com/cloakedkeys/OF-Scraper-Community/pull/641))
+* **`move_creator_files`** moves a creator's files to the folder for their current name. See [Move a Creator's Files](using-the-scraper/recipes/move-creator-files.md). ([#649](https://github.com/cloakedkeys/OF-Scraper-Community/pull/649))
+* **`--allow-dupes`** downloads media once for every post it's in. ([#588](https://github.com/cloakedkeys/OF-Scraper-Community/pull/588))
+* **The check table** shows Fansly profiles and has a Posts tab and a column picker. ([#577](https://github.com/cloakedkeys/OF-Scraper-Community/pull/577), [#545](https://github.com/cloakedkeys/OF-Scraper-Community/pull/545))
+* **Fansly scans** download while they run and stop once the rest is already downloaded. ([#561](https://github.com/cloakedkeys/OF-Scraper-Community/pull/561), [#562](https://github.com/cloakedkeys/OF-Scraper-Community/pull/562))
+* **Key mode defaults to `manual`.** The `cdrm` mode is deprecated, and with no cdrm server protected videos are skipped before download. ([#578](https://github.com/cloakedkeys/OF-Scraper-Community/pull/578), [#695](https://github.com/cloakedkeys/OF-Scraper-Community/pull/695))
+* **The archived folder is `Archived`**, capitalised like the other folders. ([#678](https://github.com/cloakedkeys/OF-Scraper-Community/pull/678))
+* **Your OnlyFans login** is only sent to OnlyFans' own media hosts, and cookies and your home folder are hidden in logs. ([#586](https://github.com/cloakedkeys/OF-Scraper-Community/pull/586), [#601](https://github.com/cloakedkeys/OF-Scraper-Community/pull/601))
+* **Config files** are read whatever their encoding, and options that did nothing now work: `-fi`, `OFSC_INCLUDE_LABELS_ALL`, `FILTER_SELF_MEDIA=False` and `remove_hash_match`. ([#694](https://github.com/cloakedkeys/OF-Scraper-Community/pull/694), [#685](https://github.com/cloakedkeys/OF-Scraper-Community/pull/685), [#682](https://github.com/cloakedkeys/OF-Scraper-Community/pull/682), [#630](https://github.com/cloakedkeys/OF-Scraper-Community/pull/630), [#619](https://github.com/cloakedkeys/OF-Scraper-Community/pull/619))
+* **Hooks for add-ons** such as the GUI patch. See [Hooks for add-ons](reference/hooks.md). ([#593](https://github.com/cloakedkeys/OF-Scraper-Community/pull/593), [#669](https://github.com/cloakedkeys/OF-Scraper-Community/pull/669))
 
 ## Python
 

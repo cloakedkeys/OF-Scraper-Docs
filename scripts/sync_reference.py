@@ -27,6 +27,10 @@ PAGES = ["README.md", "how-it-works.md", *GENERATED]
 
 # An HTML comment, so it warns anyone editing the file without showing on the site.
 NOTE = (
+    "---\n"
+    "layout:\n"
+    "  width: wide\n"
+    "---\n\n"
     "<!-- Copied from the fork's reference/ folder. Don't edit by hand: "
     "edit the fork and run scripts/sync_reference.py. -->\n"
 )

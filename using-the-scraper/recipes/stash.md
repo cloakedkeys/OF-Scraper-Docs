@@ -66,7 +66,7 @@ A few of the missing paths are listed under `not_in_stash_sample`.
 | Option | Use |
 |---|---|
 | `--apply` | Write to Stash; without it, nothing is created or changed |
-| `--postgres` | *(In releases after 3.17.1.)* Read the PostgreSQL database `$OFSC_DATABASE_URL` names instead of `user_data.db` files; give no paths with it |
+| `--postgres` | *(Since 3.18.0.)* Read the PostgreSQL database `$OFSC_DATABASE_URL` names instead of `user_data.db` files; give no paths with it |
 | `--site`, `--creator` | With `--postgres`: sync one site (`onlyfans` or `fansly`), or only creators matching an ID or username (repeatable) |
 | `--scan` | With `--apply`, have Stash scan the download folders first and wait for it |
 | `--url` | Stash's GraphQL address (default `http://localhost:9999/graphql`, or `$STASH_URL`) |

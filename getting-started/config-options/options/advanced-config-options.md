@@ -149,7 +149,7 @@ The default blacklist used during username scans.
 
 ## database\_url
 
-In releases after 3.17.1. Not a setting: it only says that the PostgreSQL address is set with the `OFSC_DATABASE_URL` environment variable, which is kept out of `config.json` because it holds a password. Anything written here is ignored and replaced, with a warning. See [PostgreSQL](../../../page/postgresql.md).
+Since 3.18.0. Not a setting: it only says that the PostgreSQL address is set with the `OFSC_DATABASE_URL` environment variable, which is kept out of `config.json` because it holds a password. Anything written here is ignored and replaced, with a warning. See [PostgreSQL](../../../page/postgresql.md).
 
 ***
 

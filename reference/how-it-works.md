@@ -89,8 +89,8 @@ The old `ofscraper` package (3.14.7) and its docs don't have these:
 - **`stash_sync`** (`python -m ofscraper.commands.stash_sync`): copies the OnlyFans and Fansly details of downloaded files into Stash. See `STASH.md`.
 - **`scripts/creator_names.py`**: lists and records the usernames a creator account has had.
 - **`move_creator_files`** (`python -m ofscraper.commands.move_creator_files`): moves a creator's downloaded files to the folder of their current name and updates the recorded folders. See `MOVING_FILES.md`.
-- **PostgreSQL** (`OFSC_DATABASE_URL`, after 3.17.1): keeps the database in one PostgreSQL database, not in a SQLite file per creator. `postgres_import` and `postgres_export` move the rows between the two. See [PostgreSQL](../page/postgresql.md).
-- **Hooks for add-ons** (after 3.17.1): functions and events that code such as the GUI patch can use. See [hooks.md](hooks.md).
+- **PostgreSQL** (`OFSC_DATABASE_URL`, since 3.18.0): keeps the database in one PostgreSQL database, not in a SQLite file per creator. `postgres_import` and `postgres_export` move the rows between the two. See [PostgreSQL](../page/postgresql.md).
+- **Hooks for add-ons** (since 3.18.0): functions and events that code such as the GUI patch can use. See [hooks.md](hooks.md).
 - **`OF_READ_TIMEOUT`**: a default read timeout for requests.
 - **`LABELS_CONCURRENCY`**: a concurrency default for label scans.
 - **Behaviour changes** listed in the release notes. For example, `--before` and `--after` accept `MM/DD/YYYY` and relative dates, a failed run exits with status 1, and command-line mistakes print a usage message.

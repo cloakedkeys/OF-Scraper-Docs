@@ -8,7 +8,7 @@ By default OF-Scraper keeps one SQLite file (`user_data.db`) per creator. Nothin
 
 As an option, it can keep every creator's rows in one PostgreSQL database instead. That is useful if you want one place to query and back up, or you run the scraper from more than one machine against the same library.
 
-> ℹ️ **In releases after 3.17.1.** Before such a release is out, install from GitHub (see below).
+> ℹ️ **Since 3.18.0.**
 
 This page covers what you need to use it. [POSTGRESQL.md](https://github.com/cloakedkeys/OF-Scraper-Community/blob/main/POSTGRESQL.md) in the fork has every detail.
 
@@ -18,7 +18,7 @@ This page covers what you need to use it. [POSTGRESQL.md](https://github.com/clo
 
 * A PostgreSQL server, version 15 or newer, and a database on it that the scraper's login may create tables in.
 * The PostgreSQL driver:
-  * **pip:** `pip install "ofscraper-community[postgres]"`, in releases after 3.17.1. Before such a release is out, install from GitHub: `pip install "ofscraper-community[postgres] @ git+https://github.com/cloakedkeys/OF-Scraper-Community"`.
+  * **pip:** `pip install "ofscraper-community[postgres]"`.
   * **Docker:** the image already includes it.
   * **Binary releases** (the `.exe` and the other single files) don't include it. Use the pip or Docker install.
 

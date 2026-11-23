@@ -1,10 +1,15 @@
+---
+layout:
+  width: wide
+---
+
 <!-- Copied by hand from the fork's reference/hooks.md. Don't edit by hand here: change it in the fork first, then copy it over. -->
 
 # Hooks for add-ons
 
 Code that runs in the same process as the scraper, such as the GUI patch or a plugin, can use the functions and events on this page instead of shipping changed copies of the scraper's files. Each entry gives the module, how to call it, what it gives back, and, where it matters, how it behaves with PostgreSQL on. The [GUI patch migration map](#gui-patch-migration-map) at the end says which part of the GUI patch's copied files each one can replace.
 
-> ℹ️ **In releases after 3.17.1.** Check an entry against the code before relying on it.
+> ℹ️ **Since 3.18.0.** Check an entry against the code before relying on it.
 
 ## Contents
 
@@ -25,7 +30,7 @@ Code that runs in the same process as the scraper, such as the GUI patch or a pl
 | [`stop.request()` / `stop.clear()`](#stopping-downloads) | `ofscraper.commands.scraper.actions.download.stop` | sync code, any thread | stop running downloads and post fetches |
 | [`gather_rows(command)`](#gather_rows-command) | `ofscraper.commands.check` | worker thread with no running loop | get check-table rows without the Textual table |
 | [`reset_table_data()`](#gather_rows-command) | `ofscraper.commands.check` | sync code | forget the last scan's rows |
-| [`process_user_batch(...)`](#process_user_batch-username-model_id-media_list-post_list-row_list) | `ofscraper.commands.check` | worker thread with no running loop | download one creator's check-table rows |
+| [`process_user_batch(...)`](#process_user_batch) | `ofscraper.commands.check` | worker thread with no running loop | download one creator's check-table rows |
 | [`auth_status()`](#auth_status) | `ofscraper.data.api.init` | sync code | check the auth and say why it couldn't be checked |
 | [`check_auth(include_main_menu=False)`](#check_auth-include_main_menu-false) | `ofscraper.utils.checkers` | sync code | check the auth, prompting when it's rejected |
 | [`unavailable_message(e)`](#unavailable_message-e) | `ofscraper.data.api.init` | sync code | tell a network or server failure from an auth failure |
@@ -133,7 +138,9 @@ rows = gather_rows("post_check")
 
 **PostgreSQL:** the downloaded state and file names come from `get_media_post_files_downloaded`, so they come from PostgreSQL when it's on.
 
-### `process_user_batch(username, model_id, media_list, post_list, row_list)`
+### `process_user_batch`
+
+`process_user_batch(username, model_id, media_list, post_list, row_list)`
 
 **Module:** `ofscraper.commands.check` · **Execution:** sync, uses `@run` inside · **Returns:** a dict of the batch's totals
 
@@ -324,7 +331,7 @@ What each hook can replace in the GUI patch's copied files, and what the copies 
 | [Download events](#download-events) | the `plugin_manager.dispatch_event("on_item_downloaded", ...)` calls in its copies of `main_download.py` and `alt_download.py`, and the failure tracking and table-cell updates in its copy of `download/run.py` | a subscriber can make the same `dispatch_event` call with `ele` and `str(path)` |
 | [Stopping downloads](#stopping-downloads) | the `is_gui_cancelled()` checks in its copies of `download/run.py` and `downloadmanager.py` | |
 | [`gather_rows`](#gather_rows-command) | the `--gui` branches in its copy of `check.py` that skip the Textual table | its `gui_checker` can call `gather_rows`, then filter and normalise the rows as it does now. The patch's copy of `checkers.py` skips the auth prompt in GUI mode; the core doesn't. |
-| [`process_user_batch`](#process_user_batch-username-model_id-media_list-post_list-row_list) | its copy's `_process_user_batch`, which returns a stats dict with the same keys | the patch's `workflow.py` calls `_process_user_batch` and reads those keys |
+| [`process_user_batch`](#process_user_batch) | its copy's `_process_user_batch`, which returns a stats dict with the same keys | the patch's `workflow.py` calls `_process_user_batch` and reads those keys |
 | [`auth_status`](#auth_status) | the `last_unavailable_message` global in its copy of `data/api/init.py`, and the code in its copy of `utils/checkers.py` that reads it | that copy also returns without prompting in GUI mode, which the core doesn't do |
 | [`unavailable_message`](#unavailable_message-e) | its copy of the function in `data/api/init.py` | the copy lacks the proxy refusal (`aiohttp.ClientHttpProxyError`), certificate, aiohttp total-timeout, `aiohttp.ClientPayloadError` and `aiohttp.ContentTypeError` cases. The patch's `gui/utils/auth_errors.py` already imports it from `ofscraper.data.api.init`. |
 | [Dynamic rule fallback](#dynamic-rule-fallback) | the fallback in its copy of `utils/auth/request.py` (digitalcriminals, then riley) | the copy also reads `advanced_options.dynamic_rules_manual` and `dynamic_rules_url` from `config.json`. The core has no such keys; the `manual` and `generic` rules come from environment defaults (see [env.md](env.md)). |

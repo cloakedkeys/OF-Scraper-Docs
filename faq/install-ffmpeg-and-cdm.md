@@ -20,7 +20,7 @@ See [Binaries Options](../getting-started/config-options/binaries-options.md).
 
 <summary>Copying a path on Windows</summary>
 
-If Windows doesn't give you an easy way to copy a file path, you can use [Path Copy Copy](https://pathcopycopy.github.io/).
+Hold **Shift**, right-click `ffmpeg.exe`, and select **Copy as path** (on Windows 11, **Copy as path** is also in the normal right-click menu, or press `Ctrl+Shift+C`). OF-Scraper strips the surrounding quotes automatically.
 
 </details>
 

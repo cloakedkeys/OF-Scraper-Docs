@@ -118,7 +118,7 @@ ofscraper --action download --force-all
 * `--force-all` (`-e`, also `--dupe`, `--dupe-all`) downloads every file found, whatever the database says.
 * `--force-model-unique` (`-eq`, also `--dupe-model-unique`, `--dupe-model`) downloads only files whose media ID isn't in the database for the current creator.
 * `--redownload` (`-rd`, also `--re-download`) scans and downloads every file in the selected post types again. For the run it implies `--force-all`, `--after 2000` and a `--before` of tomorrow.
-* In releases after 3.17.1, `--allow-dupes` (`-ad`, also `--allow-dupe-downloads`; turn it off with `--no-allow-dupes`) downloads media that appears in several posts once for each post, instead of once. It's off by default (the `ALLOW_DUPE_MEDIA` setting) and works in every mode: main, `metadata`, `manual` and the `*_check` commands.
+* Since 3.18.0, `--allow-dupes` (`-ad`, also `--allow-dupe-downloads`; turn it off with `--no-allow-dupes`) downloads media that appears in several posts once for each post, instead of once. It's off by default (the `ALLOW_DUPE_MEDIA` setting) and works in every mode: main, `metadata`, `manual` and the `*_check` commands.
 
 ***
 
