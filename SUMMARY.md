@@ -1,8 +1,9 @@
 # Table of contents
 
 * [Welcome](README.md)
-* [Fork Changes](fork-changes.md)
-* [Fansly](fansly.md)
+
+## Setup
+
 * [Install](installation/README.md)
   * [Installing Prerequisites](installation/pre-install-guide/README.md)
   * [UV Install](installation/uv-install.md)
@@ -29,6 +30,11 @@
   * [Auth](getting-started/auth.md)
   * [Controlling Output/Logs](getting-started/controlling-output.md)
   * [Migrating from Digitalcriminal's script](getting-started/migrating-from-digitalcriminals-script.md)
+* [CDM Setup](cdm-options/README.md)
+  * [CDM issues](cdm-options/cdm-issues.md)
+
+## Guides
+
 * [Using the Scraper](using-the-scraper/README.md)
   * [Using Prompts](using-the-scraper/using-prompts/README.md)
   * [Username selection or Fuzzy Search](using-the-scraper/username-selection-or-fuzzy-search.md)
@@ -49,12 +55,13 @@
     * [Scripts](using-the-scraper/recipes/scripts.md)
 * [Content Check Modes](content-check-modes/README.md)
   * [Table Management](content-check-modes/table-management/README.md)
+* [Fansly](fansly.md)
 * [Metadata](page/README.md)
   * [Database Command](page/database-command.md)
   * [PostgreSQL](page/postgresql.md)
-* [CDM Setup](cdm-options/README.md)
-  * [CDM issues](cdm-options/cdm-issues.md)
-* [FAQ/Common Issues](faq/README.md)
+
+## Reference & Help
+
 * [Command Reference](command-reference/README.md)
 * [Technical Reference](reference/README.md)
   * [Command-line options](reference/cli.md)
@@ -65,3 +72,5 @@
   * [How settings and files work](reference/how-it-works.md)
   * [Hooks for add-ons](reference/hooks.md)
   * [Testing](reference/testing.md)
+* [FAQ/Common Issues](faq/README.md)
+* [Fork Changes](fork-changes.md)
