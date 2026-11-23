@@ -1,13 +1,9 @@
 # Multiple Actions
 
-{% hint style="info" %}
-**--post is a short hand for selecting both --like-area and --download-area**&#x20;
-{% endhint %}
+> ℹ️ `--posts` is shorthand for selecting both `--like-area` and `--download-area`.
 
-{% hint style="info" %}
-**--like-area and --download area have preference over --post**
-{% endhint %}
+> ℹ️ `--like-area` and `--download-area` take precedence over `--posts`.
 
-```
+```sh
 ofscraper --action like,download --like-area pinned --download-area timeline
 ```

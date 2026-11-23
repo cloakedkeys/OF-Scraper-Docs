@@ -4,193 +4,142 @@
 
 <figure><img src="../.gitbook/assets/image2.png" alt=""><figcaption></figcaption></figure>
 
-It scrapes data from OnlyFans.com, parsing the database to showcase content information via a generated table.&#x20;
+Content check mode scrapes data from OnlyFans.com and displays it in a searchable, filterable table. The check table is for OnlyFans only.
 
-Each media item occupies its own row within the table, which is searchable and offers filtering options. The table is comprehensive, containing various details for each entry
+Each media item gets its own row with details including:
 
-* price of content
-* Will try to show if media is in your library based on media id
-* If the media is unlocked
-* The post that a media is connected
+* Price of the content
+* Whether the media is in your library (based on media ID)
+* Whether the media is unlocked (a missing value shows as locked)
+* The post the media belongs to
 * Date the media was posted
-* text included with the media
-* Length of media
+* Text included with the media
+* Length of the media
 
+Check modes use caching to speed up runs. The cache is built during regular scraping or content check runs and lasts 3 days before refreshing. Pass `--force` to fetch fresh data immediately.
 
+***
 
-It utilizes caching to expedite processes.&#x20;
+## Opening it from the menu
 
-The cache is established either during regular scraping or when running in content check mode, persisting for a day before the program updates with fresh data. Additionally, you can employ '--force' to fetch the most recent information.
+Run `ofscraper`, choose **Perform Action(s)**, then **Browse and pick media (check table)**. Pick the creators as usual, then the table: **Posts**, **Messages**, **Paid**, or **Stories**.
+
+* While the media is fetched, the same page progress as a normal scrape is shown.
+* When you close the table, any downloads you sent from it finish, then you're back at the menu.
+* The menu uses the commands' defaults: a creator's saved post list when there is one, and for Posts the Timeline, Pinned, Archived, and Streams areas. To fetch a fresh list or pick other areas, use the commands below with `--force` or `--check-area`.
+* Settings the table changes don't carry over to the next run.
+
+See [Table Management](table-management/README.md) for picking and downloading media in the table.
 
 ***
 
 ## cmdline arguments
 
-###
-
 ### Post Check Mode
 
-This functionality is for reviewing posts on the main timeline or for paid content accessed through the post URL
+Review posts on the main timeline, or paid content accessed through a post URL:
 
-1. you must add the --url or --file argument
-2. You can combine the previous args
-3. \--url can be split by comma or passed multiple times
-4. \--file can only be passed once, and does not spit string will be interpreted as single url
+* Pass `--url` or `--file` (areas come from `--check-area`, default Timeline, Pinned, Archived, and Streams). You can combine both options.
+* `--url` splits on commas and spaces, and can be passed more than once.
+* `--file` can also be passed more than once, and every file is read; lines inside a file aren't split on commas.
 
 #### Examples
 
-`ofscraper post_check --url url,url,url`
-
-`ofscraper post_check --url url --url url`
-
-`ofscraper post_check --file file`
-
-`ofscraper post_check --file file --url url`
+```sh
+ofscraper post_check --url url1,url2,url3
+ofscraper post_check --url url1 --url url2
+ofscraper post_check --file file
+ofscraper post_check --file file --url url
+```
 
 #### File
 
-Should contain accepted urls line separated
+Put one accepted URL per line.
 
 #### Accepted urls
 
-**post page**
-
-```
-https://onlyfans.com/1113331313/model
-```
-
-**model page**
-
-```
-https://onlyfans.com/model
-```
-
-**model name**
-
-```
-model
-```
-
-**model number**
-
-```
-11131313
-```
-
-###
+| Type | Example |
+|---|---|
+| Post page | `https://onlyfans.com/1113331313/creator` |
+| Creator page | `https://onlyfans.com/creator` |
+| Creator name | `creator` |
+| Creator ID | `11131313` |
 
 ### Message Check Mode
 
-To avoid redundancy, the "check mode" is equivalent to "post\_check," differing only in the accepted types of posts.&#x20;
-
-When the cache expires all messages must be scraped again.
+Works like `post_check`, differing only in the accepted URL types. When the cache expires, all messages must be scraped again.
 
 #### Examples
 
-Again all the previous examples will work
+All of the `post_check` patterns work here too:
 
-`ofscraper msg_check --url url,url,url`
+```sh
+ofscraper msg_check --url url1,url2,url3
+```
 
 #### Accepted urls
 
-**chat page**
-
-```
-https://onlyfans.com/my/chats/chat/11131313/
-```
-
-**model name**
-
-```
-model
-```
-
-**model number**
-
-```
-11131313
-```
-
-###
+| Type | Example |
+|---|---|
+| Chat page | `https://onlyfans.com/my/chats/chat/11131313/` |
+| Creator name | `creator` |
+| Creator ID | `11131313` |
 
 ### Paid Check Mode
 
-It gathers paid content using the username provided
+Gathers paid content for the specified creators:
 
-1. you must add the --username or --file argument
-2. You can combine the previous args
-3. \--username can be split by comma or passed multiple times
-4. \--file can only be passed once, and does not spit string will be interpreted as single username
+* Pass `--username` or `--file` (you can combine both).
+* `--username` splits on commas and spaces, and can be passed more than once.
+* `--file` can also be passed more than once, and every file is read; lines inside a file aren't split on commas.
 
 #### Examples
 
-```
-ofscraper paid_check --username username,username
-```
-
-```
-ofscraper paid_check --username username --username username
-```
-
-```
+```sh
+ofscraper paid_check --username username1,username2
+ofscraper paid_check --username username1 --username username2
 ofscraper paid_check --file file
-```
-
-```
 ofscraper paid_check --file file --username username
 ```
 
 #### File
 
-Should contain usernames line separated
+Put one username per line.
 
 #### Accepted username
 
-**model name**
-
-```
-model
-```
-
-**model number**
-
-```
-11131313
-```
-
-###
+| Type | Example |
+|---|---|
+| Creator name | `creator` |
+| Creator ID | `11131313` |
 
 ### Story Check Mode
 
-It collects stories and highlights using the provided username
+Collects stories and highlights for the specified creators.
 
-> stories are temporary content and may change frequently
+> ℹ️ Stories are temporary content and may change frequently.
 
-1. you must add the --username or --file argument
-2. You can combine the previous args
-3. \--username can be split by comma or passed multiple times
-4. \--file can only be passed once, and does not spit string will be interpreted as single username
+* Pass `--username` or `--file` (you can combine both).
+* `--username` splits on commas and spaces, and can be passed more than once.
+* `--file` can also be passed more than once, and every file is read; lines inside a file aren't split on commas.
 
 #### Examples
 
-`ofscraper story_check --username username,username`
-
-`ofscraper story_check --username username --username username`
-
-`ofscraper story_check --file file`
-
-`ofscraper story_check --file file --username username`
+```sh
+ofscraper story_check --username username1,username2
+ofscraper story_check --username username1 --username username2
+ofscraper story_check --file file
+ofscraper story_check --file file --username username
+```
 
 #### File
 
-Should contain usernames line separated
-
-###
+Put one username per line.
 
 ### Getting latest content
 
-In each of these modes, details for each model are cached for 24 hours. To fetch the most recent content, append the "--force" argument to any of these modes.
+In each mode, creator data is cached (3 days for `msg_check`). Add `--force` to fetch the latest content:
 
-```
+```sh
 ofscraper msg_check --url url --force
 ```

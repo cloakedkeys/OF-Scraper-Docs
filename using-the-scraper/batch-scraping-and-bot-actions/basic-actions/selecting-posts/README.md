@@ -4,156 +4,144 @@
 
 ### By post type
 
-A comma-separated list indicating the posts from which you wish to download content.
+Pass a comma-separated list of post areas to download:
 
-```
- ofscraper --action download --posts highlights,timeline
-```
-
-multiple calls
-
-```
- ofscraper --action download --posts highlights --posts timeline
+```sh
+ofscraper --action download --posts highlights,timeline
 ```
 
-Duplicates will be removed
+Or repeat `--posts`:
+
+```sh
+ofscraper --action download --posts highlights --posts timeline
+```
+
+Duplicates are removed automatically.
 
 ### Options
 
-* profile
-* highlights
-* timeline
-* archived
-* stories
-* messages
-* purchased
-* pinned
-* labels
+* `profile`
+* `highlights`
+* `timeline`
+* `archived`
+* `stories`
+* `messages`
+* `purchased`
+* `pinned`
+* `streams`
+* `labels`
 
 #### Special Options
 
-* all (adding this option means scraping highlights,timeline,archived,stories,pinned,purchased and messages)
-* labels\* or labels+ (This means scraping all+labels)
+* `all`: scrapes `highlights`, `timeline`, `archived`, `stories`, `pinned`, `purchased`, `messages`, `profile`, and `streams` (labels require `labels`, `labels+`, or `labels*`)
+* `labels*` or `labels+`: scrapes `all` plus `labels`
 
 #### remove post type
 
-You can add remove a post type by prepending the type with a hyphen (-). This will remove any selection, including those from all
-
-
-
-
-
-
+Exclude a post type by prepending a hyphen (`-`), such as `-pinned`. This removes any selection, including from `all`. Hyphen exclusions only work with `--posts`, not with `--like-area` or `--download-area`.
 
 ***
 
 ## Bypass dupe check
 
-By default, content is stored in a database to prevent duplicate downloads. If you wish to download all available content for the current model, include the '--force-all' argument.
+By default, downloaded items are recorded in a database to prevent duplicate downloads. To download all available content for the current creator regardless, pass `--force-all`:
 
-```
+```sh
 ofscraper --action download --force-all
 ```
-
-
 
 ***
 
 ## Filter Post by Date
 
-{% hint style="info" %}
-**x should be a valid date**
-{% endhint %}
+> ℹ️ `X` must be a valid date.
 
 ### Before
 
-Filters  posts on or before the specified date. It functions for downloading, liking, and unliking posts.
+Filters posts on or before the specified date. Works for downloading, liking, and unliking posts:
 
-```
+```sh
 ofscraper --action download --before X
 ```
 
 ### After
 
-Filter  posts on or after the specified date. It functions for downloading, liking, and unliking posts.
+Filters posts on or after the specified date. Works for downloading, liking, and unliking posts:
 
-```
+```sh
 ofscraper --action download --after X
 ```
 
 ### **Valid Inputs**
 
-{% hint style="info" %}
-**Read arrow documentation/repo for all valid inputs**
-{% endhint %}
+> ℹ️ See the Arrow documentation for all supported input formats.
 
-`YYYY-MM-DD, YYYY-M-DD, YYYY-M-D, YYYY/MM/DD, YYYY/M/DD, YYYY/M/D, YYYY.MM.DD, YYYY.M.DD, YYYY.M.D, YYYYMMDD, YYYY-DDDD, YYYYDDDD, YYYY-MM, YYYY/MM, YYYY.MM, YYYY`
+`YYYY-MM-DD, YYYY-M-DD, YYYY-M-D, YYYY/MM/DD, YYYY/M/DD, YYYY/M/D, YYYY.MM.DD, YYYY.M.DD, YYYY.M.D, YYYYMMDD, YYYY-DDDD, YYYYDDDD, YYYY-MM, YYYY/MM, YYYY.MM, YYYY, MM/DD/YYYY, M/D/YYYY`
+
+`MM/DD/YYYY` and `M/D/YYYY` are accepted after the ISO formats, and the command-line help shows `MM/DD/YYYY` as the main format.
 
 ### Dehumanize Strings
 
-We can convert certain strings into dates. The general rules seem to be (number) (timeframe) (ago)
+Relative strings can be converted into dates using the form `<number> <timeframe> ago`.
 
-**timeframes**
+**Timeframes:**
 
-* week
-* month
-* year
-* second
-* day
+* `year`
+* `month`
+* `week`
+* `day`
+* `hour`
+* `minute`
+* `second`
 
-You can enhance granularity by including a comma. When utilizing debuggers, the output will display in UTC, offering greater detail.
+Combine multiple timeframes with a comma for finer precision (when using debuggers, output displays in UTC):
 
-```
+```text
 1 year ago, 1 month ago
 ```
-
-
 
 ***
 
 ## Filtering Timed Post (Promotional)
 
-skip all timed post
+Skip all timed posts:
 
-```
+```sh
 ofscraper --action download --skip-timed
 ```
 
 ### Filtering by text content
 
-This feature can accept regex patterns, but you might need to enclose the string in quotes to escape the input properly. Additionally, using a capital letter will initiate a case-sensitive search.
+Accepts regex patterns (enclose the pattern in quotes to escape it properly). Including a capital letter enables case-sensitive matching.
 
 #### Filter
 
-This will include only post that match the provided regex pattern
+Include only posts matching the regex pattern:
 
-```
-
+```sh
 ofscraper --action download --filter X
 ```
 
-#### Neg Filter:&#x20;
+#### Neg Filter:
 
-This will exclude any posts that match the provided regex pattern.
+Exclude posts matching the regex pattern (`--neg-filter` or `-nf`):
 
+```sh
+ofscraper --action download --neg-filter X
 ```
-ofscraper --action download --negfilter X
-```
-
-
 
 ***
 
 ## Search entire paid page
 
-This option is designed to manage situations like when a model account has been deleted
+Useful for situations such as when a creator's account has been deleted:
 
-```
+```sh
 ofscraper --action download --scrape-paid
 ```
 
-To exclusively scrape the paid page and skip other prompts
+To scrape only the paid page and skip other prompts:
 
-```
+```sh
 ofscraper --scrape-paid
 ```

@@ -1,58 +1,41 @@
 # Price Filtering/Sort
 
-{% hint style="warning" %}
-**Fallbacks are to utilized to enable easy sorting of list**
-{% endhint %}
-
-{% hint style="warning" %}
-**Fallbacks can be eliminated with proper filtering**
-{% endhint %}
+> ⚠️ **Fallbacks are used so lists can be sorted easily.** You can eliminate fallbacks with proper filtering.
 
 ***
 
 ## Current Price
 
-{% hint style="info" %}
-**Best used with    --active-subscription**
-{% endhint %}
+> ℹ️ Best used with `--active-subscription`.
 
 1. If there is an active subscription and its subscription price is available, use that price.
-2. If there is no active subscription or the subscription price is not available, check for active promotions with a "claimable" tag. Use the lowest subscription price among these promotions.
+2. If there is no active subscription or the subscription price isn't available, check for active promotions with a "claimable" tag and use the lowest subscription price among them.
 3. If no "claimable" promotions are available, use the regular subscription price.
-4. If none of the above methods provide a valid price, then 0 is used as a fallback
-
-
+4. If none of the above provide a valid price, fall back to `0`.
 
 ***
 
 ## _Renewal Price_
 
-{% hint style="info" %}
-**Best used with    --active-subscription**
-{% endhint %}
+> ℹ️ Best used with `--active-subscription`.
 
-1. Primary Source is the lowest claimable promotional subscription price.
+1. Use the lowest claimable promotional subscription price.
 2. If no "claimable" promotions are available, use the regular subscription price.
-3. If none of the above methods provide a valid price, then 0 is used as a fallback
+3. If none of the above provide a valid price, fall back to `0`.
 
 ***
 
 ## Regular Price
 
-1. Primary Source is the regular subscription price.
-2. If that is not available then, then 0 is used as a fallback
-
-
+1. Use the regular subscription price.
+2. If that isn't available, it stays empty (no fallback to `0`).
 
 ***
 
 ## Promo Price
 
-{% hint style="info" %}
-**Best used with  --promo-only  or --all-promo-only**
-{% endhint %}
+> ℹ️ Best used with `--promo-only` or `--all-promo-only`.
 
-1. Primary Source is the lowest promotional subscription price.
+1. Use the lowest promotional subscription price.
 2. If no promotions are available, use the regular subscription price.
-3. If none of the above methods provide a valid price, then 0 is used as a fallback
-
+3. If none of the above provide a valid price, fall back to `0`.

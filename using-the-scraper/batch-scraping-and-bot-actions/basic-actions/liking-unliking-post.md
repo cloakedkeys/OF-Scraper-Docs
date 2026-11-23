@@ -4,15 +4,13 @@
 
 ## Liking/Unliking content
 
-```
- ofscraper --action like
-```
-
-```
- ofscraper --action unlike
+```sh
+ofscraper --action like
 ```
 
-
+```sh
+ofscraper --action unlike
+```
 
 ***
 
@@ -20,47 +18,43 @@
 
 ### By post type
 
-A comma-separated list indicating the posts from which you wish to download content.
+Pass a comma-separated list of post areas to target:
 
-```
- ofscraper --action like --posts pinned,timeline
+```sh
+ofscraper --action like --posts pinned,timeline
 ```
 
-multiple calls
+Or repeat `--posts`:
 
-```
- ofscraper --action like --posts pinned --posts timeline
+```sh
+ofscraper --action like --posts pinned --posts timeline
 ```
 
 ### Options
 
-* timeline
-* archived
-* pinned
-* labels
+* `timeline`
+* `archived`
+* `pinned`
+* `streams`
+* `labels`
 
 #### Special Options
 
-* all (adding this option means scraping timeline,archived,,pinned)
-* labels\* or labels+ (This means scraping all+labels)
+* `all`: scrapes `timeline`, `archived`, `pinned`, and `streams`
+* `labels*` or `labels+`: scrapes `all` plus `labels`
 
 #### remove post type
 
-You can add remove a post type by prepending the type with a hyphen (-). This will override any other selection, including those from 'all'
+Exclude a post type by prepending a hyphen (`-`), such as `-pinned`. This overrides any other selection, including `all`. Hyphen exclusions only work with `--posts`, not with `--like-area` or `--download-area`.
 
 ## Limits
 
 ### Onlyfans rate limit
 
-estimated to be around 1000 per day
+Estimated to be around 1,000 per day.
 
 ### Limit in program
 
-* Each like/unlike requests will have a delay&#x20;
-* Which will prevent the program from just spamming likes to the onlyfans server, and prevent log outs
-* The limit is about a second, but is randomized
-
-
-
-
-
+* Each like/unlike request has a delay to avoid spamming the OnlyFans server and causing logouts.
+* The delay is randomised between `0.9` and `3.5` seconds by default.
+* If a like or unlike fails, the post is marked as failed.

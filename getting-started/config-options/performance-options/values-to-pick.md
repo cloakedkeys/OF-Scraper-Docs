@@ -2,15 +2,7 @@
 
 ## Note on values to pick
 
-### Threads
+### download_sems
 
-* It's recommended to use **0 to 3 threads** for downloads.
-  * **0 threads** means downloads will occur on the main program thread.
-* Using a combination of console debug (or higher log levels) and download progress bars might benefit from more threads.
-* However, in newer versions, the performance difference between different thread counts is usually minimal or non-existent.
-* It is recommended to log trace level to log file instead of adding more threads with console output
-
-### Sems
-
-* It's recommended to limit total downloads across all threads to **around 15**
-* This translates to **5 sems** if using 3 threads.
+* The default of 6 works for most setups
+* Raise it for big creators on a fast connection, lower it if you see timeouts

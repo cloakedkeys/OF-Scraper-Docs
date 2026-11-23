@@ -1,32 +1,30 @@
 ---
-description: >-
-  These options allow you to control how usernames are searched for and the
-  order in which users are processed during program actions
+description: Control how usernames are looked up and the order in which users are processed.
 ---
 
 # Advanced Search & Processing Options
 
-## Username Search Behavior
+## Username Search Behaviour
 
-These options control how usernames are searched for during program actions.
+These options control how usernames are looked up and processed during actions.
 
-### -uf, --users-first
+### -uf, --users-first (also `--user-first`, `--usersfirst`, `--userfirst`)
 
-* **Prioritizes:** Downloading posts by scraping all users at once instead of one at a time.
-* **Effect:** This allows for gathering all required data before downloading or processing metadata
-* **Default:** `False` (users are processed one by one)
+* **Prioritises:** Scrapes all users first instead of processing them one at a time.
+* **Effect:** Gathers all required data before downloading or processing metadata.
+* **Default:** `False` (users are processed one by one).
 
-### -fi, --force-individual
+### -fi, --username-individual-search (also `--user-individual-search`)
 
-* **Enforces:** Searching each username provided with the `--username` argument as a separate request.
-* **Default:** This behavior depends on the number of --usernames and the number of subscriptions on account
-* **Use case:** This may be faster then retriving usernames in bulk
+* **Enforces:** Looks up each username given with `--username` in a separate request.
+* **Default:** Depends on the number of `--username` values and the number of subscriptions on the account.
+* **Use case:** Can be faster than retrieving usernames in bulk.
 
-### -fl, --force-list
+### -fl, --username-list-search (also `--user-list-search`)
 
-* **Processes:** The entire user list based on the currently enabled configuration settings for `userlist` or the `--user-list` argument.
-* **Effect:** Separates usernames within the list
-* **Default:** This behavior depends on the number of --usernames and the number of subscriptions on account
-* **Use case:** This is useful if your retriving a large number of users
+* **Processes:** Searches the entire user list from the enabled `userlist` config or `--user-list` argument.
+* **Effect:** Filters usernames from the fetched list.
+* **Default:** Depends on the number of `--username` values and the number of subscriptions on the account.
+* **Use case:** Useful when retrieving a large number of users.
 
-**Note:** Using `-fi` might lead to a large number of individual requests, potentially overloading the target server or encountering rate limits.
+**Note:** Using `-fi` can make many individual requests and hit rate limits.

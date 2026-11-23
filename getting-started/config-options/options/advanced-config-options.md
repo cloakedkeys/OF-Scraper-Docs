@@ -1,174 +1,136 @@
 # Advanced config options
 
-
-
 ***
 
 ## dynamic-mode-default
 
-* This is utilized to sign a request, essential for its authorization. Without this, the request would lack proper authorization and fail.
-* Generally, the options remain mostly identical. However, in rare instances, modifying these options might resolve certain issues with authentication
+Default: `digital`
 
+* Used to sign requests for authorisation. Without it, requests fail authorisation.
+* The options behave mostly the same, though switching options can occasionally resolve authentication issues.
 
+**Accepted values:**
+
+* `datawhores`, `xagler`, `rafa`
+* `digitalcriminals` (also written `digital`, `dc`, `digitals`, or `digitalcriminal`; the config menu saves it as `digital`)
+* `generic` (needs `OFSC_DYNAMIC_GENERIC_URL`) and `manual` (needs `OFSC_DYNAMIC_RULE_MANUAL`)
+* `dv` and `dev` are removed.
+* An unknown value falls back to the default with a warning in the log.
 
 ***
 
-## skip unavailable content
+## skip_unavailable_content
 
-* Completely bypasses the Timeline, Pinned, Archived, Labels, Stories, and Highlights API endpoints for expired users, within a specified grace period, defaults to 2 days
-* Continues to scan Messages, Purchased, and 'Profile' content
+* Bypasses the Timeline, Pinned, Archived, Labels, Stories, and Highlights API endpoints for expired creators within a grace period (default: 1 day).
+* Continues to scan Messages, Purchased, and Profile content.
 
 ***
 
 ## cache-mode
 
-{% hint style="info" %}
-**You can use** \
-**--no-cache**&#x20;
+> ℹ️ If you're having cache issues, you can pass `--no-cache` or `--no-api-cache`.
 
-**or** \
-**--no-cache-api**
+**Options** (default `sqlite`):
 
-\
-**If your having major issues with cache**
-{% endhint %}
+* `sqlite`
+* `json`
+* `disabled`: no cache, no API cache, and no incremental downloads (like `--no-cache`).
+* `api_disabled`: no API response cache only (like `--no-api-cache`).
 
-{% hint style="info" %}
-**Options**\
-**JSON**\
-**SQLITE**\
-**None (to disable)**
-{% endhint %}
-
-The script uses DiskCache, which has different options like SQLite and JSON.&#x20;
-
-For most folks, SQLite works fine, but if you're on a network drive, its performance might not be great. That's when switching to JSON could be a smart move, according to the author
-
-{% embed url="https://grantjenks.com/docs/diskcache/tutorial.html#caveats" %}
+OF-Scraper uses DiskCache, which supports SQLite and JSON backends. SQLite works well for most setups, but if your config is on a network drive, switching to JSON can improve performance. See [DiskCache caveats](https://grantjenks.com/docs/diskcache/tutorial.html#caveats).
 
 ***
 
 ## rotate\_logs
 
-If set to True, each run will generate a new log. If set to False, each logs will be combined into one file per day.
+When `true`, each run creates a new log file. When `false`, logs are combined into one file per day.
 
 ## sanitize\_text
 
-If set to true,  text content will be sanitized before to database insertion into database
+When `true`, text content is sanitised before insertion into the database.
 
 ## downloadbars
 
-whether to show download progress bars or not
-
-Disabling these can improve performance
-
-
+Controls whether to show download progress bars. Disabling them can improve performance.
 
 ***
 
 ## temp\_dir
 
-{% hint style="info" %}
-**If not set the the final download directory is used to hold temp files**
-{% endhint %}
+Overrides the temporary directory used during downloads.
 
-This overrides the temporary directory used during download<br>
+> ℹ️ If not set, the final download directory is used to hold temporary files.
 
 ## infinite\_loop\_action\_mode
 
-{% hint style="info" %}
-**You can disable the prompt for continuing the script with any arguments by setting the const value**\
-\
-**CONTINUE\_BOOL = False**
-{% endhint %}
+Runs the scraper in an infinite loop even when `--action` is used.
 
-Sets the script to run in a infinite loop even when \
-\--action is used
-
-
+> ℹ️ You can disable the prompt for continuing with arguments by setting the `OFSC_CONTINUE_BOOL` environment variable to `false`.
 
 ## logs\_expire\_time
 
-&#x20;Determines the maximum age for log files in hours. When log rotation is enabled, any log file older than this configured value will be automatically deleted from the system. For this feature to be active, the value must be set to a positive number greater than zero, and rotate\_logs must be enabled
-
-
+Maximum age for log files in hours. When `rotate_logs` is enabled and this value is greater than `0`, log files older than this limit are deleted automatically.
 
 ***
 
 ## ssl\_verify
 
-Controls how the scraper handles SSL certificate validation and TLS fingerprinting
+Controls how the scraper handles SSL certificate validation and TLS fingerprinting.
 
-**Available Options:**
+**Available options:**
 
-* `"custom"` **(Default & Recommended)** Uses a custom SSL context with TLS fingerprint hardening.&#x20;
-* `"default"` Uses the standard Python SSL validation. This is the default behavior of the `aiohttp`&#x20;
-* `"false"` Disables SSL certificate validation entirely
-
-
+* `"custom"` **(Default & recommended):** uses a custom SSL context with TLS fingerprint hardening.
+* `"default"`: uses standard Python SSL validation (the default behaviour of `aiohttp`).
+* `"false"`: disables SSL certificate validation entirely.
 
 ***
 
 ## incremental\_downloads
 
-{% hint style="info" %}
-**replaces auto\_after**
-{% endhint %}
+> ℹ️ Replaces `auto_after`.
 
-* incrementally download content, by automatically setting --after based on successful completion of downloads in previous runs
-  * Deleted content is automatically detected and flagged
-  * ignored if --after was set by the user in the last run
+* Default `true`. When `true` and no `--after` is given, each area is scanned only from the newest previously scanned post.
+* Like/unlike actions and forced full scans still scan everything.
+* Turned off for the run by `--no-cache` or `cache-mode` set to `disabled`.
+* The old `enable_auto_after` key is still read if this key is missing.
 
 ***
 
 ## remove\_hash\_match
 
-{% hint style="info" %}
-**Set value to None to disable calculating hash, False will calculate but not remove files**
-{% endhint %}
+If at least two files with identical hashes exist on the system, removes duplicate files and keeps only one copy on disk.
 
-{% hint style="info" %}
-**hashes are 128 bit and matched with file sizes to ensure uniqueness**
-{% endhint %}
+> ℹ️ Set to `null` to disable hash calculation. `false` calculates hashes without removing files.
 
-
-
-If at least two files with identical hashes exist on the system, remove duplicate files identified by those hashes, keeping only one copy on the file system
-
-
+> ℹ️ Hashes are 128-bit and matched alongside file sizes to ensure uniqueness.
 
 ***
 
-{% hint style="info" %}
-**ofscraper.main or main are the default built in key words for a list combining active and expired list**
-{% endhint %}
-
-{% hint style="info" %}
-**ofscraper.active or active are  the default built in key words for active list**
-{% endhint %}
-
-{% hint style="info" %}
-**ofscraper.expired or expired are the default built in key words for expired list**
-{% endhint %}
+> ℹ️ **Built-in list keywords:**
+> * `ofscraper.main` or `main`: combines active and expired lists.
+> * `ofscraper.active` or `active`: active list.
+> * `ofscraper.expired` or `expired`: expired list.
 
 ## default\_user\_list
 
-{% hint style="info" %}
-**If blank then ofscraper.main is used as setting**
-{% endhint %}
+The default user list used during username scans.
 
-The default user list used during username scan
+> ℹ️ If blank, `ofscraper.main` is used.
 
 ## default\_black\_list
 
-{% hint style="info" %}
-**If  blank then the black list option is disabled**
-{% endhint %}
+The default blacklist used during username scans.
 
-The default black list used during username scan
+> ℹ️ If blank, the blacklist option is disabled.
+
+***
+
+## database\_url
+
+In releases after 3.17.1. Not a setting: it only says that the PostgreSQL address is set with the `OFSC_DATABASE_URL` environment variable, which is kept out of `config.json` because it holds a password. Anything written here is ignored and replaced, with a warning. See [PostgreSQL](../../../page/postgresql.md).
 
 ***
 
 ## env\_files
 
-list of files imported to set custom enviroment variables for the script
+List of files imported to set custom environment variables (`OFSC_*` overrides). Later files override earlier ones. Environment variables apply at runtime only and aren't saved into `config.json`.

@@ -2,11 +2,6 @@
 
 ### --scrape-paid
 
-This is intended for scraping paid content specifically from deleted models. The regular scraper already covers content from models with active accounts\
-\
-This is the only type of content that can be scraped in that case
+Scrapes your entire paid page. It's meant for creators whose accounts are deleted. The regular scraper already covers content from creators with active accounts.
 
-
-
-
-
+Paid content is the only type of content that can be scraped for deleted creators.

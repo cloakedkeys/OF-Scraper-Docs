@@ -1,7 +1,5 @@
 ---
-description: >-
-  These options allow you to download media from specific URLs or post IDs
-  without relying on user lists or other automated selection methods.
+description: Download media from specific URLs or post IDs without using user lists.
 ---
 
 # Manual Mode Options
@@ -12,7 +10,7 @@ description: >-
 ofscraper manual [options]
 ```
 
-### example
+### Example
 
 ```
 ofscraper manual --url test
@@ -20,30 +18,32 @@ ofscraper manual --url test
 
 ## General Options
 
-{% content-ref url="shared-options/common-option-groups/" %}
-[common-option-groups](shared-options/common-option-groups/)
-{% endcontent-ref %}
+See [General Program Options](shared-options/common-option-groups/).
 
 ## Text
 
-### **-tn, --text** \[argument]
+### -tn, --text
 
-* Specify to  download text with any media tied to that text
+* Downloads text alongside any media tied to that text.
 
-### **-tp, --text-only** \[argument]
+### -tp, --text-only
 
-* Specify to  download only text, skipping any media
+* Downloads only text, skipping media.
+
+`--text` and `--text-only` can't be used together.
 
 ## Download Sources
 
-### **-f, --file \[argument]:**&#x20;
+Use either `-f` or `-u`, not both. Exactly one is required.
 
-Download media from a file containing URLs or post IDs, separated by line breaks.
+### -f, --file \[argument]
 
-### **u, --url \[argument]:**
+Downloads media from a file containing URLs or post IDs, one per line.
 
-Download media directly from one or more URLs provided as arguments (separate URLs with spaces).
+### -u, --url \[argument]
 
-***
+Downloads media directly from one or more URLs (separated by spaces or commas).
 
-**Combining Options:** You can use both `-f` and `-u` in a single command. The program will prioritize URLs from the file first, followed by any URLs specified with `-u`.
+### -fo, --force
+
+Forces fresh retrieval of post information from the API.

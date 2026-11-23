@@ -1,14 +1,8 @@
 # Metadata Check Mode Options
 
-{% hint style="info" %}
-**Metadata Mode inherits mosts options from the main/scraper mode, with a few options removed because they don't make sense outside of downloading**
-{% endhint %}
+> ℹ️ **Metadata mode inherits most options from the main scraper, with a few removed because they don't apply outside downloading.**
 
-***
-
-{% hint style="info" %}
-**without --force-all or --force-model-unique media will be filter to only those that are set as not downloaded in the database**
-{% endhint %}
+> ℹ️ **Without `--force-all` or `--force-model-unique`, media is filtered to only items marked as not downloaded in the database.**
 
 ## Syntax
 
@@ -16,76 +10,60 @@
 ofscraper metadata [options]
 ```
 
-### example
+### Example
 
 ```
-ofscraper metadata -metadata check
+ofscraper metadata --metadata check
 ```
 
 ## General Options
 
-{% content-ref url="shared-options/common-option-groups/" %}
-[common-option-groups](shared-options/common-option-groups/)
-{% endcontent-ref %}
-
-{% content-ref url="shared-options/scrape-metadata-options/" %}
-[scrape-metadata-options](shared-options/scrape-metadata-options/)
-{% endcontent-ref %}
+* [General Program Options](shared-options/common-option-groups/)
+* [Shared Scrape and Metadata Check Mode Options](shared-options/scrape-metadata-options/)
 
 ## Options
 
 ### -md, --metadata \[argument]
 
-The `--metadata` argument is used to specify how metadata mode updates the db
+Sets how metadata mode updates the database.
 
-**Available Modes:**
+**Available modes:**
 
-* **check** - Updates metadata fields for the specified area via an API. This option does not check for new filenames.
-* **update** - This mode performs two actions:
-  1. Updates download status and filenames based on the presence of actual files.
-  2. Updates metadata fields for the specified area via an API.
-* **complete** - Marks the download as complete and updates metadata fields via an API. It also uses a new filename if one is available
+* **`check`:** Updates metadata fields for the selected area via the API. Doesn't check for new filenames.
+* **`update`:** Performs two actions:
+  1. Updates download status and filenames based on whether the files exist on disk.
+  2. Updates metadata fields for the selected area via the API.
+* **`complete`:** Marks downloads as complete and updates metadata fields via the API. Also uses a new filename if one is available.
 
-### -ms, --mark-stray-locked  \[argument]
+### -ms, --mark-stray-locked (also `--mark-stray`)
 
 Marks unmatched media items as locked.
 
 **Details:**
 
-* This flag is designed to identify and manage media items retrieved using the `--after` and `--before` options (date range filtering) that cannot be retrieved again through the API (potentially due to deletion).
-* Media items with labels are excluded from being marked as locked.
-* Locking is applied on a per-API type basis,  Timeline, Archived Posts, and Messages
-* This has no effect if --scrape-paid is the only argument
+* Targets media items in the `--after` / `--before` date range that can no longer be retrieved from the API (for example, after deletion).
+* Excludes media items with labels.
+* Applied per API type: Timeline, Archived Posts and Messages.
+* Has no effect if `--scrape-paid` is the only argument.
 
-**Use Case:**
+**Use case:** Marking unretrievable items as locked stops the main scraper from using them to set the minimum date.
 
-Use this option to manage media items that aren't retrievable via the APIs. Marking them as locked prevents main scraper from using these items to set the minimum date
+### -an, --anon
 
-
+Uses anonymous credentials. Requires `--usernames` with a name other than `ALL`, forces `--individual` search and removes `--list`. Most media is ignored.
 
 ***
 
-### -sp, --scrape-paid  \[argument]&#x20;
+### -sp, --scrape-paid \[argument]
 
-The `--scrape-paid` argument is used to specify how metadata mode updates the db, for scrape paid content
+Sets how metadata mode updates the database for `--scrape-paid` content.
 
-The options are the same as --metadata
+**Fork:** models named with `--excluded-username` are skipped. See [`--excluded-username`](shared-options/scrape-metadata-options/user-selection-options.md).
 
-* **check** - Updates metadata fields for the specified area via an API. This option does not check for new filenames.
-* **update** - This mode performs two actions:
-  1. Updates download status and filenames based on the presence of actual files.
-  2. Updates metadata fields for the specified area via an API.
-* **complete** - Marks the download as complete and updates metadata fields via an API. It also uses a new filename if one is available
+Accepts the same modes as `--metadata`:
 
-
-
-**Available Modes:**
-
-* **check** - Updates metadata fields for the specified area via an API. This option does not check for new filenames.
-* **update** - This mode performs two actions:
-  1. Updates download status and filenames based on the presence of actual files.
-  2. Updates metadata fields for the specified area via an API.
-* **complete** - Marks the download as complete and updates metadata fields via an API. It also uses a new filename if one is available
-
-
-
+* **`check`:** Updates metadata fields for the selected area via the API. Doesn't check for new filenames.
+* **`update`:** Performs two actions:
+  1. Updates download status and filenames based on whether the files exist on disk.
+  2. Updates metadata fields for the selected area via the API.
+* **`complete`:** Marks downloads as complete and updates metadata fields via the API. Also uses a new filename if one is available.

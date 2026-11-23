@@ -2,34 +2,26 @@
 
 ## With metadata (recommended)
 
-{% hint style="warning" %}
-**make sure to use the same exact settings for both steps to make sure the same posts are being effected**
-{% endhint %}
+> ⚠️ **Use the exact same settings for both steps** so the same posts are affected.
 
-Recommended run&#x20;
+1. **Run `ofscraper metadata --metadata update`** (short form: `-md update`), with the same filters as your download:
 
-1. **use the 'metadata-update' argument**
+   ```sh
+   ofscraper metadata --metadata update
+   ```
 
-* This will update files on system based on config, if a file does not exist on system it will be marked as not downloaded in data
-* Much faster then --dupe, since no files are writing to disk, and the number of requests required is greatly reduced
+   * Marks downloads and filenames from the files on disk, then refreshes metadata from the site.
+   * Much faster than `--force-all` (also `--dupe`), since no files are written to disk and fewer requests are needed.
+   * Add extra arguments if needed, for example `--after 2000`.
 
-```
-ofscraper metadata --metadata-update
-```
+2. **Download normally:**
 
-* add additional args if needed for example --after 2000
-
-2. **Download normally**
-
-* If any files are missing now they will be redownloaded
+   * Any files now marked as missing are re-downloaded.
 
 ## Force all downloads
 
-```
+```sh
 ofscraper --force-all
 ```
 
-this will force all downloads to be processed
-
-
-
+Forces all downloads to be processed.

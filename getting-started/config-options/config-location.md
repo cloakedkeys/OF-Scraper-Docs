@@ -2,33 +2,30 @@
 
 ### Config Path
 
+The config file is `.config/ofscraper/config.json` under the user's home folder on every OS.
+
 #### Windows
 
-I'm not someone who uses Windows on a daily basis, but it should be
-
-```
-C:/Users/username/.config/ofscraper/config.json
+```text
+C:/Users/<username>/.config/ofscraper/config.json
 ```
 
-#### Linux or Mac
+#### Linux
 
-{% hint style="info" %}
-**If running with sudo or root** \
-**Then the file will be located in /root/.config/ofscaper/config.json**
-{% endhint %}
+```text
+/home/<username>/.config/ofscraper/config.json
+```
 
+> ℹ️ **Running with `sudo` or as `root`:** the file is located at `/root/.config/ofscraper/config.json`.
+
+#### macOS
+
+```text
+/Users/<username>/.config/ofscraper/config.json
 ```
-/home/username/.config/ofscraper/config.json
-```
+
+If no `config.json` exists, a new one is written from the built-in defaults.
 
 #### Change config location
 
-This can also be changed with the --config option
-
-{% content-ref url="../../using-the-scraper/batch-scraping-and-bot-actions/advanced-args.md" %}
-[advanced-args.md](../../using-the-scraper/batch-scraping-and-bot-actions/advanced-args.md)
-{% endcontent-ref %}
-
-###
-
-\
+You can change the config location with `OFSC_CONFIG_DIR` (a folder relative to the home folder, default `.config/ofscraper`) or the `--config` option. See [Advanced Args](../../using-the-scraper/batch-scraping-and-bot-actions/advanced-args.md).

@@ -1,7 +1,5 @@
 ---
-description: >-
-  These options allow you to control the level of detail and location for
-  program logs.
+description: Control the detail level and display of program logs.
 ---
 
 # Logging Options
@@ -10,37 +8,35 @@ description: >-
 
 ### -l, --log \[argument]
 
-* **Possible choices:**
-  * `OFF`: Disables log output to the log file.
-  * `STATS`: Logs only high-level statistics and errors.
-  * `LOW`: Logs basic program flow and non-critical errors.
-  * `NORMAL` (default): Logs most program activity and errors.
-  * `DEBUG`: Logs all program activity and detailed debugging information.
 * **Sets:** The verbosity level for the program's log file.
+* **Possible choices:**
+  * `OFF`: Disables log file output.
+  * `LOW`: Logs basic program flow and non-critical errors.
+  * `NORMAL`: Logs most program activity and errors.
+  * `DEBUG`: Logs all program activity and detailed debugging information.
+  * `TRACE`: The most detailed log level.
+* **Default:** Not set (the log level comes from `config.json`).
 
 ### -dc, --discord \[argument]
 
+* **Sets:** The verbosity level for logs sent to Discord (if configured).
 * **Possible choices:**
-  * `OFF`: Disables log output to Discord.
-  * `STATS`: Logs only high-level statistics and errors to Discord.
-  * `LOW`: Logs basic program flow and non-critical errors to Discord.
-  * `NORMAL`: Logs most program activity and errors to Discord.
-  * `DEBUG`: Logs all program activity and detailed debugging information to Discord.
-* **Sets:** The verbosity level for logs sent to the Discord channel (if configured).
+  * `OFF` (default): Disables Discord log output.
+  * `LOW`: Sends basic program flow and non-critical errors to Discord.
+  * `NORMAL`: Sends most program activity and errors to Discord.
 
 ### -p, --output \[argument]
 
+* **Sets:** The verbosity level for log messages shown in the console.
 * **Possible choices:**
-  * `PROMPT`: Logs only critical information displayed on the program prompt.
-  * `STATS`: Logs only high-level statistics and errors to the console.
-  * `LOW`: Logs basic program flow and non-critical errors to the console.
-  * `NORMAL` (default): Logs most program activity and errors to the console.
-  * `DEBUG`: Logs all program activity and detailed debugging information to the console.
-* **Sets:** The verbosity level for log messages displayed in the console window.
+  * `PROMPT`: Shows only critical information on the program prompt.
+  * `LOW`: Shows basic program flow and non-critical errors.
+  * `NORMAL` (default): Shows most program activity and errors.
+  * `DEBUG`: Shows all program activity and detailed debugging information.
 
 ## Other Options
 
-### **-nl,--no-live**
+### -nl, --no-live-screen (also `--no-live`, `--no-rich`)
 
-* **Controls**: Live displays via rich, these are used for Panels, Spinners, and progress bars
-* **Defaults**: False
+* **Controls:** Turns off Rich live displays (panels, spinners and progress bars).
+* **Default:** `False`

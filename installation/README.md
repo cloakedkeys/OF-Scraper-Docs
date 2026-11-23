@@ -1,5 +1,5 @@
 ---
-description: Getting OF-Scraper onto you system
+description: Getting OF-Scraper onto your system
 ---
 
 # Install
@@ -8,88 +8,73 @@ description: Getting OF-Scraper onto you system
 
 ## Version Info
 
-{% hint style="info" %}
-#### Stable versions are hosted on various platform including PYPI,Docker, and GitHub
-{% endhint %}
+> ℹ️ **This fork is on PyPI as `ofscraper-community`.** The command is still `ofscraper`. `datawhores/OF-Scraper` also publishes this same code as `ofscraper` (versions `3.14.7` and older are upstream's old code without the fork's fixes).
 
-{% hint style="info" %}
-**Go to** [**https://pypi.org/project/ofscraper/#history**](https://pypi.org/project/ofscraper/#history) **for latest Dev release**
-{% endhint %}
+> ℹ️ Check the [GitHub Releases page](https://github.com/cloakedkeys/OF-Scraper-Community/releases) for the latest release.
 
-[![drawing](https://img.shields.io/pypi/v/ofscraper.svg?color=dark_green\&label=Stable-Release)](https://pypi.org/project/ofscraper/)
-
-[![drawing](https://img.shields.io/badge/Pre--Release-v3.70.dev-dark_green.svg)](https://pypi.org/project/ofscraper/3.7.0.dev0/)
-
-##
+[![drawing](https://img.shields.io/github/v/release/cloakedkeys/OF-Scraper-Community?label=release&color=00a8e8)](https://github.com/cloakedkeys/OF-Scraper-Community/releases/latest)
 
 ***
 
 ## Before Starting
 
-The guide assumes you have your terminal program open and have already installed Python. If you're unsure about this, follow this guide
+This guide assumes you have your terminal open and Python installed. If you need help with that first, see:
 
-{% content-ref url="pre-install-guide/" %}
-[pre-install-guide](pre-install-guide/)
-{% endcontent-ref %}
-
-
+[Installing Prerequisites](pre-install-guide/)
 
 ***
 
 ## Install via a package manager
 
-{% hint style="info" %}
-**pipx is recommended for its virtual environment management capabilities.**
+> ℹ️ **uv is recommended.** It installs each tool in its own isolated virtual environment, which:
+>
+> * **Prevents conflicts** with other Python packages or system-wide installs.
+> * **Simplifies updates** when new releases come out.
 
-**It serves as an abstraction layer over pip, placing installed scripts within isolated virtual environments. This approach is highly recommended for script installation as it offers several advantages:**
+### **Option 1: uv Install**
 
-* **Prevents conflicts:** By isolating scripts and their dependencies within virtual environments, pipx effectively eliminates conflicts with other Python packages or system-wide installations.
-* **Enhances organization:** Each script resides in its own distinct virtual environment, promoting better organization and clarity in project management.
-* **Simplifies updates:** pipx streamlines the process of updating scripts, ensuring you always have access to the latest versions and features
-{% endhint %}
+[UV Install](uv-install.md)
 
-### **Option 1: PIPX Install**
+### **Option 2: pipx install**
 
-{% content-ref url="uv-install.md" %}
-[uv-install.md](uv-install.md)
-{% endcontent-ref %}
+```sh
+pipx install ofscraper-community
+```
 
-### **Option 2: PIP install**
+Like `uv`, `pipx` gives the tool its own environment.
 
-{% content-ref url="broken-reference" %}
-[Broken link](broken-reference)
-{% endcontent-ref %}
+### **Option 3: PIP install**
+
+```sh
+pip install ofscraper-community
+```
+
+Use a virtual environment, as `pip` installs into the current Python environment.
+
+To use [PostgreSQL](../page/postgresql.md) instead of a database file per creator, install the `postgres` extra:
+
+```sh
+pip install "ofscraper-community[postgres]"
+```
+
+The extra needs a release after 3.17.1; before one is out, use the GitHub install on the [PostgreSQL page](../page/postgresql.md#what-you-need).
+
+> ℹ️ **Don't install `ofscraper` and `ofscraper-community` together with pip.** Both provide the `ofscraper` command, so they overwrite each other. Run `pip uninstall ofscraper` first. If you already have both, uninstall both and then install `ofscraper-community` again. `uv` and `pipx` keep each tool separate, so they don't have this problem.
+
+To get the latest changes on `main` before they're released, install from GitHub:
+
+```sh
+pip install git+https://github.com/cloakedkeys/OF-Scraper-Community
+```
 
 ## Install via Docker
 
-{% content-ref url="docker.md" %}
-[docker.md](docker.md)
-{% endcontent-ref %}
-
-
+[Docker](docker.md)
 
 ## Compiled Binaries \[No Install]
 
-{% hint style="info" %}
-**A pyinstaller based binary is an executable file that contains your Python script and all the necessary dependencies to run it on different operating systems. Pyinstaller analyzes the script and bundles it with the Python interpreter, libraries, modules, and other resources into a single file or folder**
-{% endhint %}
+> ℹ️ A PyInstaller binary bundles OF-Scraper, Python, and its dependencies into a single executable or folder, so you can run it without installing Python.
 
-{% hint style="info" %}
-**Support for issues specific to how pyinstaller operates may be limited**
-{% endhint %}
+> ℹ️ Support for issues specific to PyInstaller may be limited.
 
-{% content-ref url="binary-releases.md" %}
-[binary-releases.md](binary-releases.md)
-{% endcontent-ref %}
-
-***
-
-## Basic Install/Tutorial
-
-{% hint style="info" %}
-**A quick high level tutorial of the install process**
-{% endhint %}
-
-{% embed url="https://bunkrr.su/v/scraper-l3eS0Abl.mkv" %}
-**A video showing the install process**
-{% endembed %}
+[Binary Releases](binary-releases.md)

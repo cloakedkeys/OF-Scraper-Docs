@@ -1,55 +1,58 @@
 ---
-description: >-
-  These options allow you to define which users (models) the program should
-  process for scraping actions. You can combine these methods for granular
-  control.
+description: Choose which creator accounts to include or exclude using usernames, user lists or blacklists.
 ---
 
 # User Selection Options
 
 ## Specifying Usernames
 
-### -u, --username \[argument]
+### -u, --username (also `--usernames`, `--users`, `--user`) \[argument]
 
-* **Selects:** Specific usernames to process, separated by commas (e.g., `name1,name2`).
-* **Case-sensitive:** Usernames are matched based on exact case.
-* **ALL (case-sensitive):** Use `ALL` to include all available usernames in the program's data.
+* **Selects:** Specific usernames to process, separated by commas (e.g. `name1,name2`).
+* **Not case-sensitive:** Usernames match in any case. An all-digit value also matches an account ID.
+* **ALL (case-sensitive):** Use `ALL` to include every available username.
 
-**Example:** With `-u user1,user2`, only users "user1" and "user2" will be processed.
-
-
+**Example:** `-u user1,user2` processes only `user1` and `user2`.
 
 ### -eu, --excluded-username \[argument]
 
-* **Excludes:** Specific usernames from processing, separated by commas (e.g., `name1,name2`).
-* **Precedence:** Excluded usernames take priority over usernames specified with `-u`.
+* **Excludes:** Specific usernames from processing, separated by commas (e.g. `name1,name2`).
+* **Precedence:** Excluded usernames override usernames given with `-u`.
 
-**Example:** With `-u user1,user2` and `-eu user2`, only "user1" will be processed (excluding "user2").
+**Example:** `-u user1,user2 -eu user2` processes only `user1`.
 
+#### With --scrape-paid
 
+> ℹ️ **Since 3.15.0.** 3.14.7 and earlier ignore `--excluded-username` during `--scrape-paid`. See [Fork Changes](../../../fork-changes.md).
+
+The exclusion also applies to `--scrape-paid`, for both downloads and metadata runs, so you can skip one model that keeps failing without giving up the rest of the paid scan. Names are matched case-insensitively.
+
+```bash
+ofscraper --scrape-paid --excluded-username modelname
+ofscraper metadata --scrape-paid update --excluded-username modelname,othermodel
+```
+
+* A skipped model is logged (`Skipping <name>_<id>: excluded by --excluded-username`) and left out of the run's totals.
+* Its profile is still looked up to learn its username.
+* A deleted account can only be excluded by the username recorded for it in an earlier run. Without one it shows as `modeldeleted_<id>` and can't be matched by name.
 
 ***
 
 ## Using User Lists
 
-### -ul, --user-list \[argument] (optional)
+### -ul, --user-list (also `--user_list`, `--userlist`, `--userlists`, `--user-lists`) \[argument]
 
-* **Filters:** Users based on entries in a user list.
-* **Default list:** "ofscraper.main" (if no argument provided).
-* **Built-in lists:** The program also has built-in lists "ofscraper.active" and "ofscraper.disabled"\
-  corresponding to active and expired account respectively
-* **Argument behavior:**
-  * If no argument is provided, the default list ("scrape") will be used.
-  * If an argument is provided (e.g., "myuserList"), only the specified list will be processed.
+* **Filters:** Selects users from a user list. Always takes a list name.
+* **Default:** When `-ul` isn't used, the list in `default_user_list` in `config.json` (`main` unless you change it).
+* **Built-in lists:** `main` (also `ofscraper.main`) means all your subscriptions. `ofscraper.active` and `ofscraper.expired` are your active and expired subscriptions. These names are reserved, so don't give any of your own lists these names.
 
-**Example:** With `-ul myUserList`, only users in the "myUserList" list will be processed.
+**Example:** `-ul myUserList` processes only users in `myUserList`.
 
-### -bl, --black-list \[argument] (optional)
+### -bl, --black-list (also `--black_list`, `--black-lists`, `--blacklist`, `--blacklists`) \[argument] (optional)
 
-* **Excludes:** Users based on entries in a user list.
-* **Blacklist behavior:** Similar to user lists, but excludes all users from the specified list
-* **Default list:** None
-* **Argument behavior:**
-  * If an argument is provided (e.g., "inactiveUsers"), only users from the specified blacklist will be excluded.
+* **Excludes:** Removes all users from the given user list.
+* **Default list:** None.
+* **Argument behaviour:**
+  * If an argument is given (e.g. `inactiveUsers`), users in that list are excluded.
 
-**Example:** With `-bl inactiveUsers`, users in the "inactiveUsers" blacklist will be excluded from processing
+**Example:** `-bl inactiveUsers` excludes users in `inactiveUsers`.

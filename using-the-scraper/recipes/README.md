@@ -1,9 +1,6 @@
 # Recipes
 
-{% content-ref url="redownload-deleted-downloads.md" %}
-[redownload-deleted-downloads.md](redownload-deleted-downloads.md)
-{% endcontent-ref %}
-
-{% content-ref url="adding-proxy.md" %}
-[adding-proxy.md](adding-proxy.md)
-{% endcontent-ref %}
+* [Adding Proxy](adding-proxy.md)
+* [Redownload Deleted Downloads](redownload-deleted-downloads.md)
+* [Recover Filename Collisions](recover-filename-collisions.md)
+* [Organize Downloads in Stash](stash.md)

@@ -6,148 +6,121 @@ description: Setting up authorization
 
 ***
 
-##
+> ℹ️ **Still having authentication issues?** Open an issue in the fork's GitHub repository with a debug log attached. The session cookie is masked in logs.
 
-{% hint style="info" %}
-<mark style="color:orange;">**The best way to solve  authentication issues is to join the discord, as this will allow you to confirm if may be a wide spread issue**</mark>
-{% endhint %}
+> ℹ️ **This page is for OnlyFans.** For Fansly, see [Fansly](../fansly.md).
+
+The auth file is `auth.json` in your profile folder (`~/.config/ofscraper/main_profile/` by default).
 
 ## Example
 
-{% hint style="info" %}
-**values are randomized, but should be somewhat similar in style to the example**
-{% endhint %}
+> ℹ️ Values are randomised, but should look similar in format to this example.
 
-An example of what an auth file should typically look like
-
-```
+```json
 {
     "auth": {
         "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         "x-bc": "fncx03r1ygvh26ezq4pe830l49xtj1a146e1x2av",
         "auth_id": "400000",
         "sess": "5pb18tyng144dqyzevbgfddnrz",
-        "auth_uid_": "400000"
+        "auth_uid": "400000"
     }
 }
 ```
 
-
+Older files with `auth_uid_` still work.
 
 ***
 
 ## Auto methods
 
-You have various options for fetching authentication info. If possible, I'd suggest going for the cookie helper option—it demands the least effort once it's set up.
+You have two automatic options for fetching authentication info. If possible, use the cookie helper: it takes the least effort once set up.
 
 ### M-rcus Cookie Helper
 
-Please follow the instructions provided here to install it in your browser
-
-{% embed url="https://github.com/M-rcus/OnlyFans-Cookie-Helper" %}
+Install the browser extension by following the instructions at [OnlyFans-Cookie-Helper](https://github.com/M-rcus/OnlyFans-Cookie-Helper).
 
 ![image](https://user-images.githubusercontent.com/67020411/230731183-26a43e62-4385-4fd9-aee8-f75a7c2d33cb.png)
 
-With the helper, all you need to do is copy and paste the output from the program.
-
-
+With the helper installed, copy and paste its output into OF-Scraper.
 
 ### Browser Extraction
 
-This method is probably the second simplest. However, not all information can be automatically extracted.&#x20;
-
-You'll still need to manually locate and provide the x-bc header and the User-Agent as demonstrated below.
+Not all fields can be extracted automatically with this method. You still need to copy the `x-bc` header and `User-Agent` manually (as shown below), but you don't need to extract any cookies.
 
 ![](https://raw.githubusercontent.com/taux1c/onlyfans-scraper/main/media/request_headers.png)
 
-For more details, check out the manual section below.
-
-You won't need to worry about extracting any cookie information with this choice
-
-
+See the manual section below for how to find `x-bc` and `User-Agent`.
 
 ***
 
 ## Manual methods
 
-{% hint style="info" %}
-**You can also manually edit auth information in script**
-{% endhint %}
+> ℹ️ You can also edit auth information manually from inside OF-Scraper.
 
-With this option, you'll need to manually input all the required information
+With this option, you enter all required fields manually:
 
 ```json
 {
     "auth": {
         "sess": "",
         "auth_id": "",
-        "auth_uniq_": "",
+        "auth_uid": "",
         "user_agent": "",
         "x-bc": ""
     }
 }
 ```
 
-It's not too terrible. I'll walk you through how to get this info in the next parts.
-
 #### Step One: Creating the 'auth.json' File
 
-You first need to run the program in order for the `auth.json` file to be created. To run it, simply type `ofscraper` in your terminal and hit enter. Because you don't have an `auth.json` file, the program will create one for you and then ask you to enter some information. Now we need to get that information.
+Run `ofscraper` in your terminal. Because no `auth.json` exists yet, OF-Scraper creates one and prompts you for your auth details.
 
 #### Step Two: Getting Your Auth Info
 
-_**If you've already used DIGITALCRIMINAL's OnlyFans script, you can simply copy and paste the auth information from there to here.**_
+> ℹ️ If you already used DIGITALCRIMINAL's OnlyFans script, you can copy and paste the auth information from there.
 
-Go to your [notification area](https://onlyfans.com/my/notifications) on OnlyFans. Once you're there, open your browser's developer tools. If you don't know how to do that, consult the following chart:
+Go to your [OnlyFans notifications page](https://onlyfans.com/my/notifications) and open your browser's developer tools:
 
-| Operating System |      Keys     |
-| :--------------: | :-----------: |
-|       macOS      | cmd + opt + I |
-|      Windows     |  ctrl+shift+I |
-|       Linux      |  ctrl+shift+I |
+| Operating System | Shortcut |
+|---|---|
+| macOS | `Cmd + Opt + I` |
+| Windows | `Ctrl + Shift + I` |
+| Linux | `Ctrl + Shift + I` |
 
-### **1. Getting a valid requests**
+### 1. Getting a valid request
 
+1. With developer tools open, your screen looks like this:
 
+   ![](https://raw.githubusercontent.com/taux1c/onlyfans-scraper/main/media/browser_tools_open.png)
 
-Once you have your browser's developer tools open, your screen should look like the following:
+2. Click the **Network** tab:
 
-![](https://raw.githubusercontent.com/taux1c/onlyfans-scraper/main/media/browser_tools_open.png)
+   ![](https://raw.githubusercontent.com/taux1c/onlyfans-scraper/main/media/network_tab.png)
 
-Click on the `Network` tab at the top of the browser tools:
+3. Click the **XHR** sub-tab inside **Network**:
 
-![](https://raw.githubusercontent.com/taux1c/onlyfans-scraper/main/media/network_tab.png)
+   ![](https://raw.githubusercontent.com/taux1c/onlyfans-scraper/main/media/xhr_tab.png)
 
-Then click on `XHR` sub-tab inside of the `Network` tab:
+4. Refresh the page while developer tools stay open, then look for an entry named `init`:
 
-![](https://raw.githubusercontent.com/taux1c/onlyfans-scraper/main/media/xhr_tab.png)
+   ![](https://raw.githubusercontent.com/taux1c/onlyfans-scraper/main/media/init.png)
 
-Once you're inside of the `XHR` sub-tab, refresh the page while you have your browser's developer tools open. After the page reloads, you should see a section titled `init` appear:
+5. Click `init` and make sure you're in the **Headers** section:
 
+   ![](https://raw.githubusercontent.com/taux1c/onlyfans-scraper/main/media/headers.png)
 
-
-![](https://raw.githubusercontent.com/taux1c/onlyfans-scraper/main/media/init.png)
-
-When you click on `init`, you should see a large sidebar appear. Make sure you're in the `Headers` section:
-
-![](https://raw.githubusercontent.com/taux1c/onlyfans-scraper/main/media/headers.png)
-
-Skip to step 2 if you have found init successfully\
-otherwise read the next section
+If you found `init`, skip to step 2 below. Otherwise, see the fallback note next.
 
 ***
 
-{% hint style="info" %}
-**If init does not appear use any entry with the domain onlyfans.com**
-{% endhint %}
+> ℹ️ If `init` doesn't appear, use any entry with the domain `onlyfans.com`.
 
 #### **Examples**
 
 <figure><img src="../.gitbook/assets/image (33).png" alt=""><figcaption><p>onlyfans.com</p></figcaption></figure>
 
-
-
-You may need to right click the header field to enable the domain column
+You may need to right-click the table header row to enable the **Domain** column:
 
 <figure><img src="../.gitbook/assets/image (35).png" alt=""><figcaption></figcaption></figure>
 
@@ -157,26 +130,26 @@ You may need to right click the header field to enable the domain column
 
 ![](https://raw.githubusercontent.com/taux1c/onlyfans-scraper/main/media/init.png)
 
-
-
-After that, scroll down until you see a subsection called `Request Headers`. You should then see three important fields inside of the `Request Headers` subsection: `Cookie`, `User-Agent`, and `x-bc`
+Scroll down to **Request Headers**. You'll see three fields: `Cookie`, `User-Agent`, and `x-bc`.
 
 ![](https://raw.githubusercontent.com/taux1c/onlyfans-scraper/main/media/request_headers.png)
 
-Inside of the `Cookie` field, you will see a couple of important bits:
+Inside `Cookie`, look for:
 
 * `sess=`
 * `auth_id=`
-* `auth_uid_=`
+* `auth_uid_=` *(only present if you have 2FA enabled; it has numbers after the final underscore and before `=`, which is your `auth_id`)*
 
-_Your_ `auth_uid_` _will only appear **if you have 2FA (two-factor authentication) enabled**. Also, keep in mind that your_ `auth_uid_` _will have numbers after the final underscore and before the equal sign (that's your auth\_id)._
+For each cookie value, copy everything **after** `=` and **before** `;`.
 
-You need everything _**after**_ the equal sign and everything _**before**_ the semi-colon for all of those bits.
+Paste each value into OF-Scraper as prompted and press Enter:
 
-Once you've copied the value for your `sess` cookie, go back to the program, paste it in, and hit enter. Now go back to your browser, copy the `auth_id` value, and paste it into the program and hit enter. Then go back to your browser, copy the `auth_uid_` value, and paste it into the program and hit enter (**leave this blank if you don't use 2FA!!!**).
+1. `sess`
+2. `auth_id`
+3. `auth_uid` (**leave blank if you don't use 2FA**)
+4. `User-Agent` (below `Cookie` in **Request Headers**)
+5. `x-bc` (also in **Request Headers**)
 
-Once you do that, the program will ask for your user agent. You should be able to find your user agent in a field called `User-Agent` below the `Cookie` field. Copy it and paste it into the program and hit enter.
+You're now ready to use `ofscraper`.
 
-After it asks for your user agent, it will ask for your `x-bc` token. You should also be able to find this in the `Request Headers` section.
-
-You're all set and you can now use `ofscraper`.
+Typing `quit` or `main` at an auth prompt exits or returns to the main menu. To make a run quit on an auth error instead of prompting, pass `--auth-fail`.

@@ -1,11 +1,19 @@
 # Testing
 
-The repository includes a set of various tests in its suite.
+The repository includes a test suite.
 
 ## Install
 
-Tests have specific requirements and can be installed using 'poetry install --with tests'
+Install the test dependencies:
+
+```sh
+uv sync --extra test
+```
 
 ## Running
 
-Afterwards, you can execute the test suite using 'pytest' from the cloned repository
+Run the test suite from the cloned repository:
+
+```sh
+python -m pytest test
+```

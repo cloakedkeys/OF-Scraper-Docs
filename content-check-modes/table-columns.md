@@ -1,87 +1,20 @@
 # Table Columns
 
-#### Download Cart&#x20;
-
-```
-A cart for sending downloads to a queue
-```
-
-#### Username
-
-```
-model username
-```
-
-#### Downloaded
-
-```
-Boolean for whether the media is marked by the db as downloaded
-```
-
-#### Unlocked
-
-```
-Boolean for whether the post tied to the media is unlocked
-```
-
-#### Length
-
-```
-This is the length of videos/audio
-N/A is used for media like pictures without a length
-Formated in HH:MM:SS
-```
-
-#### other\_posts\_with\_media
-
-```
-Identifies posts with the same media id
-```
-
-#### Mediatype
-
-```
-Type of media
-```
-
-#### Post date
-
-```
-Date the post was created/updated
-```
-
-#### Post Media Count
-
-```
-Number of media in the post this media item is in
-```
-
-#### Responsetype
-
-```
-Which API the media was retrieved from
-```
-
-#### Price
-
-```
-Price of the post the media is tied to
-```
-
-#### Post ID
-
-```
-ID for the post the media is tied
-```
-
-#### Media ID
-
-```
-ID for the media
-```
-
-#### Text
-
-```
-Text from the post
-```
+| Column | Meaning |
+|---|---|
+| **Number** | Row number |
+| **Download Cart** | Cart control for sending downloads to the queue |
+| **Username** | Creator's username |
+| **Downloaded** | Boolean showing whether the database marks the media as downloaded |
+| **Unlocked** | Boolean showing whether the post tied to the media is unlocked (a `null` value from the site shows as locked) |
+| **Length** | Length of videos/audio formatted as `HH:MM:SS` (`N/A` for media without a length, such as pictures) |
+| **`download_type`** | `normal`, `protected` (DRM), or `unknown` |
+| **`other_posts_with_media`** | Identifies other posts with the same media ID |
+| **Mediatype** | Type of media |
+| **Post date** | Date the post was created or updated |
+| **Post Media Count** | Number of media items in the post |
+| **Responsetype** | Which API area the media came from |
+| **Price** | Price of the post the media belongs to |
+| **Post ID** | ID of the post the media belongs to |
+| **Media ID** | ID of the media item |
+| **Text** | Text from the post |

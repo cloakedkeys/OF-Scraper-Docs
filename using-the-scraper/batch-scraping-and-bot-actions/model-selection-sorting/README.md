@@ -4,211 +4,168 @@
 
 ## Filter/Sort List By Price
 
-
-
-{% content-ref url="price-filtering-sort.md" %}
-[price-filtering-sort.md](price-filtering-sort.md)
-{% endcontent-ref %}
-
-
+[Price Filtering/Sort](price-filtering-sort.md)
 
 ***
 
 ## Selecting Specific models from command-line
 
-You can provide a comma-separated list indicating the models you wish to scrape
+Pass a comma-separated list of creators to scrape:
 
-```
- ofscraper --username name1,name
+```sh
+ofscraper --username name1,name2
 ```
 
 #### Selecting all users
 
+```sh
+ofscraper --username ALL
 ```
- ofscraper --username ALL
-```
 
-'ALL' is influenced by filters, and it  is case-sensitive.
-
-
-
-
+`ALL` is affected by filters and is case-sensitive.
 
 ***
 
 ## Filtering username list
 
-The following settings can be dynamically modified if using prompts.
+These settings can also be changed interactively when using prompts. See [Using Prompts](../../using-prompts/).
 
-{% content-ref url="../../using-prompts/" %}
-[using-prompts](../../using-prompts/)
-{% endcontent-ref %}
+Filters don't change which usernames are fetched; they only affect which usernames are displayed.
 
-Furthermore, this adjustment doesn't alter the retrieval of usernames; it solely impacts the subset of usernames that are displayed\
-
-
-> \
-> If you wish to retrieve specific usernames, set up a collection on OnlyFans, then utilize the '--userlist' or '--blacklist' arguments accordingly
-
-
+> ℹ️ To fetch a specific group of usernames, create a list on OnlyFans and pass `--userlist` or `--blacklist`.
 
 ### Version >2.1
 
-Now, '--username' takes precedence over any filters. Consequently, only the selected '--usernames' will be utilized, with the exception of 'ALL', which can still be filtered.
+`--username` takes precedence over filters, so only the specified creators are used. The exception is `ALL`, which is still filtered.
 
 ### Restrict by account type
 
-This will limit the program to exclusively interact with and display free accounts
+Limit the scraper to free accounts only:
 
-```
- ofscraper --current-price free --username ALL
+```sh
+ofscraper --current-price free --username ALL
 ```
 
 ### Restrict by subscription status
 
-This demonstrates scraping messages from subscriptions that have expired
+Scrape messages from expired subscriptions:
 
-```
-ofscraper --active-subscription --posts messages --username ALL --action download
+```sh
+ofscraper --expired-subscription --posts messages --username ALL --action download
 ```
 
 ### Restrict by renewal status
 
-You can utilize this option to exclusively scrape active accounts, considering the renewal status of their subscriptions.
+`--renew-off` (`-rf`) keeps every account that isn't set to renew, including expired ones (`--renew-on` / `-ro` keeps accounts set to renew). Add `--active-subscription` to limit it to active accounts:
 
+```sh
+ofscraper --renew-off --active-subscription --username ALL
 ```
-ofscraper  --renewal-off --username ALL
-```
-
-
 
 ***
 
 ### Combining filters
 
-Filters are commonly employed to scrape accounts that are scheduled for expiration.
+Scrape paid active accounts set to expire:
 
-```
-ofscraper  --current-price paid --active-subscription --renewal-off --username ALL
+```sh
+ofscraper --current-price paid --active-subscription --renew-off --username ALL
 ```
 
-Alternatively, you might choose to scrape only free accounts with active subscriptions
+Or scrape free active accounts only:
 
-```
-ofscraper  --current-price free --active-subscription --username ALL
+```sh
+ofscraper --current-price free --active-subscription --username ALL
 ```
 
 ### Exclude specific models
 
-Please note that this takes precedence over '--username', including  '--username ALL'
+Takes precedence over `--username`, including `--username ALL`:
 
-```
+```sh
 ofscraper --excluded-username username
 ```
 
 ### Filter by regular price
 
+```sh
+ofscraper --regular-price paid
 ```
-ofscraper  --regular-price paid 
-```
 
-{% content-ref url="price-filtering-sort.md" %}
-[price-filtering-sort.md](price-filtering-sort.md)
-{% endcontent-ref %}
-
-
+See [Price Filtering/Sort](price-filtering-sort.md).
 
 ***
 
 ### Advanced filtering
 
-{% content-ref url="../../../command-reference/shared-options/scrape-metadata-options/account-filter-args/" %}
-[account-filter-args](../../../command-reference/shared-options/scrape-metadata-options/account-filter-args/)
-{% endcontent-ref %}
-
-
+[User List Filter Options](../../../command-reference/shared-options/scrape-metadata-options/account-filter-args/)
 
 ***
 
 ## Sorting username list
 
-The default setting is to sort alphabetically by name in ascending order
+`--sort` (`-st`) accepts `name`, `subscribed`, `expired`, `current-price`, `renewal-price`, `regular-price`, `promo-price`, and `last-seen`. The default is `name`, ascending.
 
-
-
-> Sorting effects the order of scraping, and not just the order that they appear in the prompt menu
+> ℹ️ Sorting affects the order of scraping, not just the order shown in the prompt menu.
 
 ### sort by account expiring date
 
-```
-ofscraper --sort expiring
-
+```sh
+ofscraper --sort expired
 ```
 
 ### sort by account subscribed date
 
-```
+```sh
 ofscraper --sort subscribed
-
 ```
 
 #### sort by account name
 
-```
+```sh
 ofscraper --sort name
-
 ```
 
 ### sort by promotional prices
 
-```
+```sh
 ofscraper --sort promo-price
-
 ```
 
-{% content-ref url="price-filtering-sort.md" %}
-[price-filtering-sort.md](price-filtering-sort.md)
-{% endcontent-ref %}
+See [Price Filtering/Sort](price-filtering-sort.md).
 
 ### desc option
 
-By default, the sorting is in ascending order.&#x20;
+Sorting is ascending by default. Add `--desc` to sort in descending order:
 
-Utilizing this changes the sorting to descending order.
-
+```sh
+ofscraper --sort current-price --desc
 ```
-ofscraper --sort price --desc
-
-```
-
-
 
 ***
 
 ## Retrieving specific list
 
-This option enables switching from the primary list of OnlyFans accounts to a previously designated collection of accounts.
+Switch from your main OnlyFans list to a saved list of accounts (`--userlist` is an alias of `--user-list` / `-ul`):
 
-```
+```sh
 ofscraper --userlist "tiktok"
 ```
 
-You have the ability to merge multiple lists
+Combine multiple lists by repeating `--userlist`:
 
-```
+```sh
 ofscraper --userlist "tiktok" --userlist "tiktok2"
 ```
-
-
 
 ***
 
 ## Blocking list of Names
 
-Collections offer the functionality to block a list of names
+Exclude a saved list of accounts (`--blacklist` is an alias of `--black-list` / `-bl`):
 
-```
-ofscraper --blacklist "tiktok" 
+```sh
+ofscraper --blacklist "tiktok"
 ```
 
-> Please note that this takes precedence over the '--userlist' option and also 'ALL' parameter
+> ℹ️ `--blacklist` takes precedence over `--userlist` and `--username ALL`.

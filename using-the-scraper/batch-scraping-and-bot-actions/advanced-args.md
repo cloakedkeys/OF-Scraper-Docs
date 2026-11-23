@@ -4,107 +4,86 @@
 
 ### --profile
 
-You can combine this with **'--config'**.&#x20;
-
-This option holds precedence over the currently active profile within the configuration file
-
-```
-Change location of profile 
-```
-
-
+Can be combined with `--config`. Takes precedence over the active profile in `config.json`.
 
 ***
 
 ### --users-first
 
-This adjustment alters the download order to prioritize fetching links for all selected users initially. While this may lead to a longer wait for downloads to commence, it can prove beneficial in specific scenarios.
+Changes the download order to fetch links for all selected creators first before starting downloads. Downloads may take longer to begin, but this can be useful in some setups (`--user-first`, `-uf`, `--usersfirst`, and `--userfirst` also work):
 
+```sh
+ofscraper --users-first
 ```
-ofscraper --user-first
-```
-
-
 
 ***
 
 ### multiple configs
 
+```sh
+ofscraper --config <folder or file>
 ```
-ofscraper --config folder or file
-```
 
-The program attempts to intelligently guess the location of your config folder.&#x20;
+OF-Scraper checks the locations below in order and stops at the first match (or uses the fallback):
 
-You can observe the locations it's scanning in the table. The checks will cease upon reaching a successful match (True) or reaching the failback check.
-
-
-
-<table><thead><tr><th>Check </th><th width="264">config file if True</th><th>config folder if True</th></tr></thead><tbody><tr><td>--config  is not passed</td><td>$HOME/.config/ofscraper/config.json</td><td>$HOME/.config/ofscraper/</td></tr><tr><td>config_arg is an existing file</td><td>config_arg</td><td>config_arg<br>parentdir</td></tr><tr><td>config arg is an existing dir</td><td>config_arg/config.json</td><td>config_arg</td></tr><tr><td>config arg has no extension</td><td>config_arg/config.json</td><td>config_arg</td></tr><tr><td><p>config_arg ends is just  a single file</p><p>i.e</p><p>test.json</p></td><td>$HOME/.config/ofscraper/config_arg</td><td>$HOME/.config/ofscraper</td></tr><tr><td>Failback<br>always true<br>Note:<br>The only option is for config_arg to be something like <br>/home/me/test.json</td><td>config_arg</td><td>config_arg<br>parentdir</td></tr></tbody></table>
+| Check | Config file | Config folder |
+|---|---|---|
+| `--config` isn't passed | `$HOME/.config/ofscraper/config.json` | `$HOME/.config/ofscraper/` |
+| `config_arg` is an existing file | `config_arg` | Parent directory of `config_arg` |
+| `config_arg` is an existing directory | `config_arg/config.json` | `config_arg` |
+| `config_arg` has no extension | `config_arg/config.json` | `config_arg` |
+| `config_arg` is just a filename (e.g. `test.json`) | `$HOME/.config/ofscraper/config_arg` | `$HOME/.config/ofscraper` |
+| Fallback (always true; the only remaining case is a full file path such as `/home/me/test.json`) | `config_arg` | Parent directory of `config_arg` |
 
 #### Shared information
 
-Two configs within the same folder can share
+Two configs in the same folder can share:
 
 * Profiles
-* log files
-* cache
-* authorization
+* Log files
+* Cache
+* Authorisation
 
 #### Duplication check
 
-This relies on your configuration settings. If two configurations share identical metadata settings, duplicates won't exist between those configurations.
-
-
+This depends on your config settings. Configs with identical metadata settings don't download duplicates of each other.
 
 ***
 
 ### multiple profile auth
 
-Authentication for various accounts is managed via profiles. You can modify the default profile either through the configuration or by using the '--profile' argument.
+Authentication for different accounts is managed through profiles. Change the active profile in `config.json` or with `--profile`:
 
 #### Example
 
-```
+```sh
 ofscraper --profile test
 ```
 
+With config file location `/home/test/.config/ofscraper/config.json`, the profile is always inside the config file's parent folder with `_profile` appended:
+
+```text
+/home/test/.config/ofscraper/test_profile
 ```
-config file location=/home/test/.config/ofscraper/config.json
-```
-
-The profile is consistently located within the parent folder of the configuration file and is always appended with '\_profile'.&#x20;
-
-Hence, in this scenario, the profile would be
-
-```
-profile location=/home/test/.config/ofscraper/test_profile
-```
-
-
 
 ***
 
 ### --no-cache
 
-Disables all caching mechanisms and removes retrieval of past data for all data
+Disables all caching and stops reading previously cached data.
 
-As a result, synchronous processing is enforced for APIs to ensure each request is completed before the next one begins, since processing multiple API requests concurrently relies on past data\
-\
-This will also disable the use of cache to speed up decryption key retrieval \
+As a result, API requests run synchronously (each request finishes before the next begins), because concurrent API processing relies on cached data. This also disables caching for decryption key retrieval.
 
-
-```
+```sh
 ofscraper --no-cache
 ```
 
-### -no-api-cache
+### --no-api-cache
 
-Similar to --no-cache, but only disables  caching mechanisms and removes retrieval of past data for API use only
+Like `--no-cache`, but disables caching and cached data reads for API calls only.
 
-\
-As a result, synchronous processing is enforced for APIs to ensure each request is completed before the next one begins, since processing multiple API requests concurrently relies on past data.
+As a result, API requests run synchronously (each request finishes before the next begins), because concurrent API processing relies on cached data.
 
-```
+```sh
 ofscraper --no-api-cache
 ```

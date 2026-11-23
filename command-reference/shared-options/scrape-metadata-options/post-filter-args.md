@@ -1,183 +1,140 @@
 ---
-description: >-
-  This section outlines various options for specifying content targets, actions,
-  and filters within the program.
+description: Select which post areas to scrape and how to filter and sort posts.
 ---
 
 # Content Options
 
 ## Targeting Content
 
-### **-o, --posts** \[argument]
+### -o, --posts \[argument]
 
-* Specify the type of content to target for actions (like, unlike, download).
-* **Possible choices:** `highlights`, `all`, `archived`, `messages`, `timeline`, `pinned`, `stories`, `purchased`, `profile`, `labels`.
-* **Defaults:** to `None`.
+* Selects which content areas to target for actions (`like`, `unlike`, `download`).
+* **Possible choices:** `highlights`, `all`, `archived`, `messages`, `timeline`, `pinned`, `streams`, `stories`, `purchased`, `profile`, `labels`, `labels+`, `labels*`.
+* `all` doesn't include labels. To include them, use `all,labels` or tags like `labels+` or `labels*`.
+* **Default:** `None`.
 
-### **-t, --text** \[argument]
+### -t, --text (also `--download-text`)
 
-* Specify the type of content to target for text download
-* **Note:** This only has an effect on action download
-* **Possible choices:** `highlights`, `all`, `archived`, `messages`, `timeline`, `pinned`, `stories`, `purchased`, `profile`, `labels`.
-* **Defaults:** to `None`
+* Downloads text files alongside media.
+* **Note:** Affects only the `download` action.
+* **Default:** `False`.
 
-### **-la, --like-area** \[argument]
+### -tx, --text-only (also `--download-text-only`)
 
-* Define the area for like/unlike actions (overrides `--posts`).
-* **Possible choices:** `all`, `archived`, `timeline`, `pinned`, `stories`, `labels`.
-* **Defaults**: to `None`.
+* Downloads only text files, skipping all media. Also turns on `--text`.
+* **Default:** `False`.
 
-### **-da, --download-area** \[argument]
+### -la, --like-area \[argument]
 
-* Specify the area for download actions (overrides `--posts`).
-* **Possible choices:** `highlights`, `all`, `archived`, `messages`, `timeline`, `pinned`, `stories`, `purchased`, `profile`, `labels`.
-* **Defaults** to `None`.
+* Sets the area for `like` and `unlike` actions (overrides `--posts`).
+* **Possible choices:** `all`, `archived`, `timeline`, `pinned`, `labels`, `streams`.
+* **Default:** `None`.
+
+### -da, --download-area \[argument]
+
+* Sets the area for `download` actions (overrides `--posts`).
+* **Possible choices:** `highlights`, `all`, `archived`, `messages`, `timeline`, `pinned`, `stories`, `purchased`, `profile`, `streams`, `labels`, `labels+`, `labels*`.
+* **Default:** `None`.
 
 ***
 
 ## Filtering Content
 
-### **-sk, --skip-timed**
+### -sk, --skip-timed
 
 * Skips temporary posts (commonly used for promotions).
 
-### **-ms, --mass-skip**
-
-* Filters downloads to include only those labeled as mass messages.
-
-### **-mm, --mass-msg**
+### -ms, --mass-skip
 
 * Excludes downloads marked as mass messages.
 
-### **-ok, --only-timed**
+### -mm, --mass-only
+
+* Includes only downloads labelled as mass messages.
+
+### -ok, --only-timed
 
 * Downloads only temporary posts (mostly used for promotions).
 
-### **-ft, --filter** \[argument]
+> ℹ️ Select only one of each pair: `--only-timed` or `--skip-timed`, `--mass-only` or `--mass-skip`.
 
-* Filter posts using a provided regular expression pattern.
+### -ft, --filter \[argument]
+
+* Includes only posts matching a regular expression.
 * Case-sensitive if uppercase characters are included.
-* Posts matching the pattern are included.
-* **Defaults:** to `".*"` (matches all posts).
+* **Default:** `".*"` (matches all posts).
 
-### **-nf, --neg-filter** \[argument]
+### -nf, --neg-filter \[argument]
 
-* Filter posts to exclude based on a regular expression pattern.
+* Excludes posts matching a regular expression.
 * Case-sensitive if uppercase characters are included.
-* Posts matching the pattern are excluded.
-* **Defaults:** to `None` (no exclusion)
+* **Default:** `None` (no exclusion).
 
-### **-to, --protected-only**
+### -to, --protected-only
 
-* Restricts downloads to content requiring decryption.
+* Restricts downloads to content that requires decryption.
 
-### **-no, --normal-only**
+### -no, --normal-only
 
-* Restricts downloads to content that does not require decryption.
+* Restricts downloads to content that doesn't require decryption.
 
-### **-lb, --label**
+### -lb, --label
 
-* Scrape content with specific labels.
-* **Defaults:** to `None` (no specific label).
+* Scrapes content with specific labels.
+* **Default:** `None` (no specific label).
 
-### **-pd, --post-id \[argument]**
+### -pd, --post-id \[argument]
 
-* Filters content based on post ID
-* **Arguments:** One or more comma-separated (",") post IDs. You can also provide URLs containing a valid post ID
-* **Defaults:** None
-* **Note:** In certain situation this will allow direct search of content, namely for timeline and message related posts and if the number is less then 10
-* **Note:** you can also use manual if you want to process post for multiple users
-
-### -tls, --timeline-strict
-
-* Filters timeline to only include non-pinned and non-archived posts
-* **Default: False**
+* Filters content by post ID.
+* **Arguments:** One or more comma-separated (`,`) post IDs, or URLs containing a valid post ID.
+* **Default:** `None`.
+* **Note:** In certain situations this enables direct lookup, namely for timeline and message posts when fewer than 10 IDs are given.
+* **Note:** Use `manual` mode if you want to process posts for multiple users.
 
 ***
 
 ## AD Filter
 
-### **-ba, --block-ads**
+### -ba, --block-ads
 
-* Filter posts with regex to block posts with common words for advertisements
-* **Regex :**
-
-**Note:** This is passed as a raw string when  being used by python
+* Filters posts with a regex to block posts containing common advertisement words.
+* Works in the main program. Also applies when `block_ads` is turned on in `config.json`.
+* **Default:** `None`.
+* **Regex** (passed as a raw Python string):
 
 ```python
-"(#(?:ad|ads|AD|advertising|sponsored|promotion)|trial|discount|exclusive\s+offer|giveaway|limited\s+time|\Buser\s+promo|shoutout|endorsement)"
-
+"(#(?:ad|ads|AD|advertising|sponsored|promotion)|trial|giveaway|\Buser\s+promo|shoutout|endorsement)"
 ```
-
-* **Defaults:** None
-
-### **-nf, --neg-filter** \[argument]
-
-* Filter posts to exclude based on a regular expression pattern.
-* Case-sensitive if uppercase characters are included.
-* Posts matching the pattern are excluded.
-* **Defaults:** to `None` (no exclusion)
-
-
 
 ***
 
-### Date Range
+## Date Range
 
-
-
-{% embed url="https://of-scraper.gitbook.io/of-scraper/using-the-scraper/batch-scraping-and-bot-actions/selecting-posts#valid-inputs" %}
-Valid Date Inputs
-{% endembed %}
-
-### **-be, --before** \[argument]
-
-* Process posts on or before a specified date (format: Month/Day/Year).
-
-### **-af, --after** \[argument]
-
-* Process posts on or after a specified date (format: Month/Day/Year).
+`--before` and `--after` are Media Filters options. See [Media Filters Options](../common-option-groups/media-filters-options.md).
 
 ***
 
 ## Other Options
 
-### **-e, --force-all**
-
-* Downloads all files regardless of database presence.
-* **Defaults:** to `False`
-
-### **-fl,--force-like**
-
-* Like posts regardless of status in cache&#x20;
-* **Defaults:** to `False`
-
-### **-eq, --force-model-unique**
-
-* Downloads files only if not present for the current model
-* **Defaults:** to `False`.
-
-### **-sp, --scrape-paid**
+### -sp, --scrape-paid
 
 * Scrapes the entire paid page for content (can be time-consuming).
-* **Defaults:** to `False`.
+* In `metadata` it takes a mode (`check`, `update` or `complete`), like `--metadata`.
+* **Default:** `False`.
+* **Fork:** `--excluded-username` skips the named models during this scan. See [`--excluded-username`](user-selection-options.md).
 
-### **-it, --item-sort** \[argument]
+### -pst, --post-sort \[argument]
 
-* Defines the order for processing media sort order before actions.
-* Uses default action sorting if `None`.
-* **Defaults are:**
-  * Date for likes/unlikes (always)
-  * Date for normal downloader
-  * Shuffled for batch downlooader
-* **Possible choices:**&#x20;
-  * `random`: Randomize order&#x20;
-  * `text-asc`: Sort by post text in ascending order&#x20;
-  * `text-desc`: Sort by post text in descending order
-  * `date-asc`: Sort by media date in ascending order
-  * `date-desc`: Sort by media date in descending order
+* Changes the post processing order before actions (for example, `like` or `unlike`).
+* **Possible choices:** `date`.
+* **Default:** `date`.
 
-### **-xc ,--max-count** \[argument]
+### -pdc, --post-desc
 
-* Sets the maximum number of posts to like or download.
-* **Defaults:** to `None` (no limit).
+* Sorts the post list in descending order (for example, `like` or `unlike`).
+* **Default:** `False`.
+
+### -xc, --max-post-count \[argument]
+
+* Sets the maximum number of posts to process.
+* **Default:** `0` (no limit), or `max_post_count` from `config.json`.

@@ -1,78 +1,54 @@
 # Migrating from Digitalcriminal's script
 
-
-
 ***
 
-## Set Medatadata&#x20;
+## Set Metadata
 
-{% hint style="info" %}
-**Your previous metadata files are compatible so only the path needs to match**
-{% endhint %}
+> ℹ️ Your previous metadata files are compatible, so only the path needs to match.
 
-{% content-ref url="config-options/setting-metadata-path.md" %}
-[setting-metadata-path.md](config-options/setting-metadata-path.md)
-{% endcontent-ref %}
-
-
+[Setting metadata path](config-options/setting-metadata-path.md)
 
 ***
 
 ## Set save path
 
-{% hint style="info" %}
-**Most settings should be transferable**\
-**Including the defaults**
-{% endhint %}
+> ℹ️ Most settings are transferable, including the defaults.
 
-{% content-ref url="config-options/file-output-options/" %}
-[file-output-options](config-options/file-output-options/)
-{% endcontent-ref %}
+[File Output Options](config-options/file-output-options/)
 
 ## Example
 
-See the advanced DC config
-
-{% content-ref url="config-options/example-configs.md" %}
-[example-configs.md](config-options/example-configs.md)
-{% endcontent-ref %}
+See the Digitalcriminals example in [Example Configs](config-options/example-configs.md).
 
 ### save\_location
 
-```
- "save_location": "/Onlyfans",
+```text
+"save_location": "/Onlyfans",
 ```
 
 ### dir format
 
+```text
+"dir_format": "{model_username}/{responsetype}/{value}/{mediatype}/"
 ```
- "dir_format": "{model_username}/{responsetype}/{value}/{mediatype}/"
+
+Together, these produce a full path like:
+
+```text
+/Onlyfans/modelA/Messages/Free/Images/
 ```
 
-Means a full path like
-
-<pre class="language-markup"><code class="lang-markup"> "/<a data-footnote-ref href="#user-content-fn-1">Onlyfans/</a><a data-footnote-ref href="#user-content-fn-2">modelA/Messages/Free/Images/</a>"
-</code></pre>
-
-1. /Onlyfans is the save\_location
-2. /modelA/Messages/Free/Images/ is the dir\_format
+1. `/Onlyfans` comes from `save_location`.
+2. `modelA/Messages/Free/Images/` comes from `dir_format`.
 
 ### metadata
 
-<pre><code>"metadata": "<a data-footnote-ref href="#user-content-fn-3">{save_location}</a>/{model_username}/Metadata"
-</code></pre>
-
-This refers to a directory path designated for storing 'user\_data.db'.
-
-```
-"OnlyFans/ModelA/Metadata"
+```text
+"metadata": "{save_location}/{model_username}/Metadata"
 ```
 
-[^1]: save\_location
+Here `{save_location}` is the save location from `config.json`. This sets the directory where `user_data.db` is stored, for example:
 
-[^2]: dir\_format
-
-
-
-[^3]: Save location from config
-
+```text
+/Onlyfans/ModelA/Metadata
+```

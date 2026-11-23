@@ -1,86 +1,70 @@
 # CDM Setup
 
-To handle encrypted content, you'll require a CDM (Content Decryption Module). Indicators for this are the utilization of 'tempvideo' and 'tempaudio'.\\
+To handle encrypted content, you need a CDM (Content Decryption Module). You'll know it's needed if you see `tempvideo` and `tempaudio` files. Decrypting also requires `ffmpeg` 6 or newer.
 
 ### Manual
 
-This method is recommended due to its reliability and independence from potential issues like loss of third-party access or service shutdowns.
+This method is recommended for its reliability and independence from third-party service outages or shutdowns.
 
 #### Setup
 
-* Follow this guide:
+1. Follow the [KeyDive README](https://github.com/hyugogirubato/KeyDive/blob/main/README.md) to extract your two CDM files:
+   * Private key file (`private_key.pem`)
+   * Client ID file (`client_id.bin`)
+2. Save both files to an easily accessible location.
 
-{% embed url="https://forum.videohelp.com/threads/408031-Dumping-Your-own-L3-CDM-with-Android-Studio/page26#post2766668" %}
-Guide
-{% endembed %}
-
-*   In the end you should have two files\
-    \- private key file
-
-    -client id file
-* Save the files to a location that is easily accessible
+> ℹ️ **The default key mode is `manual`.** You only need to set the two file paths below.
 
 #### Changing via config manually
 
-change key-mode-default
+In the `cdm_options` section of `config.json`, if your config still says `cdrm`, change `key-mode-default` to `manual`:
 
-```
-key-mode-default:manual
-```
-
-change client-id and private-key
-
-Ensure you utilize the complete file path
-
-```json
-private-key:...??privatekey.pem
+```text
+"key-mode-default": "manual"
 ```
 
-```json
-client-id:...??client_id.bin
+Set `private-key` and `client-id` to the full paths of your CDM files (quotes from Windows' "Copy as path" are accepted):
+
+```text
+"private-key": ".../private_key.pem"
+"client-id": ".../client_id.bin"
 ```
+
+You can also pass `--key-mode manual`, `--private-key`, and `--client-id` for a single run.
 
 #### Changing via the prompt menu
 
-* go to edit advance config settings menu in the prompt menu
+1. From the main menu, go to **Edit config.json file** → **CDM Options**.
 
 <details>
 
 <summary>prompt menu</summary>
 
-[https://of-scraper.gitbook.io/of-scraper/using-prompts](https://of-scraper.gitbook.io/of-scraper/using-prompts)
+[Using Prompts](../using-the-scraper/using-prompts/README.md)
 
 </details>
 
-* Switch to manual key-mode when prompted
-* When asked for the private-key, provide the complete path
-* When requested for the client-id, provide the complete path
+2. When prompted, choose `manual` for the key mode, then enter the full path for `client-id` and `private-key` (in that order).
 
 ### CDRM
 
-\
-This is the initial automated option provided by
-
-{% embed url="https://cdrm-project.com" %}
-
-If you're unable to access the site, it's likely down, and you'll need to choose an alternative.
+> ⚠️ **Deprecated:** `cdrm` is deprecated and will be removed. The default address (`cdrm-project.com`) is never contacted, so protected videos fail in `cdrm` mode with a message to use `manual`. It works only with a server you run yourself (set in `OFSC_CDRM_URL`), and that server receives your request headers and cookies.
 
 #### Changing via config manually
 
-change key-mode-default
+Set `key-mode-default` in `config.json`:
 
-```
-key-mode-default:cdrm
+```text
+"key-mode-default": "cdrm"
 ```
 
-you could also pass --key-mode arg
+Or pass `--key-mode` on the command line:
 
-```
+```sh
 --key-mode cdrm
 ```
 
 #### Changing via the prompt menu
 
-* Navigate to the "Edit Config Settings" section
-* Navigate to the "Edit Advanced Options" section
-* When prompted to choose the key-mode, opt for "cdrm".
+1. From the main menu, go to **Edit config.json file** → **CDM Options**.
+2. Choose `cdrm` when prompted for the key mode.

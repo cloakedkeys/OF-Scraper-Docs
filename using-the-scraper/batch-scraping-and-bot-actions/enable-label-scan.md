@@ -2,40 +2,40 @@
 
 ## **what changed?**
 
-**Version 3.9 introduces a performance optimization to the `--all` command by streamlining label utilization**
+Version 3.9 introduced a performance optimisation to `--posts all` by disabling label scans by default:
 
-* In previous versions, the `--all` command relied on labels primarily to extract data and populate the labels table
-* While this functionality remains valuable for specific workflows, it can introduce extend scan times  if you don't require labels in your database
-* To address this, Version 3.9 the default is to disable label usage , resulting in a performance improvement for the `--all command`
+* In earlier versions, `--posts all` scanned labels to populate the `labels` table.
+* While useful for some workflows, scanning labels can extend scan times if you don't need them in your database.
+* Since version 3.9, labels are disabled by default with `--posts all`.
 
 ## adding labels to all
 
-```
+```sh
 ofscraper --posts all,labels
 ```
 
 ## scraping just labels
 
-```
+```sh
 ofscraper --posts labels
 ```
 
 ## shorthands for scraping all posts + labels
 
-<pre><code><strong>ofscraper --posts labels*
-</strong></code></pre>
+```sh
+ofscraper --posts labels*
+```
 
-or&#x20;
+Or:
 
-<pre><code><strong>ofscraper --posts labels+
-</strong></code></pre>
+```sh
+ofscraper --posts labels+
+```
 
 ## permanently add labels to all
 
-```
-override include_labels_all to True
-```
+Set the environment default `OFSC_INCLUDE_LABELS_ALL` to `True`.
 
-{% content-ref url="broken-reference" %}
-[Broken link](broken-reference)
-{% endcontent-ref %}
+## repeat runs
+
+Labels that have nothing new aren't paged through again. Check modes still scan labels in full.

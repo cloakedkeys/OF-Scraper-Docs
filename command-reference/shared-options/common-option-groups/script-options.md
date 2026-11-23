@@ -1,61 +1,64 @@
 ---
-description: >-
-  This options allow for custom scripts to run during certain parts of the
-  scripts flow
+description: Run custom scripts at key points during a scrape or download.
 ---
 
 # Script Options
 
-{% content-ref url="../../../getting-started/config-options/script-options.md" %}
-[script-options.md](../../../getting-started/config-options/script-options.md)
-{% endcontent-ref %}
+See [Script Options](../../../getting-started/config-options/script-options.md) for how scripts receive input and what they return.
 
-### -ds, --after-action-script \[argument]
+These options are available in the main program, `manual` and the check commands (not `metadata` or `db`).
 
-**Executes:** A user-defined script after an action is completed on a model
+### -aas, --after-action-script \[argument]
+
+**Executes:** A custom script after an action finishes for a model.
 
 **Runs:**
 
-* rafter each model is downloaded in the main scraper
-* after each model's metadata is processed in metadata mode
-* &#x20;after each model is processed in manual mode
-* for each unique model, after the current cart is downloaded in check mode
+* After each model is downloaded in the main scraper.
+* After each model's metadata is processed in metadata mode.
+* After each model is processed in manual mode.
+* For each unique model, after the current cart is downloaded in check mode.
 
 ### -ps, --post-script \[argument]
 
-**Executes:** A user-defined script once the script finishes an action&#x20;
+**Executes:** A custom script once the run finishes an action.
 
 **Runs:**
 
-* once all models are downloaded or liked in scrape mode
-* once all the post from manual mode are completed
-* After the current cart downloads are processed in check mode, and after the download-script is processed for each user
-* after all metadata for  all users is processed in metadata mode&#x20;
+* Once all models are downloaded or liked in scrape mode.
+* Once all posts in manual mode are completed.
+* After the current cart downloads finish in check mode, and after the download script runs for each user.
+* After all metadata for all users is processed in metadata mode.
 
 ### -ns, --naming-script \[argument]
 
-**Executes:** A script that dynamically generates the final filename&#x20;
+**Executes:** A script that generates the final filename dynamically.
 
 **Runs:**
 
-* when the temporary .part filename is generated for a download
-* when the final filename is being generated for a download
-* when the final filename is being generated for a text download
-* after all metadata for  all users is processed in metadata mode&#x20;
+* When the temporary `.part` filename is generated for a download.
+* When the final filename is generated for a media download.
+* When the final filename is generated for a text download.
 
 ### -sdl, --skip-download-script \[argument]
 
-**Executes:**  A script that determines whether to skip or continue a download
+**Executes:** A script that decides whether to skip or continue a download.
 
 **Runs:**
 
-* Just before a download starts
+* Just before a download starts.
+
+### --retry-permanent-skips
+
+**Effect:** Asks the skip download script again about files it skipped for good (`skip-permanent`) for the creators in this run.
+
+**Available in:** The main program, `manual` and the `*_check` commands.
 
 ### -adl, --after-download-script \[argument]
 
-**Executes:**  A script that runs after a download has completed
+**Executes:** A script that runs after a download finishes.
 
 **Runs:**
 
-* Just before a download starts
+* After a download completes.
 

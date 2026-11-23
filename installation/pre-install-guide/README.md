@@ -4,17 +4,14 @@ description: Guides for preparing your machine
 
 # Installing Prerequisites
 
-This page outlines how to install the necessary tools and Python versions required to run OF-Scraper outside of Docker.
+This page outlines how to install the tools and Python versions required to run OF-Scraper outside Docker.
 
 ***
 
 ## Getting UV
 
-UV is a modern, fast Python package installer and dependency resolver. It's the recommended tool for managing OF-Scraper installations.
+UV is a fast Python package installer and dependency resolver, and the recommended tool for managing OF-Scraper installations.
 
-{% hint style="info" %}
-Installing UV with one of their official installation scripts is recommended for the most straightforward setup.
-{% endhint %}
+> ℹ️ Installing UV with one of its official installation scripts is recommended for the most straightforward setup.
 
-{% embed url="https://docs.astral.sh/uv/getting-started/installation/" %}
-
+See the [UV installation guide](https://docs.astral.sh/uv/getting-started/installation/).

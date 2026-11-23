@@ -1,90 +1,77 @@
 ---
-description: >-
-  These options allow for highly granular filtering of user accounts based on
-  various criteria. You can combine these filters to create very specific
-  selections
+description: Filter creator accounts by price ranges and activity or subscription dates.
 ---
 
 # Advanced User Filters
 
 ## Advanced Pricing Filters
 
-These filters allow you to target accounts based on specific price ranges for different pricing models (promotional, regular, current, and renewal
+Target accounts by price ranges across promotional, regular, current and renewal pricing.
 
 ### -ppm, --promo-price-max \[argument]
 
-* **Filters:** Accounts where the lowest available promotional price matches or falls below the specified value
+* **Filters:** Accounts where the lowest available promotional price is at or below the given value.
 
 ### -ppn, --promo-price-min \[argument]
 
-* **Filters:** Accounts where the lowest available promotional price matches or falls above the specified value
+* **Filters:** Accounts where the lowest available promotional price is at or above the given value.
 
 ### -gpm, --regular-price-max \[argument]
 
-* **Filters:** Accounts where the regular price (if available) matches or falls below the specified value
+* **Filters:** Accounts where the regular price (if available) is at or below the given value.
 
 ### -gpn, --regular-price-min \[argument]
 
-* **Filters:** Accounts where the regular price (if available) matches or falls above the specified value
+* **Filters:** Accounts where the regular price (if available) is at or above the given value.
 
 ### -cpm, --current-price-max \[argument]
 
-* **Filters:** Accounts where the current price matches or falls below the specified value
+* **Filters:** Accounts where the current price is at or below the given value.
 
 ### -cpn, --current-price-min \[argument]
 
-* **Filters:** Accounts where the current price matches or falls above the specified value
+* **Filters:** Accounts where the current price is at or above the given value.
 
 ### -rpm, --renewal-price-max \[argument]
 
-* **Filters:** Accounts where the renewal price (if applicable) matches or falls below the specified value
+* **Filters:** Accounts where the renewal price (if applicable) is at or below the given value.
 
 ### -rpn, --renewal-price-min \[argument]
 
-* **Filters:** Accounts where the renewal price (if applicable) matches or falls above the specified value
-
-
+* **Filters:** Accounts where the renewal price (if applicable) is at or above the given value.
 
 ***
 
 ## Advanced Account Attributes
 
-These filters allow you to target accounts based on specific dates related to their activity or subscription status
-
-{% embed url="https://of-scraper.gitbook.io/of-scraper/using-the-scraper/batch-scraping-and-bot-actions/selecting-posts#valid-inputs" %}
-Valid Date Inputs
-{% endembed %}
+Target accounts by activity or subscription dates. See [Valid date inputs](../../../../using-the-scraper/batch-scraping-and-bot-actions/basic-actions/selecting-posts/README.md#valid-inputs) for accepted date formats.
 
 ### -lsa, --last-seen-after \[argument]
 
-* **Filters:** Accounts where the "last seen" date/time is at or after the provided date
+* **Filters:** Accounts where the "last seen" date/time is at or after the given date.
 
 ### -lsb, --last-seen-before \[argument]
 
-* **Filters:** Accounts where the "last seen" date/time is at or before the provided date
+* **Filters:** Accounts where the "last seen" date/time is at or before the given date.
 
-**Note:** The "last seen" date/time might not be available for all accounts
+**Note:** The "last seen" date/time isn't always available for every account.
 
-{% hint style="info" %}
-**When a model is set to renew, the expired date refers to the renewal date**
-{% endhint %}
+> ℹ️ **When a model is set to renew, the expired date refers to the renewal date.**
 
-### -ea, --expire-after \[argument]
+### -ea, --expired-after \[argument]
 
-* **Filters:** Accounts with an expiration or renewal date at or after the provided date
+* **Filters:** Accounts with an expiration or renewal date at or after the given date.
 
-### -eb, --expire-before \[argument]
+### -eb, --expired-before \[argument]
 
-* **Filters:** Accounts with an expiration or renewal date at or before the provided date
+* **Filters:** Accounts with an expiration or renewal date at or before the given date.
 
-{% hint style="info" %}
-**The subscription date might not always be the most accurate indicator for expired accounts. Consider using the `-ea` or `-eb` filters instead.**
-{% endhint %}
+> ℹ️ **The subscription date isn't always reliable for expired accounts. Consider using `-ea` or `-eb` instead.**
 
 ### -sa, --subscribed-after \[argument]
 
-* **Filters:** Accounts with a subscription date at or after the provided date&#x20;
+* **Filters:** Accounts with a subscription date after the given date.
 
 ### -sb, --subscribed-before \[argument]
 
-* **Filters:** Accounts with a subscription date at or before the provided date
+* **Filters:** Accounts with a subscription date at or before the given date.

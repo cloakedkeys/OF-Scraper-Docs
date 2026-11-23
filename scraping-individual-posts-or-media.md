@@ -1,93 +1,86 @@
 # Scraping Individual Posts or Media
 
-
-
 ***
 
 ## Scraping content from timeline post
 
-**1. click '...' and then copy link to post**
+1. Click `...` and select **Copy link to post**:
 
-![image](https://github.com/datawhores/OF-Scraper/assets/67020411/84a87986-36ef-4d75-a9d9-10d7b572419a)
+   ![image](https://github.com/datawhores/OF-Scraper/assets/67020411/84a87986-36ef-4d75-a9d9-10d7b572419a)
 
-```
-ofscraper manual --url copied_link
-```
+2. Run manual mode with the copied link:
 
-Alternatively
+   ```sh
+   ofscraper manual --url copied_link
+   ```
 
-```
-ofscraper manual --url postid
-```
+   Or pass the post ID directly:
 
+   ```sh
+   ofscraper manual --url postid
+   ```
 
+Manual mode downloads again even if the file is already in the database.
 
 ***
 
 ## Scraping content from purchase page
 
-**1. Click '...' and copy link to message**
+1. Click `...` and select **Copy link to message**:
 
-![image](https://github.com/datawhores/OF-Scraper/assets/67020411/74cebb3f-c0e4-4cbb-b2f7-18b52e2a98a6)
+   ![image](https://github.com/datawhores/OF-Scraper/assets/67020411/74cebb3f-c0e4-4cbb-b2f7-18b52e2a98a6)
 
-```
-ofscraper manual --url copied_link
-```
+2. Run manual mode with the copied link:
 
-
+   ```sh
+   ofscraper manual --url copied_link
+   ```
 
 ***
 
 ## Advanced
 
-\
-To grasp this better, checking out the **`get_info`** function in **`manual.py`** is the ideal way as it accepts a wider range of URLs.
-
-
+Check `get_info` in `manual.py` to see the full range of URL formats accepted by manual mode.
 
 ***
 
 ## Scraping Individual Media
 
-**1. Run a content scraper mode**
+1. **Run a content check mode:** See [Content Check Modes](content-check-modes/).
+2. **Select rows to download:** Click a row's **Download Cart** cell, or use the cart keys `a`, `e`, or `u`. (`;` and `'` copy the highlighted cell's value into that column's filter.)
+   * Only unlocked media can be added; rows showing `Not Unlocked` or `Unknown` can't be added.
+   * Media marked for download shows `[added]`.
 
-{% content-ref url="content-check-modes/" %}
-[content-check-modes](content-check-modes/)
-{% endcontent-ref %}
+   ![image](https://github.com/datawhores/OF-Scraper/assets/67020411/48e3badd-5502-480b-aeaa-04d58c769dd1)
 
-**2. Use the mouse to toggle the checkmark of the row you want to download**\
-&#xNAN;_&#x4E;ote you can also toggle with  ";" or "',"_&#x20;
+3. **Click `>> Send Downloads to OF-Scraper`:**
 
-Only unlocked media will have a checkmark
+   ![image](https://github.com/datawhores/OF-Scraper/assets/67020411/9727c122-73ea-4043-850a-4d4fe0ffbf33)
 
-* media marked for download will have 'added' in them
+   Download progress updates in the console:
 
-![image](https://github.com/datawhores/OF-Scraper/assets/67020411/48e3badd-5502-480b-aeaa-04d58c769dd1)
+   ![image](https://github.com/datawhores/OF-Scraper/assets/67020411/9d0748b2-c036-4b7f-91c0-499b78a808e1)
 
-**3. Click Send to OF-Scraper**
+4. **Finished downloads show `[downloaded]`:**
 
-![image](https://github.com/datawhores/OF-Scraper/assets/67020411/9727c122-73ea-4043-850a-4d4fe0ffbf33)
+   ![image](https://github.com/datawhores/OF-Scraper/assets/67020411/7ae553c7-94d1-4a03-a44f-83fd056b80f9)
 
-Downloads progress will be updated in console
+To download an item again, click a `[downloaded]`, `[failed]`, `[stopped]`, or `[skipped]` cell once; it goes back to `[added]`.
 
-![image](https://github.com/datawhores/OF-Scraper/assets/67020411/9d0748b2-c036-4b7f-91c0-499b78a808e1)
+| Status | Meaning |
+|---|---|
+| `[added]` | Content is ready to be added to the queue |
+| `[downloading]` | Content is added to the queue and will be downloaded |
+| `[downloaded]` | Content was downloaded and post-processing succeeded |
+| `[failed]` | Content wasn't downloaded or post-processing failed |
+| `[stopped]` | Stopped with `Ctrl+X` |
+| `[skipped]` | Skipped by the size limits or a skip script, and not recorded as downloaded |
 
-**4. Finished Downloads will have the words download in them**
-
-![image](https://github.com/datawhores/OF-Scraper/assets/67020411/7ae553c7-94d1-4a03-a44f-83fd056b80f9)
-
-You can redownload by using ";" or "'" to untoggle and then retoggle with the added value
-
-| Status      | Meaning                                                     |
-| ----------- | ----------------------------------------------------------- |
-| added       | content is ready to be added to queue                       |
-| downloading | content is added to queue, and will be downloaded           |
-| downloaded  | content was downloaded and all post process were successful |
-| failed      | content was not downloaded and or post process failed       |
+Rows still waiting when you press **Stop** go back to `[added]`. Rows showing `Not Unlocked` or `Unknown` can't be added.
 
 ### Good things to know
 
-* Downloads won't start off immediately because the program is designed to check the queue for new downloads every 10 seconds.
-* Since there isn't a progress bar, enabling debug mode could be helpful in this situation.
-* By clicking on the table, you can instantly add more downloads. Any entry marked as "downloading" will be inaccessible for modification
-* Sorting and filtering functionalities should also be operational
+* Downloads start within about a second of pressing `>> Send Downloads to OF-Scraper`.
+* Since there isn't a progress bar, enabling debug mode can help track progress.
+* You can click the table to add more downloads at any time; entries marked `[downloading]` can't be modified.
+* Sorting and filtering remain available while downloading.

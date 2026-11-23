@@ -1,26 +1,15 @@
 ---
-description: Options that have an effect on the download experience
+description: Options that affect the download experience
 ---
 
 # Advanced Download Options
 
-## backend
-
-\
-Both aio and httpx can handle downloads and requests. Normally aio is faster,so switching is only required if your having issues&#x20;
-
-Historically, this has mostly been the case Mac users, and even then, only a small group among them
-
 ## downloadbars
 
-whether to show download progress bars or not
-
-Disabling these can improve performance
+Controls whether to show download progress bars. Disabling them can improve performance.
 
 ## temp\_dir
 
-{% hint style="info" %}
-**If not set the the final download directory is used to hold temp files**
-{% endhint %}
+Overrides the temporary directory used during downloads.
 
-This overrides the temporary directory used during download
+> ℹ️ If not set, the final download directory is used to hold temporary files.

@@ -1,15 +1,13 @@
 # Downloading Text Files
 
-{% hint style="info" %}
-**Text files must be handled differently since there are no text media uploads; instead, they are based on the posts and tied to multiple media**
-{% endhint %}
+> ℹ️ Text files are handled differently because there are no text media uploads; instead, they're based on posts and tied to multiple media.
 
-1. **Download Text only**
+There is no `config.json` setting for text files (`--mediatypes` / `-mt` and `config.json`'s `filter` only accept `Videos`, `Audios`, and `Images`). Use these command-line options instead:
 
-* Set the mediatype to only text via the --mediatypes arg or config file
-* This will work in download and manual,content check mode as well, It will not work in like/unlike mode
+* `--text` (also `-t`, `--download-text`): downloads text files alongside media.
+* `--text-only` (also `-tx`, `--download-text-only`): downloads only text files and skips all media.
 
-2. **Download Text with other media**
+Notes:
 
-* Set the mediatype to include text via the --mediatypes arg or config file
-* Again This will work in download and manual,content check mode as well, It will not work in like/unlike mode
+* On the content-check and manual commands, `--text` and `--text-only` can't be used together, and their short forms are `-tn` (`--text`) and `-tp` (`--text-only`) instead of `-t` and `-tx`.
+* Text files are only written by the `download` action, not by `like` or `unlike`.

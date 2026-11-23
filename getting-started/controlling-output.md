@@ -10,135 +10,71 @@ description: various options for output
 
 ### Discord
 
-{% hint style="info" %}
-**Discord logs will solely contain the log message, whereas other logs will include additional details like function calls and line numbers.**
-{% endhint %}
+Sends output to your Discord channel.
 
-{% hint style="info" %}
-**You can turn the const value 'DISCORD\_ASYNC' to true to spend up discord logs**\
-**This could result in logs not being in order**
-{% endhint %}
+> ℹ️ Discord logs contain only the log message, whereas other logs include additional details like function calls and line numbers.
 
-{% hint style="info" %}
-**For optimal performance with Discord, it's recommended to use the Normal or below logging level. Levels like Debug generate a significant amount of data, requiring numerous requests to process and log**
-{% endhint %}
+> ℹ️ You can set the environment default `OFSC_DISCORD_ASYNC` to `true` to speed up Discord logs, though messages may arrive out of order.
 
-The output goes to the Discord channel
+> ℹ️ Discord accepts only `OFF`, `LOW`, and `NORMAL` (`NORMAL` is its highest level).
 
 #### LEVELS
 
-_In ascending output order_
+*In ascending output order:*
 
-* OFF
-* LOW
-* NORMAL
-* DEBUG
-* TRACE
+* `OFF`
+* `LOW`
+* `NORMAL`
 
 ***
 
 ### Output
 
-**output to the console**
+Outputs to the console.
 
-{% hint style="info" %}
-**For clear console output, it is recommended to set the logging level to Normal or below to avoid excessive messages**
-{% endhint %}
+> ℹ️ For clear console output, set the logging level to `NORMAL` or lower to avoid excessive messages.
 
 #### LEVELS
 
-_In ascending output order_
+*In ascending output order:*
 
-* PROMPT
-* LOW
-* NORMAL
-* DEBUG
-* TRACE
+* `PROMPT`
+* `LOW`
+* `NORMAL`
+* `DEBUG`
 
 ***
 
 ### Log
 
-**output to logfile within the config folder**
+Outputs to a log file in the config folder (`~/.config/ofscraper/logging/`).
 
-_In ascending output order_
+*In ascending output order:*
 
-* OFF
-* LOW
-* NORMAL
-* DEBUG
-* TRACE
+* `OFF`
+* `LOW`
+* `NORMAL`
+* `DEBUG`
+* `TRACE`
 
-Deprecated
+Removed:
 
-* STAT
+* `STATS`
 
 ***
 
+> ℹ️ **Logs are safe to share after a check:** the OnlyFans session cookie and the Fansly token are masked in log lines. Still look for personal details before posting a log.
+
 ## Log levels details
 
-With the 1.9 release, you gain increased control over the output level.
+With the 1.9 release, you have finer control over each output level:
 
-**OFF**
-
-```
-
-This feature allows you to deactivate Discord or log file logging. 
-By default, these outputs are turned off.
-```
-
-**PROMPT**
-
-```
-
-The program needs prompts and specific console output for certain operations. 
-It configures console output to only show necessary information. 
-Providing a scraping action and usernames should largely disable most,
- if not all, additional output.
-```
-
-**LOW**
-
-```
-
-It disables all progress bars and displays essential program status while running. 
-It also includes avatars and applies to all output destinations.
-```
-
-**STATS**
-
-{% hint style="info" %}
-**Removed in 3.5**
-{% endhint %}
-
-```
-
-Slight modification to LOW no avatars will be shown
-
-```
-
-**NORMAL**.
-
-```
-The default console output level, progress bars
- and general status messages are displayed. 
- All output destinations, including Discord and log files, 
- receive general status messages but exclude progress bars.
-```
-
-**DEBUG**
-
-```
-It includes debugger messages and tracebacks within the 
-'Normal' output level. 
-This applies to all output destinations.
-
-```
-
-**TRACE**
-
-```
-
-This mode provides the most detailed and extensive 
-information compared to all other modes.
-```
+| Level | Description |
+|---|---|
+| `OFF` | Disables Discord or log file logging. Default for Discord (the log file defaults to `DEBUG`). |
+| `PROMPT` | Shows only prompts and essential console output. Passing a scraping action and usernames disables most or all additional output. |
+| `LOW` | Disables all progress bars and displays essential program status while running (including avatars). Applies to all output destinations. |
+| `STATS` | *(Removed in 3.5.)* Slight modification to `LOW` with no avatars shown. |
+| `NORMAL` | Default console output level. Shows progress bars and general status messages on the console; Discord and log files receive general status messages without progress bars. |
+| `DEBUG` | Adds debugger messages and tracebacks on top of `NORMAL`. Applies to console and log file only. |
+| `TRACE` | *(Log file only.)* Provides the most detailed output of all modes. |

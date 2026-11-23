@@ -4,32 +4,24 @@
 
 ## main\_profile
 
-{% hint style="info" %}
-&#x20;**all profiles will share the same configuration, unless overridden with --config**
-{% endhint %}
+> ℹ️ All profiles share the same configuration unless overridden with `--config`.
 
-{% hint style="info" %}
-**If you want to use multiple profiles**&#x20;
+> ℹ️ To use multiple profiles, pass `--profile`.
 
-**use --profile**
-{% endhint %}
-
-* In most cases, there's no need to modify this setup. Profiles are organized into directories within the config location, with the value being derived from the profile name.&#x20;
-* Each directory can correspond to a distinct authentication file
-
-
+* In most cases, there's no need to change this setting. Profiles are organised into directories inside the config location, named after the profile.
+* Each directory can hold its own authentication file.
 
 ***
 
 ## discord
 
-```
+To send updates to Discord using webhooks, follow Discord's [Intro to Webhooks](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks) guide.
 
-To send updates to Discord using webhooks, 
-follow the setup guide at
-https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks.
-  
-You'll need to add the URL provided in the setup 
-and include the --discord argument when executing the script
-```
+Add the webhook URL to `discord` in `config.json`, and raise the Discord log level with `-dc` / `--discord` `LOW` or `NORMAL` (default `OFF`). Nothing is sent while it stays `OFF`.
 
+***
+
+## New config files and environment variables
+
+* A new `config.json` is written from the built-in defaults.
+* Environment variables (`OFSC_*`) apply at runtime only and aren't saved into `config.json`.

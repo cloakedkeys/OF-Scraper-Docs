@@ -1,7 +1,5 @@
 ---
-description: >-
-  These options allow you to configure automated actions performed by the
-  program and control its background execution
+description: Configure automated actions, daemon mode and Fansly livestream recording.
 ---
 
 # Automation Options
@@ -10,27 +8,59 @@ description: >-
 
 ### -d, --daemon \[argument]
 
-* **Runs:** The program in the background as a daemon process.
-* **Argument:** (required) Specify the desired interval between program runs (e.g., `-d 60` for hourly runs).
+* **Runs:** Runs the program in the background as a daemon.
+* **Argument (required):** Interval in minutes between runs; decimals are allowed (e.g. `-d 60` for hourly runs).
+
+#### Trigger the next pass early
+
+> ℹ️ **Since 3.15.0, Docker/Linux.** See [Fork Changes](../../../fork-changes.md).
+
+While the daemon is waiting between passes, send `SIGUSR1` to start the next pass without restarting it:
+
+```sh
+docker kill --signal=SIGUSR1 <container>
+```
+
+Outside Docker, `kill -USR1 <pid>` does the same.
+
+* The signal is ignored during an active pass. Repeated signals don't queue extra passes.
+* After the triggered pass, the normal interval starts again.
+* SIGTERM and Ctrl+C still shut the daemon down, including while it's waiting between passes.
+* Native Windows has no SIGUSR1, so this isn't available there.
 
 ## Automated Actions
 
-### -a, --action \[argument]
+### -a, --action (also `--actions`) \[argument]
 
-* **Selects:** The automated action to perform on posts.
+* **Selects:** The automated action to run on posts.
 * **Possible choices:**
-  * `like`: Like each post encountered during processing.
-  * `unlike`: Unlike each post encountered during processing.
-  * `download`: Download media associated with each post encountered during processing.
+  * `like`: Likes each processed post.
+  * `unlike`: Unlikes each processed post.
+  * `download`: Downloads media (images, videos, audio) from each processed post.
+* **Combined actions:** Repeat `-a` or separate choices with a comma (for example, `-a like -a download` or `-a like,download`). `like` and `unlike` can't be combined.
 
-**Combined actions:** You can combine the `-a` option multiple times to specify multiple actions. For example, `-a like -a download` or `a like,download` would like and download media for each post.
+> ℹ️ **Like and unlike are subject to rate limits.**
 
-#### **Action Descriptions:**
+## Fansly Livestreams
 
-{% hint style="info" %}
-**Like and unlike are limited by rate limiting**
-{% endhint %}
+These options apply to Fansly only (`--site fansly`) and are available in the main program.
 
-* **Like:** Attempts to like each post processed by the program.
-* **Unlike:** Attempts to unlike each post processed by the program
-* **Download:** Downloads associated media (e.g., images, videos) from each post processed by the program
+### --live
+
+* Records the selected creators (all followed creators without `-u`) who are live now, then continues.
+
+### --live-watch
+
+* Keeps checking who is live and records them. With `--daemon` it runs beside the scheduled scrapes.
+
+### --live-interval \[argument]
+
+* Seconds between live checks in `--live-watch`. Whole number, at least 10 (default 60, plus up to 10 seconds of jitter).
+
+### --live-max \[argument]
+
+* The most livestreams recorded at the same time. Whole number, at least 1 (default 2).
+
+### --live-chat
+
+* Also saves livestream chat to a `.jsonl` file (read-only; off by default).

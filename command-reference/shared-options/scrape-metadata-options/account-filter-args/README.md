@@ -1,55 +1,46 @@
 ---
-description: >-
-  These options allow you to refine the list of user accounts displayed and
-  processed by the program. You can combine multiple filters to create specific
-  selections.
+description: Filter which creator accounts are listed and processed. Filters can be combined.
 ---
 
 # User List Filter Options
 
 ## Pricing Filters
 
-{% hint style="info" %}
-**Refer to the dedicated documentation for detailed information on price filtering and sorting**
-{% endhint %}
+> ℹ️ For details on how price filtering and sorting work, see [Price Filtering/Sort](../../../../using-the-scraper/batch-scraping-and-bot-actions/model-selection-sorting/price-filtering-sort.md).
 
-{% content-ref url="../../../../using-the-scraper/batch-scraping-and-bot-actions/model-selection-sorting/price-filtering-sort.md" %}
-[price-filtering-sort.md](../../../../using-the-scraper/batch-scraping-and-bot-actions/model-selection-sorting/price-filtering-sort.md)
-{% endcontent-ref %}
-
-These options allow you to filter accounts based on their current price, renewal price, promotional price (if available), and regular price (if available).
+Filter accounts by their current price, renewal price, promotional price (if available) or regular price (if available).
 
 ### -cp, --current-price \[argument]
 
 * **Possible choices:**
-  * `paid`: Filters for accounts with a paid current price.
-  * `free`: Filters for accounts with a free current price.
+  * `paid`: Accounts with a paid current price.
+  * `free`: Accounts with a free current price.
 
 ### -rp, --renewal-price \[argument]
 
 * **Possible choices:**
-  * `paid`: Filters for accounts with a paid renewal price.
-  * `free`: Filters for accounts with a free renewal price.
+  * `paid`: Accounts with a paid renewal price.
+  * `free`: Accounts with a free renewal price.
 
 ### -pp, --promo-price \[argument]
 
+Uses the lowest promotional price, claimable or not, otherwise the regular price.
+
 * **Possible choices:**
-  * `paid`: Filters for accounts with a claimable promotional price.
-  * `free`: Filters for accounts without a claimable promotional price.
+  * `paid`: Accounts with a paid price.
+  * `free`: Accounts with a free price.
 
 ### -gp, --regular-price \[argument]
 
 * **Possible choices:**
-  * `paid`: Filters for accounts with a regular price (if applicable).
-  * `free`: Filters for accounts without a regular price (if applicable).
-
-
+  * `paid`: Accounts with a regular price (if applicable).
+  * `free`: Accounts without a regular price (if applicable).
 
 ***
 
 ## Account Flags
 
-These options filter accounts based on specific flags or properties.
+Filter accounts by specific flags or properties.
 
 ### -lo, --last-seen-only
 
@@ -69,19 +60,17 @@ These options filter accounts based on specific flags or properties.
 
 ### -ao, --all-promo-only
 
-* **Filters:** Accounts with any claimable promotional price, regardless of current or renewal status.
+* **Filters:** Accounts with any promotional price, claimable or not.
 
-### -as, --all-promo-skip
+### --all-promo-skip
 
-* **Filters:** Accounts without any claimable promotional price, regardless of current or renewal status.
-
-
+* **Filters:** Accounts without any promotional price, claimable or not.
 
 ***
 
 ## Subscription Type
 
-These options filter accounts based on their subscription status.
+Filter accounts by their subscription status.
 
 ### -fo, --free-trial-only
 
@@ -89,7 +78,7 @@ These options filter accounts based on their subscription status.
 
 ### -fs, --free-trial-skip
 
-* **Filters:** Accounts that are not currently in a free trial (normally paid accounts).
+* **Filters:** Accounts not currently in a free trial (normally paid accounts).
 
 ### -ts, --active-subscriptions
 

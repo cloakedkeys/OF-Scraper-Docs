@@ -1,35 +1,29 @@
 # Config Options
 
-{% content-ref url="example-configs.md" %}
-[example-configs.md](example-configs.md)
-{% endcontent-ref %}
+For the complete, generated list of every key, see [config.json keys](../../reference/config.md) in the Technical Reference.
+
+* [Example Configs](example-configs.md)
 
 ***
 
 ## Config settings for save locations
 
-**Customize the final file path for downloads**
+Customise the final file path for downloads:
 
-{% content-ref url="file-output-options/" %}
-[file-output-options](file-output-options/)
-{% endcontent-ref %}
+* [File Output Options](file-output-options/)
 
 ***
 
 ## Media Filtering
 
-**Customize which files are downloaded**
+Customise which files are downloaded:
 
-{% content-ref url="download-options/media-filtering-options.md" %}
-[media-filtering-options.md](download-options/media-filtering-options.md)
-{% endcontent-ref %}
+* [Media Filtering Options](download-options/media-filtering-options.md)
 
 ***
 
 ## Key Options
 
-**These settings are required for some files**
+These settings are required for some files:
 
-{% content-ref url="key-option.md" %}
-[key-option.md](key-option.md)
-{% endcontent-ref %}
+* [CDM Options](key-option.md)

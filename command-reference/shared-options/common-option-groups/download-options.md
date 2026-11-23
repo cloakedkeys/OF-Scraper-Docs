@@ -1,49 +1,45 @@
 ---
-description: These options allow you to fine-tune how the program handles downloads.
+description: Fine-tune how the program handles downloads.
 ---
 
 # Download Options
 
 ## Download Configuration Overrides
 
-{% hint style="info" %}
-**For threads and sems**
-{% endhint %}
+> ℹ️ For help choosing thread and semaphore counts, see [Values to Pick](../../../getting-started/config-options/performance-options/values-to-pick.md).
 
-{% content-ref url="../../../getting-started/config-options/performance-options/values-to-pick.md" %}
-[values-to-pick.md](../../../getting-started/config-options/performance-options/values-to-pick.md)
-{% endcontent-ref %}
+### -db, --downloadbars (also `--download-bars`, `--download-bar`)
 
-### -db, --download-bars
+* **Overrides:** The `downloadbars` setting in `config.json`.
+* **Default:** `None`.
+* **Available in:** The main program and `metadata` only.
 
-* **Overrides:** The `downloadbars` setting in the configuration file
-* **Default:** `None`
+### -sd, --downloadsem (also `--downloadsems`, `--download-sems`, `--download-sem`, `--sems`, `--sem`) \[argument]
 
-### -sd, --download-sems \[argument]
+* **Overrides:** The `download_sems` setting in `config.json`, which sets the number of concurrent downloads per thread. Takes a whole number.
+* **Default:** `None` (uses the value in `config.json`).
+* **Available in:** The main program and `metadata` only.
 
-* **Overrides:** The `download_sems` setting in the configuration file. This setting controls the number of concurrent download processes.
-* **Default:** `None` (uses default value from configuration file)
+### -dl, --download-limit \[argument]
 
-### -dt, --download-threads \[argument]
+* **Overrides:** The `download_limit` setting in `config.json`.
+* **Limits:** Maximum download speed, shared across all downloads in the run, in bytes per second. Values below `1024` are raised to `1024`.
+* **Accepts:** Human-readable sizes such as `10MB`.
+* **Default:** No limit.
+* **Available in:** The main program, `manual` and the check commands (not `metadata` or `db`).
 
-* **Overrides:** The `threads_count` setting in the configuration file. This setting controls the number of threads used within each download process.
-* **Special case:** Setting the value to zero forces the program to use the main thread for downloading. The main thread is also used if there aren't enough active downloads to fill the configured number of download threads.
-* **Default:** `None` (uses default value from configuration file)
+### -ad, --allow-dupes (also `--allow-dupe-downloads`; turn off with `--no-allow-dupes`)
 
-### -dl, --download-limit\[argument]
-
-* **Overrides:** The `download_limit` setting in the configuration file.
-* **Limits:** the maximum download speed per thread to the specified number of bytes per second
-* **Accepts:** Human-readable size values like "10MB"
-* **Default:** No default limit (unlimited download speed).
+* **Sets:** Downloads media that appears in several posts once for each post, instead of once.
+* **Default:** Off (the `ALLOW_DUPE_MEDIA` setting).
+* **Available in:** Every mode: main, `metadata`, `manual` and the `*_check` commands.
 
 ***
 
 ## Download Cleanup
 
-## -ar, --no-auto-resume
+### -ar, --no-auto-resume
 
-* **Disables:** Automatic cleanup of partially downloaded files (".part" files) upon program exit. This includes forced exits (e.g., Ctrl+C).
-* **Default:** `false` (automatic cleanup is enabled)
-
-***
+* **Effect:** Deletes temporary `.part` files instead of resuming them.
+* **Default:** `false` (partial downloads are kept so they can resume).
+* **Available in:** The main program, `manual` and the check commands (not `metadata` or `db`).

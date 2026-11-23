@@ -1,29 +1,19 @@
 # Welcome
 
-OF-Scraper is a command-line tool that lets you download media from OnlyFans and perform bulk actions like liking or unliking posts
+OF-Scraper is a command-line tool that lets you download media from OnlyFans and Fansly and perform bulk actions like liking or unliking posts.
+
+> ℹ️ **These are the docs for the cloakedkeys/OF-Scraper-Community fork.** They start from the upstream docs and add the fork's changes. See [Fork Changes](fork-changes.md) for the full list.
 
 ***
 
-## Installation&#x20;
+## Installation
 
-{% content-ref url="requirements.md" %}
-[requirements.md](requirements.md)
-{% endcontent-ref %}
-
-{% content-ref url="installation/" %}
-[installation](installation/)
-{% endcontent-ref %}
-
-
+* [Requirements](requirements.md)
+* [Install](installation/)
 
 ***
 
 ## After Install
 
-{% content-ref url="getting-started/" %}
-[getting-started](getting-started/)
-{% endcontent-ref %}
-
-{% content-ref url="faq/" %}
-[faq](faq/)
-{% endcontent-ref %}
+* [Getting Started and Settings](getting-started/)
+* [FAQ/Common Issues](faq/)

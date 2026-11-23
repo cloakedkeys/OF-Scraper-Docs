@@ -6,35 +6,25 @@ description: Options required for protected downloads
 
 ## key-mode-default
 
-The default Content Decryption Module (CDM) used for decrypting content.&#x20;
+The default Content Decryption Module (CDM) used for decrypting content. Default: `manual`.
 
-Certain CDMs might need additional configuration.
+* `manual`: uses the local CDM files from `private-key` and `client-id`.
+* Other values fall back to the default.
 
-{% content-ref url="../../cdm-options/" %}
-[cdm-options](../../cdm-options/)
-{% endcontent-ref %}
+> ⚠️ **Deprecated:** `cdrm` is deprecated: the service no longer works and the option will be removed. It also sends your request headers, cookies included, to `cdrm-project.com`.
 
-The following command can overwrite this setting
+Certain CDMs might need additional configuration. See [CDM Setup](../../cdm-options/).
 
-```
---key-mode 
-```
+You can override this setting on the command line with `--key-mode` (or `-k`).
 
 ***
 
 ## private-key
 
-Utilized for manual cdm
+Path to the CDM private key file (`private_key.pem`), used for `manual` CDM.
+
+> ℹ️ **Fork:** A path with surrounding quotes, as Windows' "Copy as path" produces, is accepted. The same applies to `client-id`, `ffmpeg`, and `temp_dir`.
 
 ## client-id
 
-Utilized for manual cdm
-
-
-
-
-
-
-
-
-
+Path to the CDM client ID file (`client_id.bin`), used for `manual` CDM.

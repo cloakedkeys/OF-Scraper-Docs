@@ -1,10 +1,11 @@
 # Adding Proxy
 
-The const value for proxy is&#x20;
+Set the `OFSC_PROXY` environment variable (or add it to a `.env` file listed in `env_files`). There is no `config.json` key.
 
-\
-**PROXY**\
-\
-For compatibility with httpx and aiohttp the proxy url must include credential if required\
-\
-[**http://username:password@localhost:8030**](http://username:password@localhost:8030)
+Only `http://` and `https://` proxies are supported; SOCKS proxies aren't supported.
+
+For compatibility with `httpx` and `aiohttp`, include credentials in the proxy URL if required:
+
+```text
+OFSC_PROXY=http://username:password@localhost:8030
+```

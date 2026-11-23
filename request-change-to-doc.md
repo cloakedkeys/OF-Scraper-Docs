@@ -1,11 +1,5 @@
 # Request Change to Doc
 
-The documents are synchronized with GitHub
+Found a mistake, something out of date, or a page that doesn't make sense?
 
-
-
-To propose a change, you can create a pull request at:&#x20;
-
-{% embed url="https://github.com/datawhores/OF-Scraper-Docs" %}
-
-\
+Open an issue on [GitHub Issues](https://github.com/cloakedkeys/OF-Scraper-Community/issues) and say which page and what's wrong.

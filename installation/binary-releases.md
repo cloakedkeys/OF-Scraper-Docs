@@ -1,16 +1,10 @@
 # Binary Releases
 
-{% hint style="info" %}
-**Check out the binaries below if you want to run without installing**
-{% endhint %}
+Download a standalone binary below if you want to run OF-Scraper without installing Python.
 
-{% hint style="info" %}
-**However, pip/pipx are the recommended as they will have better performance**\
-**and provide easier path to updates**
-{% endhint %}
+> ℹ️ **Recommended alternative:** Use `uv` or `pip` instead for better performance and easier updates.
 
-{% embed url="https://github.com/datawhores/OF-Scraper/releases" %}
+Builds for Windows, macOS, and Linux are attached to each release. They use Python 3.15.1.
 
-{% content-ref url="release-info.md" %}
-[release-info.md](release-info.md)
-{% endcontent-ref %}
+- [GitHub Releases](https://github.com/cloakedkeys/OF-Scraper-Community/releases)
+- [Release Info](release-info.md)

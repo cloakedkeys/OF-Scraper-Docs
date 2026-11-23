@@ -2,139 +2,121 @@
 
 ## Volumes
 
-{% hint style="warning" %}
-**If manually downloading binaries, you'll need to mount the Linux-based binaries from your host system into the container. Refer to the 'Docker Compose' section for examples.**
-{% endhint %}
+> ⚠️ **If you manually download binaries, mount the Linux binaries from your host system into the container.** See the [Docker Compose](#docker-compose) section for an example.
 
-| Mount Point     | Purpose                                                                                                                         | Typical Default Location                              |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| **APP\_HOME**   | The **home directory** for your application's user inside the container. This often serves as the base for other default paths. | `/home/<APP_USER>` (e.g., `/home/ofscraper`)          |
-| **DATA\_DIR**   | Where the application stores its **persistent data files**, such as databases, downloaded content, or user-generated media.     | `$APP_HOME/data` (e.g., `/home/ofscraper/data`)       |
-| **CONFIG\_DIR** | Where the application stores its **configuration files** and settings.                                                          | `$APP_HOME/.config` (e.g., `/home/ofscraper/.config`) |
+| Mount Point | Purpose | Typical Default Location |
+|---|---|---|
+| **APP\_HOME** | The **home directory** for the application's user inside the container. Often used as the base for other default paths. | `/home/ofscraper` |
+| **DATA\_DIR** | Where the application stores **persistent data**, such as databases, downloaded content, and media. Sets the default save path. | `$APP_HOME/data` (e.g. `/home/ofscraper/data`) |
+| **CONFIG\_DIR** | Which folder the start script creates and gives the container user ownership of. | `$APP_HOME/.config` (e.g. `/home/ofscraper/.config`) |
 
 ### CONFIG\_DIR
 
-The `CONFIG_DIR` is where OF-Scrapers configuration files will be stored. It will prioritizes any explicit setting by the user
+`CONFIG_DIR` only sets which folder the start script creates and gives the container user ownership of. The app doesn't read `CONFIG_DIR`: config comes from `~/.config/ofscraper` or `--config`, so setting `CONFIG_DIR` doesn't move the config.
 
-| Scenario               | `CONFIG_DIR` Environment Variable        | `APP_HOME` Value (Example) | `CONFIG_DIR` Final Path   | Explanation                                                                                                                                                                                                                     |
-| ---------------------- | ---------------------------------------- | -------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **1. Explicitly Set**  | `CONFIG_DIR=/app/onfig/`                 | `/home/ofscraper`          | `/app/config`             | If you explicitly provide the `CONFIG_DIR` environment variable, its value is used directly. This overrides any default behavior.                                                                                               |
-| **2. Not Set / Empty** | `CONFIG_DIR` is unset or `CONFIG_DIR=""` | `/home/ofscraper`          | `/home/ofscraper/.config` | <p>If <code>CONFIG_DIR</code> is not provided (or provided as an empty string), it defaults to a hidden <code>.config</code> directory within the determined <code>APP_HOME</code>.   </p><p>or users <br><code>Home</code></p> |
-
-
+| Scenario | `CONFIG_DIR` Environment Variable | `APP_HOME` Value (Example) | `CONFIG_DIR` Final Path | Explanation |
+|---|---|---|---|---|
+| **1. Explicitly Set** | `CONFIG_DIR=/app/config/` | `/home/ofscraper` | `/app/config` | The start script creates and owns `/app/config`, but the app still reads config from `~/.config/ofscraper` or `--config`. |
+| **2. Not Set / Empty** | Unset or `CONFIG_DIR=""` | `/home/ofscraper` | `/home/ofscraper/.config` | Defaults to `.config` inside `APP_HOME`. |
 
 ### DATA\_DIR
 
-The `DATA_DIR` is where your application will store its persistent data. Similar to `CONFIG_DIR`, it will respects user overrides.
+`DATA_DIR` sets the default save path for persistent data and respects explicit overrides.
 
-| Scenario               | `DATA_DIR` Environment Variable      | `APP_HOME` Value (Example) | `DATA_DIR` Final Path  | Explanation                                                                                                                       |
-| ---------------------- | ------------------------------------ | -------------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| **1. Explicitly Set**  | `DATA_DIR=/app/data`                 | `/home/ofscraper`          | `/app/data`            | If you explicitly provide the `DATA_DIR` environment variable, its value is used directly, overriding any default.                |
-| **2. Not Set / Empty** | `DATA_DIR` is unset or `DATA_DIR=""` | `/home/ofscraper`          | `/home/ofscraper/data` | If `DATA_DIR` is not provided (or provided as an empty string), it defaults to a `data` directory within the determined `APP_HOM` |
+| Scenario | `DATA_DIR` Environment Variable | `APP_HOME` Value (Example) | `DATA_DIR` Final Path | Explanation |
+|---|---|---|---|---|
+| **1. Explicitly Set** | `DATA_DIR=/app/data` | `/home/ofscraper` | `/app/data` | Uses the value you set directly, overriding the default. |
+| **2. Not Set / Empty** | Unset or `DATA_DIR=""` | `/home/ofscraper` | `/home/ofscraper/data` | Defaults to `data` inside `APP_HOME`. |
 
 ### Home Folder
 
-{% hint style="danger" %}
-**If you do&#x20;**_**not**_**&#x20;explicitly set the `HOME_FOLDER` environment variable, the script's default behavior is to make the home directory name match the adapted `APP_USER` name. For instance, if `APP_USER` was initially `ofscraper` but gets adapted to an existing user like `nginx` (due to a UID conflict), the `APP_HOME`  folder will dynamically change to `/home/nginx`. This keeps the user's name and home folder consistent within the container's `/etc/passwd` file.**
-{% endhint %}
-
-| Scenario     | `HOME_FOLDER` Environment Variable Status | `APP_USER` Adaptation (e.g., from `ofscraper` to `nginx`) | Resulting `APP_HOME` Directory Path in Container (`/etc/passwd`) | Explanation                                                                                                                                                                                                                                   |
-| ------------ | ----------------------------------------- | --------------------------------------------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Default**  | **Not set** (or empty string)             | **Yes**, `APP_USER` changes                               | `/home/nginx` (dynamically matches new `APP_USER`)               | When `HOME_FOLDER` isn't specified, the home directory name **automatically updates** to match the new `APP_USER` name if the user account has to adapt to an existing UID on the host. This keeps the user name and home folder consistent.  |
-|              | **Not set** (or empty string)             | **No**, `APP_USER` remains `ofscraper`                    | `/home/ofscraper`                                                | If no `HOME_FOLDER` is set and `APP_USER` doesn't need to change, the home directory defaults to `/home/ofscraper`.                                                                                                                           |
-| **Explicit** | **Set** (e.g., `mydata`)                  | **Yes**, `APP_USER` changes                               | `/home/mydata` (remains as explicitly set)                       | If you explicitly define `HOME_FOLDER`, the home directory path **stays fixed** at `/home/mydata`. It will not change, even if `APP_USER` adapts to a different name due to UID/GID conflicts. This provides a stable, predictable home path. |
-|              | **Set** (e.g., `mydata`)                  | **No**, `APP_USER` remains `ofscraper`                    | `/home/mydata`                                                   | The explicitly set `HOME_FOLDER` always takes precedence, so the home directory will be `/home/mydata`.                                                                                                                                       |
-
-
-
-
-
-
-
-
+The container's home directory is controlled by `APP_HOME`, a full path that defaults to `/home/ofscraper`. It doesn't change when the username changes.
 
 ***
 
 ## Environment Variables
 
-The container is managed by a entrypoint script that automatically creates a non-root user to run the application.&#x20;
+The container is managed by an entrypoint script that creates a non-root user to run the application. You can control the user, group, paths, and script behaviour with the environment variables below.
 
-You can control the user, group, paths, and script behavior using the environment variables below.
+### Fork changes
+
+> ℹ️ **Since 3.15.0.** These apply to images from 3.15.0 on. See [Fork Changes](../fork-changes.md).
+
+* **Downloads go to the mounted data folder by default.** With no `save_location` in your config, downloads are saved to `DATA_DIR` (`/home/ofscraper/data`), the folder `docker-compose.yml` mounts. Upstream saved them to `/home/ofscraper/Data/ofscraper`, which isn't mounted. A `save_location` in your config, a custom `DATA_DIR` or `OFSC_SAVE_PATH_DEFAULT` still take priority.
+* **Both sets of user variables work.** `USER_ID`, `GROUP_ID`, `USER_NAME` and `GROUP_NAME` (the names in `docker-compose.yml`) are read as well as `UID`, `GID`, `USERNAME` and `GROUPNAME`. The first set takes precedence. A lone user ID is also used for the group, and a lone group ID keeps the default user ID 1000.
+* **Non-root containers start.** With `docker run --user 1234:1234` or compose `user:`, the entrypoint skips user creation and `chown`, and runs as that user. Mounted folders must already be writable by it.
+* **ffmpeg works on arm64.** Every image includes ffmpeg: amd64 uses `pyffmpeg`'s ffmpeg, and arm64 uses a static ffmpeg 9.0.2.
+* **`docker stop` works in daemon mode.** SIGTERM stops the scraper promptly instead of waiting for Docker to kill it, including while it's waiting between passes.
+* **Start the next daemon pass early** with `docker kill --signal=SIGUSR1 <container>`. See [`--daemon`](../command-reference/shared-options/scrape-metadata-options/general-scraper-args.md).
 
 ### User and Group Identity
 
-These variables control the identity of the user that runs the application inside the container.
+These variables control the user that runs the application inside the container. The start script reads `USER_ID`, `GROUP_ID`, `USER_NAME`, and `GROUP_NAME` first, then falls back to `UID`, `GID`, `USERNAME`, and `GROUPNAME`.
 
-For the best experience with mounted volumes, it is **highly recommended** to set `UID` and `GID` to match your host system's user (e.g., `-e UID=$(id -u) -e GID=$(id -g)`).
+For mounted volumes, setting the user and group IDs to match your host user (e.g. `-e USER_ID=$(id -u) -e GROUP_ID=$(id -g)`) is **highly recommended**.
 
-| **Environment Variable** | **Default Value (if not set)** | **Purpose & Effect of Changing the Value**                                                                                                                                                                                                                                                                                                                                                                  |
-| ------------------------ | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `UID`                    | `1000`                         | Sets the **numeric User ID (UID)** for the application user, which is critical for matching file ownership on mounted volumes. Setting `UID=$(id -u)` makes the container user have the _same UID as your host user_, ensuring files it creates are correctly owned by you on the host. if the UID already exists with a different username in the container, it will adapt and use that existing user.     |
-| `GID`                    | `1000`                         | Sets the **numeric Group ID (GID)** for the application user's primary group, which works with `UID` to manage correct group ownership. Setting `GID=$(id -g)` ensures file permissions align with your host's primary group. Similar to `UID`, the script will adapt if this GID already belongs to an existing group.                                                                                     |
-| `USERNAME`               | `ofscraper`                    | Defines the **name** of the user to be created or managed inside the container. If you set `USERNAME=youruser`, the script will attempt to create or modify a user named `youruser` with the specified `UID`. This name is mainly for logical identification. If the `UID` you provide is already taken by a different user, the script will use that existing user's name instead and print a log message. |
-| `GROUPNAME`              | The value of `USERNAME`        | Defines the **name** of the primary group for the application user. By default, the group name will match the username (e.g., `ofscraper`). You can set this explicitly if you have specific group naming conventions. Like `USERNAME`, this is secondary to `GID`.                                                                                                                                         |
+| Environment Variable | Default | Purpose |
+|---|---|---|
+| `USER_ID` / `UID` | `1000` | Sets the **numeric User ID (UID)** so files created on mounted volumes are owned by your host user. If this UID already belongs to another user in the container, the script adapts and uses that user. |
+| `GROUP_ID` / `GID` | `1000` | Sets the **numeric Group ID (GID)** for the user's primary group. Like `USER_ID` / `UID`, the script adapts if this GID already belongs to an existing group. |
+| `USER_NAME` / `USERNAME` | `ofscraper` | Sets the **username** created inside the container. If the UID already belongs to a different user, the script uses that existing username instead and logs a message. |
+| `GROUP_NAME` / `GROUPNAME` | Value of `USER_NAME` / `USERNAME` | Sets the **primary group name**. Secondary to the GID, like the username is to the UID. |
 
 ### Path and Directory Management
 
-These variables allow you to control where the application stores its files. This is useful for mounting specific host directories.
+These variables control the container's paths.
 
-| **Environment Variable** | **Default Value (if not set)** | **Purpose & Effect of Changing the Value**                                                                                                                                                                                                                                                            |
-| ------------------------ | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `HOME_FOLDER`            | The value of `USERNAME`        | Sets the **folder name** for the user's home directory inside the container's `/home/` directory. If you set `USERNAME=john` and leave this unset, the home directory will be `/home/john`. If you set `HOME_FOLDER=my_app`, the home directory becomes `/home/my_app`, regardless of the `USERNAME`. |
-| `DATA_DIR`               | `$APP_HOME/data`               | Overrides the path for the application's data directory. By default, data is stored in a `data` folder inside the user's home directory (e.g., `/home/ofscraper/data`). You can set this to any absolute path, such as `/data`, if you prefer to mount a volume directly to `/data`.                  |
-| `CONFIG_DIR`             | `$APP_HOME/.config`            | Overrides the path for the application's configuration directory. By default, configuration is stored in a hidden `.config` folder inside the user's home directory (e.g., `/home/ofscraper/.config`). You can set this to an absolute path like `/config` to mount a volume there instead.           |
+| Environment Variable | Default | Purpose |
+|---|---|---|
+| `APP_HOME` | `/home/ofscraper` | Full path for the application user's home directory inside the container. Doesn't change with the username. |
+| `DATA_DIR` | `$APP_HOME/data` | Sets the data folder and, unless `OFSC_SAVE_PATH_DEFAULT` is set, the default save path. Set to any absolute path (such as `/data`) if you prefer to mount a volume there. |
+| `CONFIG_DIR` | `$APP_HOME/.config` | Sets which folder the start script creates and gives the container user ownership of. Doesn't change where the app reads config (`~/.config/ofscraper` or `--config`). |
 
 ### Script Behavior Flags
 
-These variables act as on/off switches to control specific actions within the entrypoint script.
-
-| **Environment Variable** | **Default Value (if not set)** | **Purpose & Effect of Changing the Value**                                                                                                                                                                                                                                                              |
-| ------------------------ | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `KEEP_PERM`              | `false`                        | Prevents the script from changing ownership of the home, data, and config directories. If you set `KEEP_PERM=true`, the script will **not** run `chown` on your mounted directories. This is useful for advanced setups like rootless Docker or when you are managing permissions manually on the host. |
-| `SKIP_FFMPEG`            | `false`                        | Controls the installation of the `pyffmpeg` Python package. If you set `SKIP_FFMPEG=true`, the script will not attempt to install the `pyffmpeg` package. This can be used to speed up container startup if you do not need its functionality or if the installation is causing issues.                 |
+| Environment Variable | Default | Purpose |
+|---|---|---|
+| `KEEP_PERM` | `false` | When `true`, skips running `chown` on the home, data, and config directories. Useful for rootless Docker or when managing host permissions manually. |
 
 ***
 
 ## Docker Run
 
-This section provides the basic `docker run` commands to get OF-Scraper started. Remember to replace `/your/host/config/path/` with the actual path on your host machine where you want to store OF-Scraper's configuration, and `/your/host/data/path/` with where you want to store downloaded content. Replace `{args}` with your desired OF-Scraper commands (e.g., `ofscraper --username myonlyfans`)
+Replace `/your/host/config/path/` with your host config folder, `/your/host/data/path/` with your host downloads folder, and `{args}` with your OF-Scraper arguments (for example, `--username myonlyfans`).
 
 ### Minimal `docker run` Command
 
-This command uses the container's default user and group settings (`ofscraper` user with UID/GID `1000`).
+Uses the container's default user and group (`ofscraper`, UID/GID `1000`):
 
-```
+```bash
 docker run -it --rm --name=ofscraper \
   -v /your/host/config/path/:/home/ofscraper/.config/ofscraper/ \
   -v /your/host/data/path/:/home/ofscraper/data \
-  ghcr.io/datawhores/of-scraper:main ofscraper {args}
+  ghcr.io/cloakedkeys/of-scraper-community:latest ofscraper {args}
 ```
 
 #### Using Optional Environment Variables
 
-To pass these optional variables, add them to your `docker run` command using the `-e` flag:
+Pass optional variables with `-e` (`GROUP_NAME` is only needed if you want a group name different from `USER_NAME`):
 
-Bash
-
-```
+```bash
 docker run -it --rm --name=ofscraper \
   -v /your/host/config/path/:/home/ofscraper/.config/ofscraper/ \
   -v /your/host/data/path/:/home/ofscraper/data \
   -e USER_NAME=youruser \
   -e USER_ID=$(id -u) \
   -e GROUP_ID=$(id -g) \
-  -e GROUP_NAME=yourgroup \ # Optional: Only if you want a custom group name different from USER_NAME
-  ghcr.io/datawhores/of-scraper:main ofscraper {args}
+  -e GROUP_NAME=yourgroup \
+  ghcr.io/cloakedkeys/of-scraper-community:latest ofscraper {args}
 ```
 
 ***
 
 ## Docker Compose
 
-For more complex setups or for defining your service persistently, use Docker Compose. Remember to install `ffmpeg` and `mp4decrypt` on your local system if you choose to mount them from the host.
+For persistent setups, use Docker Compose. If you choose to mount `ffmpeg` from the host, install `ffmpeg` on your host system first.
 
-```
-version: "3.8" # Recommended to use a recent version for new features
+```yaml
 services:
   of-scraper:
     stdin_open: true # Keeps STDIN open for interactive processes
@@ -156,7 +138,7 @@ services:
       # Optional: Mount pre-installed binaries from host (adjust paths as needed)
       # - /usr/bin/ffmpeg:/usr/bin/ffmpeg
 
-    image: ghcr.io/datawhores/of-scraper:main 
+    image: ghcr.io/cloakedkeys/of-scraper-community:latest 
     # --- COMMAND OPTIONS ---
     # Choose one of the following 'command' configurations based on your use case.
     # Uncomment the desired option and ensure others are commented out.
@@ -180,77 +162,58 @@ services:
 
 ### Interactive Use
 
-If you've set up your `docker-compose.yml` for interactive use (by using `command: ["/bin/bash", "-c", "sleep infinity"]` or similar), you'll start the container in the background and then execute commands inside it.
+If your `docker-compose.yml` uses `command: ["/bin/bash", "-c", "sleep infinity"]`, start the container in detached mode with `docker compose up -d`, then run commands inside it:
 
-To run the scraper manually (after bringing the service up with `docker compose up -d` to start it in detached mode), use:
-
-Bash
-
-```
+```bash
 docker compose exec -it ofscraper ofscraper {args}
 ```
 
-Replace `{args}` with your desired OF-Scraper commands, for example: `docker compose exec -it ofscraper ofscraper --username myuser --posts all`.
+Replace `{args}` with your OF-Scraper arguments, for example:
+
+```bash
+docker compose exec -it ofscraper ofscraper --username myuser --posts all
+```
 
 ***
 
 ## Building Custom Images
 
-{% hint style="info" %}
-**All officially released OF-Scraper Docker images already include `ffmpeg` built-in.**
-{% endhint %}
+> ℹ️ **Every image includes `ffmpeg` with no build argument:** `amd64` uses `pyffmpeg`'s `ffmpeg`, and `arm64` uses a static `ffmpeg 9.0.2`. You generally don't need to install `ffmpeg` on your host system or mount it into the container.
 
-This section is **only relevant if you are building the OF-Scraper Docker image locally from source**, for instance, to include specific Python dependencies or to customize the build process. You can use `docker buildx` for this.
+This section is only needed if you're building the Docker image locally from source (for example, to customise the build or add Python dependencies).
 
-### Using `INSTALL_FFMPEG` Build Argument
+### Build Arguments
 
-The OF-Scraper `Dockerfile` includes an `ARG` (build argument) named `INSTALL_FFMPEG`. When set to `true` during a local build, this argument triggers the installation of the `pyffmpeg` Python package, which in turn includes and manages its own `ffmpeg` binary within the container.
+The only build argument is `BUILD_VERSION`, which is optional (otherwise the version is taken from git).
 
-To build an image locally where `pyffmpeg` (and thus `ffmpeg`) is included, you would pass `INSTALL_FFMPEG=true` to your `docker buildx` command:
-
-```
+```bash
 # Optional: Create a builder instance for multi-platform builds (recommended for cross-platform compatibility)
 # docker buildx create --name mybuilder --use
 
-# Navigate to the directory containing your Dockerfile (e.g., your cloned OF-Scraper repository)
+# Navigate to the directory containing your Dockerfile
 # cd /path/to/OF-Scraper/repository
 
-# Build the image, specifying the build-arg
-docker buildx build --platform linux/amd64,linux/arm64 \
-  --build-arg INSTALL_FFMPEG=true \
-  -t my-ofscraper-image:latest \
+# Build for one platform and load into local Docker
+docker buildx build --platform linux/amd64 -t my-ofscraper-image:latest --load .
 ```
 
-{% hint style="info" %}
-**Benefit of built-in FFmpeg:** If your image was built with `INSTALL_FFMPEG=true` (or if you're using an official released image that already includes FFmpeg), the image is self-contained. This means you generally **do not need to install `ffmpeg` on your host system or mount it into your Docker container**
-{% endhint %}
-
-
+A two-platform build (`--platform linux/amd64,linux/arm64`) needs `--push` instead of `--load`.
 
 ***
 
 ## Releases
 
-{% embed url="https://hub.docker.com/r/datawhores/of-scraper" %}
-Images on Docker.com
-{% endembed %}
-
-{% embed url="https://github.com/datawhores/OF-Scraper/pkgs/container/of-scraper/" %}
-Images on ghcr.io
-{% endembed %}
+Images are published on [GitHub Container Registry (ghcr.io)](https://github.com/cloakedkeys/OF-Scraper-Community/pkgs/container/of-scraper-community).
 
 ***
 
 ## Tags
 
-This table explains the different image tags you can use to pull specific versions or builds of the OF-Scraper Docker image.
+The fork publishes only these image tags on GHCR:
 
-| **Syntax**           | **Example**    | **What it is**                        |
-| -------------------- | -------------- | ------------------------------------- |
-| `latest`             | `latest`       | Get the latest commit from any branch |
-| `stable`             | `stable`       | the latest stable release             |
-| `dev`                | `dev`          | the latest development release        |
-| `branch-commitshort` | `main-9e54ed3` | Container for a specific commit       |
-| `branch`             | `main`         | Latest commits for a specific branch  |
-| `version number`     | `2.4.3`        | Specific stable release               |
-
+| Syntax | Example | What it is |
+|---|---|---|
+| `latest` | `latest` | The newest `main` build |
+| `main` | `main` | The newest `main` build |
+| `<version>-<hash>-<timestamp>` and `<version>-<hash>` | `3.17.1-9e54ed3-1749940070` | Snapshot build for a commit |
+| `X.Y.Z` | `3.17.1` | Release build |

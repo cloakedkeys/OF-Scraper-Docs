@@ -2,26 +2,25 @@
 
 ## auto\_resume
 
-{% hint style="info" %}
-**replaces partfileclean**
-{% endhint %}
+> ℹ️ Replaces `partfileclean`.
 
-If you set this to false, the script will  delete .part files, and will not be able to auto resume
-
-
+When set to `false`, OF-Scraper deletes `.part` files and can't auto-resume interrupted downloads.
 
 ***
 
 ## system\_free\_min
 
-{% hint style="info" %}
-**set to 0 to disable**
-{% endhint %}
+> ℹ️ Set to `0` to disable.
 
-forces the script to crash if free space limit is bypassed\
+Stops scraping further post areas (`"Space min has been reached"`) once free space drops below the limit. Accepts bytes or a size string such as `10GB`. Space is measured on `OFSC_DISK_SPACE_CHECK_PATH` (default `/`), not `save_location`.
 
-
-checked
+Checked:
 
 * Before scraping
 * Before each download starts
+
+***
+
+## verify\_all\_integrity
+
+Default `false`. When `true`, ordinary video and audio downloads and Fansly streams are checked with `ffprobe` against the expected duration, and any truncated file is deleted and reported as failed. Requires `ffprobe`.

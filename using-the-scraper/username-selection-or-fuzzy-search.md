@@ -1,111 +1,77 @@
 # Username selection or Fuzzy Search
 
-{% hint style="info" %}
-**Fuzzy search is built to mimic fzf**
-{% endhint %}
+> ℹ️ Fuzzy search is built to mimic `fzf`.
 
-OF-Scraper applies a fuzzy search technique to simplify managing selected models. This approximate search aims to find strong matches for the string you input.
-
-However, the challenge lies in determining which models are being selected.
+OF-Scraper uses fuzzy search to make selecting creators easier. It finds close matches for the text you type.
 
 ***
 
 ## Selecting a model
 
-For all models
+| Action | Keys |
+|---|---|
+| Toggle the highlighted creator | `End`, `Home`, `PageUp`, `PageDown`, `Shift+Right` |
+| Toggle and move down / up | `Tab` / `Shift+Tab` |
+| Select all, or clear all if all are already selected | `Ctrl+A` |
+| Select all | `Ctrl+S` |
+| Clear all | `Ctrl+D` |
+| Range select or deselect | `Alt+B` |
+| Move | `Up`/`Down`, `Ctrl+P`/`Ctrl+N` |
+| Filter | Type text (`Space` types a space; it doesn't toggle) |
+| Show full details of a creator | `Alt+D` |
+| Change sort and filters | `Alt+X` or `Ctrl+B` |
+| Show the key help | `Alt+V` or `Ctrl+V` |
+| Confirm | `Enter` |
+| Go back | `Esc` |
 
-```
-Ctrl+R
-```
-
-For a single model you can hit
-
-```
-END  |  HOME | PAGEUP | PAGEDOWN 
-```
-
-For all Models
-
-```
-Ctrl+A
-```
-
-
+`Ctrl+A`, `Ctrl+S`, and `Ctrl+D` only affect the creators the current filter shows.
 
 ***
 
 ## Getting Model Detail
 
-only a limited amount of data can be shown be shown at a time \
-As the prompt menu does not work well when the data goes past a single
+Only a limited amount of data can be shown at a time, as the prompt menu doesn't work well when entries exceed a single line.
 
-To view all details for a model
-
-```
-Alt+D
-```
-
-
+To view all details for a creator, press `Alt+D`.
 
 ***
 
 ## Sorting/Filtering List
 
-You'll be able to adjust the filters which controls the appearance of models on the list and how they're sorted
+Adjust the filters that control which creators appear in the list and how they're sorted:
 
-```
-Alt+X or Ctrl+B
-```
-
-
+`Alt+X` or `Ctrl+B`
 
 ***
 
 ## Searching the list
 
-It's as simple as typing, for instance, 'example.'&#x20;
-
-The outcome is based on your account and the filters you've implemented.
+Start typing to filter the list (for example, `example`). The results depend on your account and active filters.
 
 ![image](https://user-images.githubusercontent.com/67020411/230736225-1b24a4b3-d56f-4297-88bd-63e2d4815990.png)
 
-Entering '1' here filters out all other non-matching options, displaying only '1'.
-
-
+Entering `1` filters out non-matching options, displaying only `1`:
 
 ![image](https://user-images.githubusercontent.com/67020411/230736203-c7e433f9-30a9-4c35-8615-8046b3d7d001.png)
 
-### How does searching effect my currently select models?
+### How does searching affect my currently selected creators?
 
-It doesn't it only effects which models appear in the list for example
+It doesn't; it only affects which creators appear in the list. For example:
 
 ![image](https://user-images.githubusercontent.com/67020411/230736111-3581cc77-bca0-491f-b86c-fdd3bd1d6551.png)
 
 ![image](https://user-images.githubusercontent.com/67020411/230736159-bdc9f4ec-87d7-48ac-9099-81743b52c785.png)
 
-In the second image, although my previously chosen options aren't visible, they're still selected,&#x20;
-
-As shown by the number in parentheses, denoting the count of selected options (3).
-
-
+In the second image, although previously chosen options aren't visible, they're still selected, as shown by the count in parentheses (`3`).
 
 ***
 
 ## Unselecting
 
-To remove a model, either change the filter to an empty string or input a filter that displays the specific model you wish to remove.&#x20;
-
-You can use the previously mentioned keys to toggle between selecting and unselecting models.
+To unselect a creator, either clear the search filter or type a filter that shows that creator, then use the toggle keys above. To clear all currently shown creators at once, press `Ctrl+D`.
 
 ***
 
 ## More Controls
 
-These controls may change, and there may be additional keys not shown here
-
-Use one of the keys below during the model selection for up to date keys
-
-```
-ALT+V | CTRL+V
-```
-
+Controls may change, and additional keys may not be listed here. Press `Alt+V` or `Ctrl+V` during creator selection to view the current key bindings.

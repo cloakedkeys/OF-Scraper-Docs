@@ -6,7 +6,7 @@
 ofscraper [options]
 ```
 
-### examples
+### Examples
 
 ```
 ofscraper
@@ -18,14 +18,12 @@ or
 ofscraper --username ALL
 ```
 
+> ℹ️ **Fork:** a failed run exits with status 1, and bad command-line input prints a short usage message.
+
 ## General Options
 
-{% content-ref url="../getting-started/config-options/general-options.md" %}
-[general-options.md](../getting-started/config-options/general-options.md)
-{% endcontent-ref %}
+See [General Program Options](shared-options/common-option-groups/).
 
 ## Options
 
-{% content-ref url="shared-options/scrape-metadata-options/" %}
-[scrape-metadata-options](shared-options/scrape-metadata-options/)
-{% endcontent-ref %}
+See [Shared Scrape and Metadata Check Mode Options](shared-options/scrape-metadata-options/).

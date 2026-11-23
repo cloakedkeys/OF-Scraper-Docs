@@ -8,119 +8,95 @@ description: Automate liking & downloading OnlyFans posts
 
 ## Basic Run
 
-This enables you to choose arguments using the prompt menus.
+Running with no arguments opens the interactive prompt menus:
 
-```
+```sh
 ofscraper
 ```
 
-{% content-ref url="basic-actions/selecting-posts/" %}
-[selecting-posts](basic-actions/selecting-posts/)
-{% endcontent-ref %}
-
-{% content-ref url="model-selection-sorting/" %}
-[model-selection-sorting](model-selection-sorting/)
-{% endcontent-ref %}
-
-{% content-ref url="basic-actions/liking-unliking-post.md" %}
-[liking-unliking-post.md](basic-actions/liking-unliking-post.md)
-{% endcontent-ref %}
-
-
+* [Downloading Content](basic-actions/selecting-posts/)
+* [Model Filtering/Sorting](model-selection-sorting/)
+* [Liking/Unliking Post](basic-actions/liking-unliking-post.md)
 
 ***
 
 ## Performing action(s)
 
-{% hint style="info" %}
-**--post is a short hand used for all actions unless an --like-area or --download-area command is passed**
-{% endhint %}
+> ℹ️ `--posts` is shorthand used for all actions unless `--like-area` or `--download-area` is passed.
 
-You can combine these actions together
+You can combine these actions:
 
-* likes or unlike (only 1 because liking and unliking all posts doesn't make sense)
-* combine the previous with download
+* `like` or `unlike` (only one, because liking and unliking all posts at once doesn't make sense)
+* Either of those combined with `download`
 
-This command will download all wall posts for the selected model and simultaneously like all the posts
+Download all wall posts for the selected creator and like them at the same time:
 
-```
- ofscraper --posts all --action like,download
+```sh
+ofscraper --posts all --action like,download
 ```
 
-This command will only download
+Download only:
 
-```
+```sh
 ofscraper --posts all --action download
 ```
 
 ### Selecting different areas
 
-You can use&#x20;
+You can set separate areas for each action:
 
-* like-area specifically for like/unlike action
-* download-area specifically for the download action
+* `--like-area` for `like`/`unlike`
+* `--download-area` for `download`
 
-This command will download all post, but only like pinned
+Download all posts, but only like pinned posts:
 
-```
- ofscraper --download-area all --like-area pinned --action like,download
-```
-
-or&#x20;
-
-```
- ofscraper --posts all --like-area pinned --action like,download
+```sh
+ofscraper --download-area all --like-area pinned --action like,download
 ```
 
+Or:
 
+```sh
+ofscraper --posts all --like-area pinned --action like,download
+```
 
 ***
 
 ## Bypass all prompts
 
-{% hint style="info" %}
-**You must pick timeline,pinned, or archived to bypass the like area prompt when doing action**&#x20;
+> ℹ️ To bypass the like-area prompt when running `like` or `unlike`, pass `--like-area` or include `timeline`, `pinned`, `archived`, `streams`, `labels`, `all`, `labels+`, or `labels*` in `--posts`.
 
-**like or unlike**
-{% endhint %}
+To bypass all prompts:
 
-To bypass prompts
+* Select at least one scraping action (`--action`)
+* Provide one or more usernames (`--username`)
+* Provide the areas to scan (`--posts`, `--download-area`, or `--like-area`)
 
-* Select at least one scraping method
-* Provide a username(s)
-* Providing the areas to scan
-
+```sh
+ofscraper --posts all --username ALL --action like,download
 ```
- ofscraper --posts all --username ALL --action like,download
-```
-
-
-
-
 
 ***
 
 ## Running command in the background
 
-For daemon mode to function, you must select at least one scraping method
+For daemon mode to run, you must select at least one scraping action.
 
-{% hint style="info" %}
-&#x20;**In daemon mode, if the --username argument isn't provided, it will prompt you to pick a username only once**
-{% endhint %}
+> ℹ️ In daemon mode, if `--username` isn't provided, OF-Scraper prompts you to pick creators only once.
 
-{% hint style="info" %}
-**In daemon mode, if the --post or --scrape-paid argument isn't provided, it will prompt you to  them only once**
-{% endhint %}
+> ℹ️ In daemon mode, if `--posts` or `--scrape-paid` isn't provided, OF-Scraper prompts you to pick areas only once.
 
-```
- ofscraper --daemon 10 --posts all --action like,download
+```sh
+ofscraper --daemon 10 --posts all --action like,download
 ```
 
-The script will operate at least every 10 minutes. If a run extends beyond 10 minutes, the subsequent run begins immediately after the prior one concludes.
+This runs at least every 10 minutes. If a run takes longer than 10 minutes, the next run starts immediately after the previous one finishes.
 
+On Linux and in Docker, send `SIGUSR1` while the daemon is waiting between runs to start the next run early. It is ignored while a run is active:
 
-
-
+```sh
+docker kill --signal=SIGUSR1 <container>
+```
 
 ***
 
@@ -128,18 +104,14 @@ The script will operate at least every 10 minutes. If a run extends beyond 10 mi
 
 ### Toggle letter count for textlength
 
-By default, 'textlength' corresponds to the maximum number of words you desire. To modify this to represent the maximum number of letters, use the '--letter-count' argument.
+`textlength` counts either words or letters. Choose with `--text-type` (`word` or `letter`) or `text_type_default` in `config.json`:
 
+```sh
+ofscraper --text-type letter
 ```
-ofscraper --letter-count
-```
-
-
 
 ***
 
 ### Output Options
 
-{% content-ref url="../../getting-started/controlling-output.md" %}
-[controlling-output.md](../../getting-started/controlling-output.md)
-{% endcontent-ref %}
+[Controlling Output/Logs](../../getting-started/controlling-output.md)

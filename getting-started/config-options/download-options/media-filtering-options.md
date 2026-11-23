@@ -1,62 +1,49 @@
 ---
-description: Settings control which media is downloaded
+description: Settings that control which media is downloaded
 ---
 
 # Media Filtering Options
 
 ## filter
 
-Determines the type of content you wish to download.
+Controls which media types to download. Valid values: `Images`, `Audios`, `Videos` (case-insensitive).
 
-```
-Options are Images,Audios,Videos case insensitive
-```
+## file\_size\_max
 
+Sets the maximum file size allowed for downloads. (Older configs called this `file_size_limit`; it is still read.)
 
-
-## file\_size\_limit
-
-Controls the maximum allowable file size for downloads
-
-* ignored if 0 or None
-* provided value should be in bytes or human readable string like '10MB'
+* Ignored if `0` or `None`.
+* Value can be in bytes or a human-readable string like `"10MB"`.
 
 ## file\_size\_min
 
-Controls the minimum allowable file size for downloads
+Sets the minimum file size allowed for downloads.
 
-* ignored if 0 or None
-* provided value should be in bytes or human readable string like '10MB'
-
-
+* Ignored if `0` or `None`.
+* Value can be in bytes or a human-readable string like `"10MB"`.
 
 ## length\_max
 
-Limits processed items to media as long or  longer then the given length
+Filters out videos longer than the given length (in seconds).
 
-in seconds
-
-* ignored if 0
-* only used to filter videos
+* Ignored if `0`.
+* Applies only to videos.
 
 ## length\_min
 
-Limits processed items to media as short or  shorter then the given length
+Filters out videos shorter than the given length (in seconds).
 
-in seconds
-
-* ignored if 0
-* only used to filter videos
+* Ignored if `0`.
+* Applies only to videos.
 
 ## block\_ads
 
-remove posts with based on built in AD regex
+Removes posts matching the built-in ad regex:
 
-```
-r"(#(?:ad|ads|AD|advertising|sponsored|promotion)|trial|discount|exclusive\s+offer|giveaway|limited\s+time|\Buser\s+promo|shoutout|endorsement)"
-
+```python
+r"(#(?:ad|ads|AD|advertising|sponsored|promotion)|trial|giveaway|\Buser\s+promo|shoutout|endorsement)"
 ```
 
 ## max\_post\_count
 
-The maximum  number of items to process
+The maximum number of media items (not posts) to process per creator. `0` means no cap.
