@@ -2,7 +2,7 @@
 
 These pages are published to GitBook through Git Sync. `SUMMARY.md` sets the sidebar; a page that isn't listed there isn't shown.
 
-* **Generated pages in `reference/`** (`cli.md`, `config.md`, `env.md`, `placeholders.md`, `database.md`) are copied from the fork. Don't edit them here. To refresh them, run and commit the result:
+* **Generated pages in `reference/`** (`cli.md`, `config.md`, `env.md`, `env-ratelimits.md`, `env-urls.md`, `env-unused.md`, `placeholders.md`, `database.md`) are copied from the fork. Don't edit them here. To refresh them, run and commit the result:
   ```sh
   python scripts/sync_reference.py <path to the fork checkout>
   ```

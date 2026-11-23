@@ -21,6 +21,12 @@ Before the app reads either kind, it loads these into the environment. Each one 
 
 The values shown are the defaults with no environment variables set. Paths under your home directory appear as `{home_directory}`. Each description comes from the comment above the value in the source, where there is one.
 
+The larger internal reference tables live on their own pages:
+
+- [Rate-limit & backoff settings](env-ratelimits.md): per-request-type rate-limit and 403 backoff keys
+- [API addresses & URLs](env-urls.md): internal OnlyFans API endpoints, dynamic rule sources and other URLs
+- [Unused legacy defaults](env-unused.md): compatibility keys defined in `of_env/values/` but not currently read
+
 ## Contents
 
 - [Read directly from the environment](#read-directly-from-the-environment)
@@ -29,8 +35,6 @@ The values shown are the defaults with no environment variables set. Paths under
 - [Network, retries and rate limits](#network-retries-and-rate-limits)
 - [DRM, CDM and Discord](#drm-cdm-and-discord)
 - [Logging, progress and UI](#logging-progress-and-ui)
-- [API addresses and URLs](#api-addresses-and-urls)
-- [Unused legacy defaults](#unused-legacy-defaults)
 
 ## Read directly from the environment
 
@@ -158,9 +162,9 @@ Defined in `ofscraper/utils/of_env/values/main.py`.
 | <a id="ffmpeg_default"></a>`OFSC_FFMPEG_DEFAULT`<br>Key: `FFMPEG_DEFAULT` | **Default:** `''`. Default for `binary_options.ffmpeg` (path to the ffmpeg executable). |
 | <a id="discord_default"></a>`OFSC_DISCORD_DEFAULT`<br>Key: `DISCORD_DEFAULT` | **Default:** `''`. Default for `discord` (Discord webhook URL for log messages). |
 | <a id="download_sem_default"></a>`OFSC_DOWNLOAD_SEM_DEFAULT`<br>Key: `DOWNLOAD_SEM_DEFAULT` | **Default:** `6`. Default for `performance_options.download_sems` (number of concurrent downloads). |
-| <a id="fansly_stream_segments"></a>`OFSC_FANSLY_STREAM_SEGMENTS`<br>Key: `FANSLY_STREAM_SEGMENTS` | **Default:** `8`. How many files of one Fansly stream (HLS segments, AES-128 keys, DASH segments) are fetched at once before ffmpeg joins them locally (`fansly_stream_download.py`). [Details](#fansly_stream_segments-details). |
-| <a id="silent_rechecks"></a>`OFSC_SILENT_RECHECKS`<br>Key: `SILENT_RECHECKS` | **Default:** `3`. How many times to recheck a Fansly video that was saved without sound because the CDN refused its separate audio track and the direct file had no audio (`download/utils/silent.py`). [Details](#silent_rechecks-details). |
-| <a id="fansly_full_scan_days"></a>`OFSC_FANSLY_FULL_SCAN_DAYS`<br>Key: `FANSLY_FULL_SCAN_DAYS` | **Default:** `7`. How often, in days, a Fansly download run scans a creator's timeline and messages in full. [Details](#fansly_full_scan_days-details). |
+| <a id="fansly_stream_segments"></a>`OFSC_FANSLY_STREAM_SEGMENTS`<br>Key: `FANSLY_STREAM_SEGMENTS` | **Default:** `8`. How many files of one Fansly stream (HLS segments, AES-128 keys, DASH segments) are fetched at once before ffmpeg joins them locally (`fansly_stream_download.py`). [Details](#general-defaults). |
+| <a id="silent_rechecks"></a>`OFSC_SILENT_RECHECKS`<br>Key: `SILENT_RECHECKS` | **Default:** `3`. How many times to recheck a Fansly video that was saved without sound because the CDN refused its separate audio track and the direct file had no audio (`download/utils/silent.py`). [Details](#general-defaults). |
+| <a id="fansly_full_scan_days"></a>`OFSC_FANSLY_FULL_SCAN_DAYS`<br>Key: `FANSLY_FULL_SCAN_DAYS` | **Default:** `7`. How often, in days, a Fansly download run scans a creator's timeline and messages in full. [Details](#general-defaults). |
 | <a id="text_type_default"></a>`OFSC_TEXT_TYPE_DEFAULT`<br>Key: `TEXT_TYPE_DEFAULT` | **Default:** `'letter'`. Default for `file_options.text_type_default` (`letter` or `word`). |
 | <a id="truncation_default"></a>`OFSC_TRUNCATION_DEFAULT`<br>Key: `TRUNCATION_DEFAULT` | **Default:** `True`. Default for `file_options.truncation_default` (whether long file paths are shortened to fit OS limits). |
 | <a id="filename_collision_default"></a>`OFSC_FILENAME_COLLISION_DEFAULT`<br>Key: `FILENAME_COLLISION_DEFAULT` | **Default:** `'media_id'`. What to do when a download's path is already taken by a different media. "media_id" appends _<media_id>; "overwrite" keeps the old behaviour (one file replaces the other). |
@@ -186,19 +190,19 @@ Defined in `ofscraper/utils/of_env/values/main.py`.
 | <a id="naming_script_default"></a>`OFSC_NAMING_SCRIPT_DEFAULT`<br>Key: `NAMING_SCRIPT_DEFAULT` | **Default:** `None`. Default for `script_options.naming_script`. |
 | <a id="download_limit_default"></a>`OFSC_DOWNLOAD_LIMIT_DEFAULT`<br>Key: `DOWNLOAD_LIMIT_DEFAULT` | **Default:** `0`. Default for `performance_options.download_limit` (maximum download speed in bytes per second; 0 means unlimited). |
 
-##### <a id="fansly_stream_segments-details"></a>`FANSLY_STREAM_SEGMENTS`
+##### `FANSLY_STREAM_SEGMENTS` details
 
 **Environment variable:** `OFSC_FANSLY_STREAM_SEGMENTS` · **Default:** `8`
 
 How many files of one Fansly stream (HLS segments, AES-128 keys, DASH segments) are fetched at once before ffmpeg joins them locally (`fansly_stream_download.py`). Fetched segments are kept so a stopped download can resume. 0 hands the whole stream to ffmpeg, one segment at a time, with no resume. Streams the local downloader can't handle still go to ffmpeg: live HLS (no `#EXT-X-ENDLIST`), HLS with encryption other than AES-128, and DASH that is protected, live, multi-period or uses unsupported addressing. Total concurrent downloads are still capped by `download_sems`.
 
-##### <a id="silent_rechecks-details"></a>`SILENT_RECHECKS`
+##### `SILENT_RECHECKS` details
 
 **Environment variable:** `OFSC_SILENT_RECHECKS` · **Default:** `3`
 
 How many times to recheck a Fansly video that was saved without sound because the CDN refused its separate audio track and the direct file had no audio (`download/utils/silent.py`). Each check fetches the audio playlist and its first segment with fresh links, once at the end of the run that saved it and once on each later download run for that creator that includes videos. If the audio succeeds, the video is downloaded again and replaces the silent file once it passes checks. After this many refused checks, the video is kept as is. Checks that fail for other reasons (network, rate limit) don't count. 0 turns rechecks off.
 
-##### <a id="fansly_full_scan_days-details"></a>`FANSLY_FULL_SCAN_DAYS`
+##### `FANSLY_FULL_SCAN_DAYS` details
 
 **Environment variable:** `OFSC_FANSLY_FULL_SCAN_DAYS` · **Default:** `7`
 
@@ -320,23 +324,7 @@ Defined in `ofscraper/utils/of_env/values/path/bytes.py`.
 
 ## Network, retries and rate limits
 
-Requests back off when they get rate-limit errors (429, 503, 504) or 403 errors. The logic is in `ofscraper/managers/sessionmanager/sleepers.py` and in `SessionSleep` in `sessionmanager.py`.
-
-Each kind of request has its own set of values. Rate limits use `<KIND>_SESSION_*` and 403s use `<KIND>_SESSION_403_*`. The standard API uses `SESSION_*`.
-
-How the wait changes:
-- The wait starts at `*_MIN_SLEEP`.
-- The first error sets the wait to `*_SLEEP_INIT` seconds (or 1 if that is 0). If that is not above `*_MIN_SLEEP`, the wait becomes `*_MIN_SLEEP` times `*_SLEEP_INCREASE_FACTOR` instead.
-- A later error multiplies the wait by `*_SLEEP_INCREASE_FACTOR`, up to `*_SLEEP_MAX`, in two cases: the failed request was sent after the wait was last raised (it was refused even at the current pace), or `*_SLEEP_INCREASE_TIME_DIFF` seconds have passed since the wait was last raised. Other errors belong to the same burst and change nothing.
-- After `*_SLEEP_DECAY_THRESHOLD` seconds without an error or a change, the wait is divided by `*_SLEEP_DECAY_FACTOR`, down to `*_MIN_SLEEP`. If the result would drop below 0.5 seconds, the wait goes straight to `*_MIN_SLEEP` and the backoff ends.
-- A request that gets a 429 is tried up to `RATE_LIMIT_NUM_TRIES` times instead of its usual number, so its tries last long enough for the growing wait to outlast the limit.
-
-How the waits combine:
-- `*_MIN_SLEEP` is also the minimum gap kept between requests.
-- Before each request, the rate-limit wait runs first. The 403 backoff runs next, if one is active.
-- The 403 `*_MIN_SLEEP` gap is kept only when the rate-limit `*_MIN_SLEEP` is 0 and no rate-limit backoff is active.
-
-Only the standard API session (`SESSION_403_*`) backs off on a 403. Downloads, CDM, likes, metadata, Discord and subscriptions never start a 403 backoff, because a 403 there is usually an expired link. Their `<KIND>_SESSION_403_*` values therefore have no effect. The one exception is `<KIND>_SESSION_403_MIN_SLEEP`, which is still kept as a gap under the rule above.
+For per-request-type rate-limit and 403 backoff keys and how backoff waits combine, see [Rate-limit & backoff settings](env-ratelimits.md).
 
 ### Connections, proxies and concurrency
 
@@ -348,14 +336,14 @@ Defined in `ofscraper/utils/of_env/values/req/req.py`.
 |---|---|
 | <a id="connect_timeout"></a>`OFSC_CONNECT_TIMEOUT`<br>Key: `CONNECT_TIMEOUT` | **Default:** `15`. Default connection timeout, in seconds, for HTTP sessions that don't pass their own. |
 | <a id="pool_connect_timeout"></a>`OFSC_POOL_CONNECT_TIMEOUT`<br>Key: `POOL_CONNECT_TIMEOUT` | **Default:** `15`. Default time, in seconds, allowed to get a connection, for HTTP sessions that don't pass their own. |
-| <a id="of_read_timeout"></a>`OFSC_READ_TIMEOUT`<br>Key: `OF_READ_TIMEOUT` | **Default:** `60`. Longest wait for the next piece of a response (seconds), for requests that don't pass their own read timeout. [Details](#of_read_timeout-details). |
+| <a id="of_read_timeout"></a>`OFSC_READ_TIMEOUT`<br>Key: `OF_READ_TIMEOUT` | **Default:** `60`. Longest wait for the next piece of a response (seconds), for requests that don't pass their own read timeout. [Details](#connections-proxies-and-concurrency). |
 | <a id="max_connections"></a>`OFSC_MAX_CONNECTIONS`<br>Key: `MAX_CONNECTIONS` | **Default:** `200`. Default maximum simultaneous connections for HTTP sessions that don't pass their own limit. |
 | <a id="api_max_connection"></a>`OFSC_API_MAX_CONNECTION`<br>Key: `API_MAX_CONNECTION` | **Default:** `100`. Default maximum simultaneous connections for API sessions (OnlyFans and Fansly). |
 | <a id="total_timeout"></a>`OFSC_TOTAL_TIMEOUT`<br>Key: `TOTAL_TIMEOUT` | **Default:** `None`. Default total request timeout, in seconds, for HTTP sessions that don't pass their own (`None` means no limit). |
 | <a id="keep_alive"></a>`OFSC_KEEP_ALIVE`<br>Key: `KEEP_ALIVE` | **Default:** `20`. The most idle connections the sync client keeps open to use again. A count, not a time. The async client, which downloads, has no such limit. |
 | <a id="keep_alive_exp"></a>`OFSC_KEEP_ALIVE_EXP`<br>Key: `KEEP_ALIVE_EXP` | **Default:** `10`. How long an idle connection is kept open to use again (seconds). Applies to both clients. 0 keeps none: each connection is closed after use. |
 
-##### <a id="of_read_timeout-details"></a>`OF_READ_TIMEOUT`
+##### `OF_READ_TIMEOUT` details
 
 **Environment variable:** `OFSC_READ_TIMEOUT` · **Default:** `60`
 
@@ -432,183 +420,6 @@ Defined in `ofscraper/utils/of_env/values/req/api.py`.
 | <a id="api_timeout_per_task"></a>`OFSC_API_TIMEOUT_PER_TASK`<br>Key: `API_TIMEOUT_PER_TASK` | **Default:** `500`. Total timeout, in seconds, for each API session request in main scraper and metadata runs. |
 | <a id="api_req_sem_max"></a>`OFSC_API_REQ_SEM_MAX`<br>Key: `API_REQ_SEM_MAX` | **Default:** `12`. Maximum concurrent API requests in main scraper and metadata runs. |
 | <a id="api_req_check_max"></a>`OFSC_API_REQ_CHECK_MAX`<br>Key: `API_REQ_CHECK_MAX` | **Default:** `12`. Maximum concurrent API requests in check (`*_check`) and `manual` modes. |
-
-### Rate-limit values per request type
-
-Defined in `ofscraper/utils/of_env/values/req/ratelimit.py`.
-
-<details>
-<summary>Show all rate-limit sleeper keys (98 keys)</summary>
-
-#### Standard API: rate limits (429, 504)
-
-| Variable / Key | Description |
-|---|---|
-| <a id="session_sleep_init"></a>`OFSC_SESSION_SLEEP_INIT`<br>Key: `SESSION_SLEEP_INIT` | **Default:** `2.5`. The wait the first error of this kind sets (0 means 1 second). It must be above `*_MIN_SLEEP`, or the first error sets `*_MIN_SLEEP` times the increase factor instead. |
-| <a id="session_sleep_increase_time_diff"></a>`OFSC_SESSION_SLEEP_INCREASE_TIME_DIFF`<br>Key: `SESSION_SLEEP_INCREASE_TIME_DIFF` | **Default:** `30.0`. Seconds that must pass since the wait was last raised before an error from an earlier request raises it again. An error from a request sent after the last raise raises it at once. |
-| <a id="session_sleep_max"></a>`OFSC_SESSION_SLEEP_MAX`<br>Key: `SESSION_SLEEP_MAX` | **Default:** `180.0`. The longest backoff wait, in seconds. |
-| <a id="session_sleep_increase_factor"></a>`OFSC_SESSION_SLEEP_INCREASE_FACTOR`<br>Key: `SESSION_SLEEP_INCREASE_FACTOR` | **Default:** `2.0`. Each further error multiplies the wait by this. |
-| <a id="session_sleep_decay_threshold"></a>`OFSC_SESSION_SLEEP_DECAY_THRESHOLD`<br>Key: `SESSION_SLEEP_DECAY_THRESHOLD` | **Default:** `120.0`. Seconds without an error or a change after which the wait shrinks. |
-| <a id="session_sleep_decay_factor"></a>`OFSC_SESSION_SLEEP_DECAY_FACTOR`<br>Key: `SESSION_SLEEP_DECAY_FACTOR` | **Default:** `1.5`. The wait is divided by this when it shrinks. |
-| <a id="session_min_sleep"></a>`OFSC_SESSION_MIN_SLEEP`<br>Key: `SESSION_MIN_SLEEP` | **Default:** `0.5`. The smallest wait, and the minimum gap kept between requests, in seconds. The wait starts here. |
-
-#### Standard API: 403 errors
-
-| Variable / Key | Description |
-|---|---|
-| <a id="session_403_sleep_init"></a>`OFSC_SESSION_403_SLEEP_INIT`<br>Key: `SESSION_403_SLEEP_INIT` | **Default:** `15.0`. The wait the first error of this kind sets (0 means 1 second). It must be above `*_MIN_SLEEP`, or the first error sets `*_MIN_SLEEP` times the increase factor instead. |
-| <a id="session_403_sleep_increase_time_diff"></a>`OFSC_SESSION_403_SLEEP_INCREASE_TIME_DIFF`<br>Key: `SESSION_403_SLEEP_INCREASE_TIME_DIFF` | **Default:** `60.0`. Seconds that must pass since the wait was last raised before an error from an earlier request raises it again. An error from a request sent after the last raise raises it at once. |
-| <a id="session_403_sleep_max"></a>`OFSC_SESSION_403_SLEEP_MAX`<br>Key: `SESSION_403_SLEEP_MAX` | **Default:** `180.0`. The longest backoff wait, in seconds. |
-| <a id="session_403_sleep_increase_factor"></a>`OFSC_SESSION_403_SLEEP_INCREASE_FACTOR`<br>Key: `SESSION_403_SLEEP_INCREASE_FACTOR` | **Default:** `1.5`. Each further error multiplies the wait by this. |
-| <a id="session_403_sleep_decay_threshold"></a>`OFSC_SESSION_403_SLEEP_DECAY_THRESHOLD`<br>Key: `SESSION_403_SLEEP_DECAY_THRESHOLD` | **Default:** `65.0`. Seconds without an error or a change after which the wait shrinks. |
-| <a id="session_403_sleep_decay_factor"></a>`OFSC_SESSION_403_SLEEP_DECAY_FACTOR`<br>Key: `SESSION_403_SLEEP_DECAY_FACTOR` | **Default:** `1.5`. The wait is divided by this when it shrinks. |
-| <a id="session_403_min_sleep"></a>`OFSC_SESSION_403_MIN_SLEEP`<br>Key: `SESSION_403_MIN_SLEEP` | **Default:** `0.0`. The smallest wait, and the minimum gap kept between requests, in seconds. The wait starts here. |
-
-#### Downloads: rate limits (429, 504)
-
-| Variable / Key | Description |
-|---|---|
-| <a id="download_session_sleep_init"></a>`OFSC_DOWNLOAD_SESSION_SLEEP_INIT`<br>Key: `DOWNLOAD_SESSION_SLEEP_INIT` | **Default:** `0.0`. The wait the first error of this kind sets (0 means 1 second). It must be above `*_MIN_SLEEP`, or the first error sets `*_MIN_SLEEP` times the increase factor instead. |
-| <a id="download_session_sleep_increase_time_diff"></a>`OFSC_DOWNLOAD_SESSION_SLEEP_INCREASE_TIME_DIFF`<br>Key: `DOWNLOAD_SESSION_SLEEP_INCREASE_TIME_DIFF` | **Default:** `30.0`. Seconds that must pass since the wait was last raised before an error from an earlier request raises it again. An error from a request sent after the last raise raises it at once. |
-| <a id="download_session_sleep_max"></a>`OFSC_DOWNLOAD_SESSION_SLEEP_MAX`<br>Key: `DOWNLOAD_SESSION_SLEEP_MAX` | **Default:** `180.0`. The longest backoff wait, in seconds. |
-| <a id="download_session_sleep_increase_factor"></a>`OFSC_DOWNLOAD_SESSION_SLEEP_INCREASE_FACTOR`<br>Key: `DOWNLOAD_SESSION_SLEEP_INCREASE_FACTOR` | **Default:** `2.0`. Each further error multiplies the wait by this. |
-| <a id="download_session_sleep_decay_threshold"></a>`OFSC_DOWNLOAD_SESSION_SLEEP_DECAY_THRESHOLD`<br>Key: `DOWNLOAD_SESSION_SLEEP_DECAY_THRESHOLD` | **Default:** `120.0`. Seconds without an error or a change after which the wait shrinks. |
-| <a id="download_session_sleep_decay_factor"></a>`OFSC_DOWNLOAD_SESSION_SLEEP_DECAY_FACTOR`<br>Key: `DOWNLOAD_SESSION_SLEEP_DECAY_FACTOR` | **Default:** `1.5`. The wait is divided by this when it shrinks. |
-| <a id="download_session_min_sleep"></a>`OFSC_DOWNLOAD_SESSION_MIN_SLEEP`<br>Key: `DOWNLOAD_SESSION_MIN_SLEEP` | **Default:** `0.0`. The smallest wait, and the minimum gap kept between requests, in seconds. The wait starts here. |
-
-#### Downloads: 403 errors
-
-| Variable / Key | Description |
-|---|---|
-| <a id="download_session_403_sleep_init"></a>`OFSC_DOWNLOAD_SESSION_403_SLEEP_INIT`<br>Key: `DOWNLOAD_SESSION_403_SLEEP_INIT` | **Default:** `15.0`. The wait the first error of this kind sets (0 means 1 second). It must be above `*_MIN_SLEEP`, or the first error sets `*_MIN_SLEEP` times the increase factor instead. |
-| <a id="download_session_403_sleep_increase_time_diff"></a>`OFSC_DOWNLOAD_SESSION_403_SLEEP_INCREASE_TIME_DIFF`<br>Key: `DOWNLOAD_SESSION_403_SLEEP_INCREASE_TIME_DIFF` | **Default:** `80.0`. Seconds that must pass since the wait was last raised before an error from an earlier request raises it again. An error from a request sent after the last raise raises it at once. |
-| <a id="download_session_403_sleep_max"></a>`OFSC_DOWNLOAD_SESSION_403_SLEEP_MAX`<br>Key: `DOWNLOAD_SESSION_403_SLEEP_MAX` | **Default:** `180.0`. The longest backoff wait, in seconds. |
-| <a id="download_session_403_sleep_increase_factor"></a>`OFSC_DOWNLOAD_SESSION_403_SLEEP_INCREASE_FACTOR`<br>Key: `DOWNLOAD_SESSION_403_SLEEP_INCREASE_FACTOR` | **Default:** `1.5`. Each further error multiplies the wait by this. |
-| <a id="download_session_403_sleep_decay_threshold"></a>`OFSC_DOWNLOAD_SESSION_403_SLEEP_DECAY_THRESHOLD`<br>Key: `DOWNLOAD_SESSION_403_SLEEP_DECAY_THRESHOLD` | **Default:** `70.0`. Seconds without an error or a change after which the wait shrinks. |
-| <a id="download_session_403_sleep_decay_factor"></a>`OFSC_DOWNLOAD_SESSION_403_SLEEP_DECAY_FACTOR`<br>Key: `DOWNLOAD_SESSION_403_SLEEP_DECAY_FACTOR` | **Default:** `1.5`. The wait is divided by this when it shrinks. |
-| <a id="download_session_403_min_sleep"></a>`OFSC_DOWNLOAD_SESSION_403_MIN_SLEEP`<br>Key: `DOWNLOAD_SESSION_403_MIN_SLEEP` | **Default:** `0.0`. The smallest wait, and the minimum gap kept between requests, in seconds. The wait starts here. |
-
-#### CDM: rate limits (429, 504)
-
-| Variable / Key | Description |
-|---|---|
-| <a id="cdm_session_sleep_init"></a>`OFSC_CDM_SESSION_SLEEP_INIT`<br>Key: `CDM_SESSION_SLEEP_INIT` | **Default:** `0.0`. The wait the first error of this kind sets (0 means 1 second). It must be above `*_MIN_SLEEP`, or the first error sets `*_MIN_SLEEP` times the increase factor instead. |
-| <a id="cdm_session_sleep_increase_time_diff"></a>`OFSC_CDM_SESSION_SLEEP_INCREASE_TIME_DIFF`<br>Key: `CDM_SESSION_SLEEP_INCREASE_TIME_DIFF` | **Default:** `30.0`. Seconds that must pass since the wait was last raised before an error from an earlier request raises it again. An error from a request sent after the last raise raises it at once. |
-| <a id="cdm_session_sleep_max"></a>`OFSC_CDM_SESSION_SLEEP_MAX`<br>Key: `CDM_SESSION_SLEEP_MAX` | **Default:** `180.0`. The longest backoff wait, in seconds. |
-| <a id="cdm_session_sleep_increase_factor"></a>`OFSC_CDM_SESSION_SLEEP_INCREASE_FACTOR`<br>Key: `CDM_SESSION_SLEEP_INCREASE_FACTOR` | **Default:** `2.0`. Each further error multiplies the wait by this. |
-| <a id="cdm_session_sleep_decay_threshold"></a>`OFSC_CDM_SESSION_SLEEP_DECAY_THRESHOLD`<br>Key: `CDM_SESSION_SLEEP_DECAY_THRESHOLD` | **Default:** `120.0`. Seconds without an error or a change after which the wait shrinks. |
-| <a id="cdm_session_sleep_decay_factor"></a>`OFSC_CDM_SESSION_SLEEP_DECAY_FACTOR`<br>Key: `CDM_SESSION_SLEEP_DECAY_FACTOR` | **Default:** `1.5`. The wait is divided by this when it shrinks. |
-| <a id="cdm_session_min_sleep"></a>`OFSC_CDM_SESSION_MIN_SLEEP`<br>Key: `CDM_SESSION_MIN_SLEEP` | **Default:** `1.0`. The smallest wait, and the minimum gap kept between requests, in seconds. The wait starts here. |
-
-#### CDM: 403 errors
-
-| Variable / Key | Description |
-|---|---|
-| <a id="cdm_session_403_sleep_init"></a>`OFSC_CDM_SESSION_403_SLEEP_INIT`<br>Key: `CDM_SESSION_403_SLEEP_INIT` | **Default:** `8.0`. The wait the first error of this kind sets (0 means 1 second). It must be above `*_MIN_SLEEP`, or the first error sets `*_MIN_SLEEP` times the increase factor instead. |
-| <a id="cdm_session_403_sleep_increase_time_diff"></a>`OFSC_CDM_SESSION_403_SLEEP_INCREASE_TIME_DIFF`<br>Key: `CDM_SESSION_403_SLEEP_INCREASE_TIME_DIFF` | **Default:** `60.0`. Seconds that must pass since the wait was last raised before an error from an earlier request raises it again. An error from a request sent after the last raise raises it at once. |
-| <a id="cdm_session_403_sleep_max"></a>`OFSC_CDM_SESSION_403_SLEEP_MAX`<br>Key: `CDM_SESSION_403_SLEEP_MAX` | **Default:** `180.0`. The longest backoff wait, in seconds. |
-| <a id="cdm_session_403_sleep_increase_factor"></a>`OFSC_CDM_SESSION_403_SLEEP_INCREASE_FACTOR`<br>Key: `CDM_SESSION_403_SLEEP_INCREASE_FACTOR` | **Default:** `1.5`. Each further error multiplies the wait by this. |
-| <a id="cdm_session_403_sleep_decay_threshold"></a>`OFSC_CDM_SESSION_403_SLEEP_DECAY_THRESHOLD`<br>Key: `CDM_SESSION_403_SLEEP_DECAY_THRESHOLD` | **Default:** `65.0`. Seconds without an error or a change after which the wait shrinks. |
-| <a id="cdm_session_403_sleep_decay_factor"></a>`OFSC_CDM_SESSION_403_SLEEP_DECAY_FACTOR`<br>Key: `CDM_SESSION_403_SLEEP_DECAY_FACTOR` | **Default:** `1.5`. The wait is divided by this when it shrinks. |
-| <a id="cdm_session_403_min_sleep"></a>`OFSC_CDM_SESSION_403_MIN_SLEEP`<br>Key: `CDM_SESSION_403_MIN_SLEEP` | **Default:** `0.0`. The smallest wait, and the minimum gap kept between requests, in seconds. The wait starts here. |
-
-#### Likes: rate limits (429, 504)
-
-| Variable / Key | Description |
-|---|---|
-| <a id="like_session_sleep_init"></a>`OFSC_LIKE_SESSION_SLEEP_INIT`<br>Key: `LIKE_SESSION_SLEEP_INIT` | **Default:** `8.0`. The wait the first error of this kind sets (0 means 1 second). It must be above `*_MIN_SLEEP`, or the first error sets `*_MIN_SLEEP` times the increase factor instead. |
-| <a id="like_session_sleep_increase_time_diff"></a>`OFSC_LIKE_SESSION_SLEEP_INCREASE_TIME_DIFF`<br>Key: `LIKE_SESSION_SLEEP_INCREASE_TIME_DIFF` | **Default:** `4.0`. Seconds that must pass since the wait was last raised before an error from an earlier request raises it again. An error from a request sent after the last raise raises it at once. |
-| <a id="like_session_sleep_max"></a>`OFSC_LIKE_SESSION_SLEEP_MAX`<br>Key: `LIKE_SESSION_SLEEP_MAX` | **Default:** `120.0`. The longest backoff wait, in seconds. |
-| <a id="like_session_sleep_increase_factor"></a>`OFSC_LIKE_SESSION_SLEEP_INCREASE_FACTOR`<br>Key: `LIKE_SESSION_SLEEP_INCREASE_FACTOR` | **Default:** `2.0`. Each further error multiplies the wait by this. |
-| <a id="like_session_sleep_decay_threshold"></a>`OFSC_LIKE_SESSION_SLEEP_DECAY_THRESHOLD`<br>Key: `LIKE_SESSION_SLEEP_DECAY_THRESHOLD` | **Default:** `120.0`. Seconds without an error or a change after which the wait shrinks. |
-| <a id="like_session_sleep_decay_factor"></a>`OFSC_LIKE_SESSION_SLEEP_DECAY_FACTOR`<br>Key: `LIKE_SESSION_SLEEP_DECAY_FACTOR` | **Default:** `1.5`. The wait is divided by this when it shrinks. |
-| <a id="like_session_min_sleep"></a>`OFSC_LIKE_SESSION_MIN_SLEEP`<br>Key: `LIKE_SESSION_MIN_SLEEP` | **Default:** `0.0`. The smallest wait, and the minimum gap kept between requests, in seconds. The wait starts here. |
-
-#### Likes: 403 errors
-
-| Variable / Key | Description |
-|---|---|
-| <a id="like_session_403_sleep_init"></a>`OFSC_LIKE_SESSION_403_SLEEP_INIT`<br>Key: `LIKE_SESSION_403_SLEEP_INIT` | **Default:** `8.0`. The wait the first error of this kind sets (0 means 1 second). It must be above `*_MIN_SLEEP`, or the first error sets `*_MIN_SLEEP` times the increase factor instead. |
-| <a id="like_session_403_sleep_increase_time_diff"></a>`OFSC_LIKE_SESSION_403_SLEEP_INCREASE_TIME_DIFF`<br>Key: `LIKE_SESSION_403_SLEEP_INCREASE_TIME_DIFF` | **Default:** `4.0`. Seconds that must pass since the wait was last raised before an error from an earlier request raises it again. An error from a request sent after the last raise raises it at once. |
-| <a id="like_session_403_sleep_max"></a>`OFSC_LIKE_SESSION_403_SLEEP_MAX`<br>Key: `LIKE_SESSION_403_SLEEP_MAX` | **Default:** `120.0`. The longest backoff wait, in seconds. |
-| <a id="like_session_403_sleep_increase_factor"></a>`OFSC_LIKE_SESSION_403_SLEEP_INCREASE_FACTOR`<br>Key: `LIKE_SESSION_403_SLEEP_INCREASE_FACTOR` | **Default:** `1.5`. Each further error multiplies the wait by this. |
-| <a id="like_session_403_sleep_decay_threshold"></a>`OFSC_LIKE_SESSION_403_SLEEP_DECAY_THRESHOLD`<br>Key: `LIKE_SESSION_403_SLEEP_DECAY_THRESHOLD` | **Default:** `65.0`. Seconds without an error or a change after which the wait shrinks. |
-| <a id="like_session_403_sleep_decay_factor"></a>`OFSC_LIKE_SESSION_403_SLEEP_DECAY_FACTOR`<br>Key: `LIKE_SESSION_403_SLEEP_DECAY_FACTOR` | **Default:** `1.5`. The wait is divided by this when it shrinks. |
-| <a id="like_session_403_min_sleep"></a>`OFSC_LIKE_SESSION_403_MIN_SLEEP`<br>Key: `LIKE_SESSION_403_MIN_SLEEP` | **Default:** `0.0`. The smallest wait, and the minimum gap kept between requests, in seconds. The wait starts here. |
-
-#### Metadata: rate limits (429, 504)
-
-| Variable / Key | Description |
-|---|---|
-| <a id="metadata_session_sleep_init"></a>`OFSC_METADATA_SESSION_SLEEP_INIT`<br>Key: `METADATA_SESSION_SLEEP_INIT` | **Default:** `4.0`. The wait the first error of this kind sets (0 means 1 second). It must be above `*_MIN_SLEEP`, or the first error sets `*_MIN_SLEEP` times the increase factor instead. |
-| <a id="metadata_session_sleep_increase_time_diff"></a>`OFSC_METADATA_SESSION_SLEEP_INCREASE_TIME_DIFF`<br>Key: `METADATA_SESSION_SLEEP_INCREASE_TIME_DIFF` | **Default:** `35.0`. Seconds that must pass since the wait was last raised before an error from an earlier request raises it again. An error from a request sent after the last raise raises it at once. |
-| <a id="metadata_session_sleep_max"></a>`OFSC_METADATA_SESSION_SLEEP_MAX`<br>Key: `METADATA_SESSION_SLEEP_MAX` | **Default:** `60.0`. The longest backoff wait, in seconds. |
-| <a id="metadata_session_sleep_increase_factor"></a>`OFSC_METADATA_SESSION_SLEEP_INCREASE_FACTOR`<br>Key: `METADATA_SESSION_SLEEP_INCREASE_FACTOR` | **Default:** `1.5`. Each further error multiplies the wait by this. |
-| <a id="metadata_session_sleep_decay_threshold"></a>`OFSC_METADATA_SESSION_SLEEP_DECAY_THRESHOLD`<br>Key: `METADATA_SESSION_SLEEP_DECAY_THRESHOLD` | **Default:** `35.0`. Seconds without an error or a change after which the wait shrinks. |
-| <a id="metadata_session_sleep_decay_factor"></a>`OFSC_METADATA_SESSION_SLEEP_DECAY_FACTOR`<br>Key: `METADATA_SESSION_SLEEP_DECAY_FACTOR` | **Default:** `2.0`. The wait is divided by this when it shrinks. |
-| <a id="metadata_session_min_sleep"></a>`OFSC_METADATA_SESSION_MIN_SLEEP`<br>Key: `METADATA_SESSION_MIN_SLEEP` | **Default:** `0.5`. The smallest wait, and the minimum gap kept between requests, in seconds. The wait starts here. |
-
-#### Metadata: 403 errors
-
-| Variable / Key | Description |
-|---|---|
-| <a id="metadata_session_403_sleep_init"></a>`OFSC_METADATA_SESSION_403_SLEEP_INIT`<br>Key: `METADATA_SESSION_403_SLEEP_INIT` | **Default:** `4.0`. The wait the first error of this kind sets (0 means 1 second). It must be above `*_MIN_SLEEP`, or the first error sets `*_MIN_SLEEP` times the increase factor instead. |
-| <a id="metadata_session_403_sleep_increase_time_diff"></a>`OFSC_METADATA_SESSION_403_SLEEP_INCREASE_TIME_DIFF`<br>Key: `METADATA_SESSION_403_SLEEP_INCREASE_TIME_DIFF` | **Default:** `35.0`. Seconds that must pass since the wait was last raised before an error from an earlier request raises it again. An error from a request sent after the last raise raises it at once. |
-| <a id="metadata_session_403_sleep_max"></a>`OFSC_METADATA_SESSION_403_SLEEP_MAX`<br>Key: `METADATA_SESSION_403_SLEEP_MAX` | **Default:** `60.0`. The longest backoff wait, in seconds. |
-| <a id="metadata_session_403_sleep_increase_factor"></a>`OFSC_METADATA_SESSION_403_SLEEP_INCREASE_FACTOR`<br>Key: `METADATA_SESSION_403_SLEEP_INCREASE_FACTOR` | **Default:** `1.5`. Each further error multiplies the wait by this. |
-| <a id="metadata_session_403_sleep_decay_threshold"></a>`OFSC_METADATA_SESSION_403_SLEEP_DECAY_THRESHOLD`<br>Key: `METADATA_SESSION_403_SLEEP_DECAY_THRESHOLD` | **Default:** `30.0`. Seconds without an error or a change after which the wait shrinks. |
-| <a id="metadata_session_403_sleep_decay_factor"></a>`OFSC_METADATA_SESSION_403_SLEEP_DECAY_FACTOR`<br>Key: `METADATA_SESSION_403_SLEEP_DECAY_FACTOR` | **Default:** `2.0`. The wait is divided by this when it shrinks. |
-| <a id="metadata_session_403_min_sleep"></a>`OFSC_METADATA_SESSION_403_MIN_SLEEP`<br>Key: `METADATA_SESSION_403_MIN_SLEEP` | **Default:** `2.0`. The smallest wait, and the minimum gap kept between requests, in seconds. The wait starts here. |
-
-#### Discord: rate limits (429, 504)
-
-| Variable / Key | Description |
-|---|---|
-| <a id="discord_session_sleep_init"></a>`OFSC_DISCORD_SESSION_SLEEP_INIT`<br>Key: `DISCORD_SESSION_SLEEP_INIT` | **Default:** `5.0`. The wait the first error of this kind sets (0 means 1 second). It must be above `*_MIN_SLEEP`, or the first error sets `*_MIN_SLEEP` times the increase factor instead. |
-| <a id="discord_session_sleep_increase_time_diff"></a>`OFSC_DISCORD_SESSION_SLEEP_INCREASE_TIME_DIFF`<br>Key: `DISCORD_SESSION_SLEEP_INCREASE_TIME_DIFF` | **Default:** `30.0`. Seconds that must pass since the wait was last raised before an error from an earlier request raises it again. An error from a request sent after the last raise raises it at once. |
-| <a id="discord_session_sleep_max"></a>`OFSC_DISCORD_SESSION_SLEEP_MAX`<br>Key: `DISCORD_SESSION_SLEEP_MAX` | **Default:** `60.0`. The longest backoff wait, in seconds. |
-| <a id="discord_session_sleep_increase_factor"></a>`OFSC_DISCORD_SESSION_SLEEP_INCREASE_FACTOR`<br>Key: `DISCORD_SESSION_SLEEP_INCREASE_FACTOR` | **Default:** `2.0`. Each further error multiplies the wait by this. |
-| <a id="discord_session_sleep_decay_threshold"></a>`OFSC_DISCORD_SESSION_SLEEP_DECAY_THRESHOLD`<br>Key: `DISCORD_SESSION_SLEEP_DECAY_THRESHOLD` | **Default:** `120.0`. Seconds without an error or a change after which the wait shrinks. |
-| <a id="discord_session_sleep_decay_factor"></a>`OFSC_DISCORD_SESSION_SLEEP_DECAY_FACTOR`<br>Key: `DISCORD_SESSION_SLEEP_DECAY_FACTOR` | **Default:** `1.5`. The wait is divided by this when it shrinks. |
-| <a id="discord_session_min_sleep"></a>`OFSC_DISCORD_SESSION_MIN_SLEEP`<br>Key: `DISCORD_SESSION_MIN_SLEEP` | **Default:** `2.0`. The smallest wait, and the minimum gap kept between requests, in seconds. The wait starts here. |
-
-#### Discord: 403 errors
-
-| Variable / Key | Description |
-|---|---|
-| <a id="discord_session_403_sleep_init"></a>`OFSC_DISCORD_SESSION_403_SLEEP_INIT`<br>Key: `DISCORD_SESSION_403_SLEEP_INIT` | **Default:** `4.0`. The wait the first error of this kind sets (0 means 1 second). It must be above `*_MIN_SLEEP`, or the first error sets `*_MIN_SLEEP` times the increase factor instead. |
-| <a id="discord_session_403_sleep_increase_time_diff"></a>`OFSC_DISCORD_SESSION_403_SLEEP_INCREASE_TIME_DIFF`<br>Key: `DISCORD_SESSION_403_SLEEP_INCREASE_TIME_DIFF` | **Default:** `30.0`. Seconds that must pass since the wait was last raised before an error from an earlier request raises it again. An error from a request sent after the last raise raises it at once. |
-| <a id="discord_session_403_sleep_max"></a>`OFSC_DISCORD_SESSION_403_SLEEP_MAX`<br>Key: `DISCORD_SESSION_403_SLEEP_MAX` | **Default:** `300.0`. The longest backoff wait, in seconds. |
-| <a id="discord_session_403_sleep_increase_factor"></a>`OFSC_DISCORD_SESSION_403_SLEEP_INCREASE_FACTOR`<br>Key: `DISCORD_SESSION_403_SLEEP_INCREASE_FACTOR` | **Default:** `4.0`. Each further error multiplies the wait by this. |
-| <a id="discord_session_403_sleep_decay_threshold"></a>`OFSC_DISCORD_SESSION_403_SLEEP_DECAY_THRESHOLD`<br>Key: `DISCORD_SESSION_403_SLEEP_DECAY_THRESHOLD` | **Default:** `60.0`. Seconds without an error or a change after which the wait shrinks. |
-| <a id="discord_session_403_sleep_decay_factor"></a>`OFSC_DISCORD_SESSION_403_SLEEP_DECAY_FACTOR`<br>Key: `DISCORD_SESSION_403_SLEEP_DECAY_FACTOR` | **Default:** `1.5`. The wait is divided by this when it shrinks. |
-| <a id="discord_session_403_min_sleep"></a>`OFSC_DISCORD_SESSION_403_MIN_SLEEP`<br>Key: `DISCORD_SESSION_403_MIN_SLEEP` | **Default:** `30.0`. The smallest wait, and the minimum gap kept between requests, in seconds. The wait starts here. |
-
-#### Subscription API: rate limits (429, 504)
-
-| Variable / Key | Description |
-|---|---|
-| <a id="subscription_session_sleep_init"></a>`OFSC_SUBSCRIPTION_SESSION_SLEEP_INIT`<br>Key: `SUBSCRIPTION_SESSION_SLEEP_INIT` | **Default:** `1.0`. The wait the first error of this kind sets (0 means 1 second). It must be above `*_MIN_SLEEP`, or the first error sets `*_MIN_SLEEP` times the increase factor instead. |
-| <a id="subscription_session_sleep_increase_time_diff"></a>`OFSC_SUBSCRIPTION_SESSION_SLEEP_INCREASE_TIME_DIFF`<br>Key: `SUBSCRIPTION_SESSION_SLEEP_INCREASE_TIME_DIFF` | **Default:** `30.0`. Seconds that must pass since the wait was last raised before an error from an earlier request raises it again. An error from a request sent after the last raise raises it at once. |
-| <a id="subscription_session_sleep_max"></a>`OFSC_SUBSCRIPTION_SESSION_SLEEP_MAX`<br>Key: `SUBSCRIPTION_SESSION_SLEEP_MAX` | **Default:** `180.0`. The longest backoff wait, in seconds. |
-| <a id="subscription_session_sleep_increase_factor"></a>`OFSC_SUBSCRIPTION_SESSION_SLEEP_INCREASE_FACTOR`<br>Key: `SUBSCRIPTION_SESSION_SLEEP_INCREASE_FACTOR` | **Default:** `2.0`. Each further error multiplies the wait by this. |
-| <a id="subscription_session_sleep_decay_threshold"></a>`OFSC_SUBSCRIPTION_SESSION_SLEEP_DECAY_THRESHOLD`<br>Key: `SUBSCRIPTION_SESSION_SLEEP_DECAY_THRESHOLD` | **Default:** `120.0`. Seconds without an error or a change after which the wait shrinks. |
-| <a id="subscription_session_sleep_decay_factor"></a>`OFSC_SUBSCRIPTION_SESSION_SLEEP_DECAY_FACTOR`<br>Key: `SUBSCRIPTION_SESSION_SLEEP_DECAY_FACTOR` | **Default:** `1.5`. The wait is divided by this when it shrinks. |
-| <a id="subscription_session_min_sleep"></a>`OFSC_SUBSCRIPTION_SESSION_MIN_SLEEP`<br>Key: `SUBSCRIPTION_SESSION_MIN_SLEEP` | **Default:** `0.5`. The smallest wait, and the minimum gap kept between requests, in seconds. The wait starts here. |
-
-#### Subscription API: 403 errors
-
-| Variable / Key | Description |
-|---|---|
-| <a id="subscription_session_403_sleep_init"></a>`OFSC_SUBSCRIPTION_SESSION_403_SLEEP_INIT`<br>Key: `SUBSCRIPTION_SESSION_403_SLEEP_INIT` | **Default:** `2.0`. The wait the first error of this kind sets (0 means 1 second). It must be above `*_MIN_SLEEP`, or the first error sets `*_MIN_SLEEP` times the increase factor instead. |
-| <a id="subscription_session_403_sleep_increase_time_diff"></a>`OFSC_SUBSCRIPTION_SESSION_403_SLEEP_INCREASE_TIME_DIFF`<br>Key: `SUBSCRIPTION_SESSION_403_SLEEP_INCREASE_TIME_DIFF` | **Default:** `60.0`. Seconds that must pass since the wait was last raised before an error from an earlier request raises it again. An error from a request sent after the last raise raises it at once. |
-| <a id="subscription_session_403_sleep_max"></a>`OFSC_SUBSCRIPTION_SESSION_403_SLEEP_MAX`<br>Key: `SUBSCRIPTION_SESSION_403_SLEEP_MAX` | **Default:** `180.0`. The longest backoff wait, in seconds. |
-| <a id="subscription_session_403_sleep_increase_factor"></a>`OFSC_SUBSCRIPTION_SESSION_403_SLEEP_INCREASE_FACTOR`<br>Key: `SUBSCRIPTION_SESSION_403_SLEEP_INCREASE_FACTOR` | **Default:** `1.5`. Each further error multiplies the wait by this. |
-| <a id="subscription_session_403_sleep_decay_threshold"></a>`OFSC_SUBSCRIPTION_SESSION_403_SLEEP_DECAY_THRESHOLD`<br>Key: `SUBSCRIPTION_SESSION_403_SLEEP_DECAY_THRESHOLD` | **Default:** `65.0`. Seconds without an error or a change after which the wait shrinks. |
-| <a id="subscription_session_403_sleep_decay_factor"></a>`OFSC_SUBSCRIPTION_SESSION_403_SLEEP_DECAY_FACTOR`<br>Key: `SUBSCRIPTION_SESSION_403_SLEEP_DECAY_FACTOR` | **Default:** `1.5`. The wait is divided by this when it shrinks. |
-| <a id="subscription_session_403_min_sleep"></a>`OFSC_SUBSCRIPTION_SESSION_403_MIN_SLEEP`<br>Key: `SUBSCRIPTION_SESSION_403_MIN_SLEEP` | **Default:** `0.0`. The smallest wait, and the minimum gap kept between requests, in seconds. The wait starts here. |
-
-</details>
 
 ### Authentication
 
@@ -688,30 +499,30 @@ Defined in `ofscraper/utils/of_env/values/live.py`.
 
 | Variable / Key | Description |
 |---|---|
-| <a id="supress_api_display"></a>`OFSC_SUPRESS_API_DISPLAY`<br>Key: `SUPRESS_API_DISPLAY` | **Default:** `None`. Hides the API progress display when on. [Details](#supress_api_display-details). |
-| <a id="supress_download_display"></a>`OFSC_SUPRESS_DOWNLOAD_DISPLAY`<br>Key: `SUPRESS_DOWNLOAD_DISPLAY` | **Default:** `None`. Hides the download progress display when on. [Details](#supress_download_display-details). |
-| <a id="supress_subscription_display"></a>`OFSC_SUPRESS_SUBSCRIPTION_DISPLAY`<br>Key: `SUPRESS_SUBSCRIPTION_DISPLAY` | **Default:** `None`. Hides the subscription progress display when on. [Details](#supress_subscription_display-details). |
-| <a id="supress_like_display"></a>`OFSC_SUPRESS_LIKE_DISPLAY`<br>Key: `SUPRESS_LIKE_DISPLAY` | **Default:** `None`. Hides the like progress display when on. [Details](#supress_like_display-details). |
+| <a id="supress_api_display"></a>`OFSC_SUPRESS_API_DISPLAY`<br>Key: `SUPRESS_API_DISPLAY` | **Default:** `None`. Hides the API progress display when on. [Details](#progress-display). |
+| <a id="supress_download_display"></a>`OFSC_SUPRESS_DOWNLOAD_DISPLAY`<br>Key: `SUPRESS_DOWNLOAD_DISPLAY` | **Default:** `None`. Hides the download progress display when on. [Details](#progress-display). |
+| <a id="supress_subscription_display"></a>`OFSC_SUPRESS_SUBSCRIPTION_DISPLAY`<br>Key: `SUPRESS_SUBSCRIPTION_DISPLAY` | **Default:** `None`. Hides the subscription progress display when on. [Details](#progress-display). |
+| <a id="supress_like_display"></a>`OFSC_SUPRESS_LIKE_DISPLAY`<br>Key: `SUPRESS_LIKE_DISPLAY` | **Default:** `None`. Hides the like progress display when on. [Details](#progress-display). |
 
-##### <a id="supress_api_display-details"></a>`SUPRESS_API_DISPLAY`
+##### `SUPRESS_API_DISPLAY` details
 
 **Environment variable:** `OFSC_SUPRESS_API_DISPLAY` · **Default:** `None`
 
 Hides the API progress display when on. The value is read as on/off: `true` or `1` (any case) is on, and anything else is off, which shows the display. This holds for the bare name too, which has no default to take a type from. It applies only while that screen is up. Unset, the display follows `--output` and `--no-rich`.
 
-##### <a id="supress_download_display-details"></a>`SUPRESS_DOWNLOAD_DISPLAY`
+##### `SUPRESS_DOWNLOAD_DISPLAY` details
 
 **Environment variable:** `OFSC_SUPRESS_DOWNLOAD_DISPLAY` · **Default:** `None`
 
 Hides the download progress display when on. The value is read as on/off: `true` or `1` (any case) is on, and anything else is off, which shows the display. This holds for the bare name too, which has no default to take a type from. It applies only while that screen is up. Unset, the display follows `--output` and `--no-rich`.
 
-##### <a id="supress_subscription_display-details"></a>`SUPRESS_SUBSCRIPTION_DISPLAY`
+##### `SUPRESS_SUBSCRIPTION_DISPLAY` details
 
 **Environment variable:** `OFSC_SUPRESS_SUBSCRIPTION_DISPLAY` · **Default:** `None`
 
 Hides the subscription progress display when on. The value is read as on/off: `true` or `1` (any case) is on, and anything else is off, which shows the display. This holds for the bare name too, which has no default to take a type from. It applies only while that screen is up. Unset, the display follows `--output` and `--no-rich`.
 
-##### <a id="supress_like_display-details"></a>`SUPRESS_LIKE_DISPLAY`
+##### `SUPRESS_LIKE_DISPLAY` details
 
 **Environment variable:** `OFSC_SUPRESS_LIKE_DISPLAY` · **Default:** `None`
 
@@ -732,10 +543,10 @@ Defined in `ofscraper/utils/of_env/values/system.py`.
 | <a id="log_subprocess_level"></a>`OFSC_LOG_SUBPROCESS_LEVEL`, `OFSC_LOG_SUBPROCESS_LEVELL`<br>Key: `LOG_SUBPROCESS_LEVEL` | **Default:** `10`. Log level for subprocess output that has no more specific setting. `OFSC_LOG_SUBPROCESS_LEVELL` is the old misspelled name, and it is still read. |
 | <a id="ffmpeg_subprocess_level"></a>`OFSC_FFMPEG_SUBPROCESS_LEVEL`<br>Key: `FFMPEG_SUBPROCESS_LEVEL` | **Default:** `10`. Log level for the output of this subprocess (the user script, ffmpeg or ffprobe named in the key). 0 turns that output off. |
 | <a id="ffprobe_subprocess_level"></a>`OFSC_FFPROBE_SUBPROCESS_LEVEL`<br>Key: `FFPROBE_SUBPROCESS_LEVEL` | **Default:** `10`. Log level for the output of this subprocess (the user script, ffmpeg or ffprobe named in the key). 0 turns that output off. |
-| <a id="ofsc_database_url"></a>`OFSC_DATABASE_URL` | **Default:** `''`. A PostgreSQL connection URL, such as postgresql://user:password@host:5432/database. [Details](#ofsc_database_url-details). |
+| <a id="ofsc_database_url"></a>`OFSC_DATABASE_URL` | **Default:** `''`. A PostgreSQL connection URL, such as postgresql://user:password@host:5432/database. [Details](#subprocess-log-levels-and-free-space-check). |
 | <a id="disk_space_check_path"></a>`OFSC_DISK_SPACE_CHECK_PATH`<br>Key: `DISK_SPACE_CHECK_PATH` | **Default:** `'/'`. The path whose disk free space is compared with `download_options.system_free_min` (`ofscraper/utils/system/free.py`). It is not the save location unless you set it to be. |
 
-##### <a id="ofsc_database_url-details"></a>`OFSC_DATABASE_URL`
+##### `OFSC_DATABASE_URL` details
 
 **Environment variable:** `OFSC_DATABASE_URL` · **Default:** `''`
 
@@ -780,170 +591,4 @@ Defined in `ofscraper/utils/of_env/values/prompts.py`.
 | Variable / Key | Description |
 |---|---|
 | <a id="modelprompt"></a>`modelPrompt`<br>*(bare key only)* | **Default:** a dict of 10 entries (see the source). Menu entries for filtering and sorting the creator list interactively. Not read from the environment. |
-
-## API addresses and URLs
-
-### OnlyFans API addresses
-
-Defined in `ofscraper/utils/of_env/values/url/url.py`.
-
-<details>
-<summary>Show OnlyFans API endpoint URLs (28 keys)</summary>
-
-| Variable / Key | Description |
-|---|---|
-| <a id="licence_url"></a>`OFSC_API_LICENCE_URL`<br>Key: `LICENCE_URL` | **Default:** `'https://onlyfans.com/api2/v2/users/media/{}/drm/{}/{}?type=widevine'`. URL for media DRM licence acquisition. |
-| <a id="individual_timeline"></a>`OFSC_API_INDIVIDUAL_TIMELINE`<br>Key: `INDIVIDUAL_TIMELINE` | **Default:** `'https://onlyfans.com/api2/v2/posts/{}?skip_users=all'`. Endpoint for a single timeline post. |
-| <a id="meep"></a>`OFSC_API_ME_EP`<br>Key: `meEP` | **Default:** `'https://onlyfans.com/api2/v2/users/me'`. Endpoint for the current user's profile information. |
-| <a id="subscriptionsactiveep"></a>`OFSC_API_SUBSCRIPTIONS_ACTIVE_EP`<br>Key: `subscriptionsActiveEP` | **Default:** `'https://onlyfans.com/api2/v2/subscriptions/subscribes?offset={}&limit=10&type=active&format=infinite'`. Endpoint for active subscriptions. |
-| <a id="subscriptionsexpiredep"></a>`OFSC_API_SUBSCRIPTIONS_EXPIRED_EP`<br>Key: `subscriptionsExpiredEP` | **Default:** `'https://onlyfans.com/api2/v2/subscriptions/subscribes?offset={}&limit=10&type=expired&format=infinite'`. Endpoint for expired subscriptions. |
-| <a id="subscribecountep"></a>`OFSC_API_SUBSCRIBE_COUNT_EP`<br>Key: `subscribeCountEP` | **Default:** `'https://onlyfans.com/api2/v2/subscriptions/count/all'`. Endpoint for subscription count. |
-| <a id="sortsubscriptions"></a>`OFSC_API_SORT_SUBSCRIPTIONS`<br>Key: `sortSubscriptions` | **Default:** `'https://onlyfans.com/api2/v2/lists/following/sort'`. Endpoint for sorting subscriptions. |
-| <a id="profileep"></a>`OFSC_API_PROFILE_EP`<br>Key: `profileEP` | **Default:** `'https://onlyfans.com/api2/v2/users/{}'`. Endpoint for a specific user profile. |
-| <a id="timelineep"></a>`OFSC_API_TIMELINE_EP`<br>Key: `timelineEP` | **Default:** `'https://onlyfans.com/api2/v2/users/{}/posts?limit=100&order=publish_date_asc&skip_users=all&skip_users_dups=1&pinned=0&format=infinite'`. Endpoint for user's timeline posts. |
-| <a id="timelinenextep"></a>`OFSC_API_TIMELINE_NEXT_EP`<br>Key: `timelineNextEP` | **Default:** `'https://onlyfans.com/api2/v2/users/{}/posts?limit=100&order=publish_date_asc&skip_users=all&skip_users_dups=1&afterPublishTime={}&pinned=0&format=infinite'`. Endpoint for next set of timeline posts. |
-| <a id="timelinepinnedep"></a>`OFSC_API_TIMELINE_PINNED_EP`<br>Key: `timelinePinnedEP` | **Default:** `'https://onlyfans.com/api2/v2/users/{}/posts?skip_users=all&pinned=1&counters={}&format=infinite'`. Endpoint for user's pinned timeline posts. |
-| <a id="streamsep"></a>`OFSC_API_STREAMS_EP`<br>Key: `streamsEP` | **Default:** `'https://onlyfans.com/api2/v2/users/{}/posts/streams?limit=100&order=publish_date_asc&skip_users=all&skip_users_dups=1&format=infinite'`. Endpoint for user's streams/live content. |
-| <a id="streamsnextep"></a>`OFSC_API_STREAMS_NEXT_EP`<br>Key: `streamsNextEP` | **Default:** `'https://onlyfans.com/api2/v2/users/{}/posts/streams?limit=100&order=publish_date_asc&skip_users=all&skip_users_dups=1&afterPublishTime={}&format=infinite'`. Endpoint for next set of streams/live content. |
-| <a id="archivedep"></a>`OFSC_API_ARCHIVED_EP`<br>Key: `archivedEP` | **Default:** `'https://onlyfans.com/api2/v2/users/{}/posts/archived?limit=100&order=publish_date_asc&skip_users=all&skip_users_dups=1&format=infinite'`. Endpoint for user's archived posts. |
-| <a id="archivednextep"></a>`OFSC_API_ARCHIVED_NEXT_EP`<br>Key: `archivedNextEP` | **Default:** `'https://onlyfans.com/api2/v2/users/{}/posts/archived?limit=100&order=publish_date_asc&skip_users=all&skip_users_dups=1&afterPublishTime={}&format=infinite'`. Endpoint for next set of archived posts. |
-| <a id="highlightswithstoriesep"></a>`OFSC_API_HIGHLIGHTS_WITH_STORIES_EP`<br>Key: `highlightsWithStoriesEP` | **Default:** `'https://onlyfans.com/api2/v2/users/{}/stories/highlights?limit=5&offset={}&unf=1'`. Endpoint for highlights with stories. |
-| <a id="highlightswithastoryep"></a>`OFSC_API_HIGHLIGHTS_WITH_A_STORY_EP`<br>Key: `highlightsWithAStoryEP` | **Default:** `'https://onlyfans.com/api2/v2/users/{}/stories?unf=1'`. Endpoint for highlights with a single story. |
-| <a id="storyep"></a>`OFSC_API_STORY_EP`<br>Key: `storyEP` | **Default:** `'https://onlyfans.com/api2/v2/stories/highlights/{}?unf=1'`. Endpoint for a specific story. |
-| <a id="messagesep"></a>`OFSC_API_MESSAGES_EP`<br>Key: `messagesEP` | **Default:** `'https://onlyfans.com/api2/v2/chats/{}/messages?limit=100&order=desc&skip_users=all&skip_users_dups=1'`. Endpoint for chat messages. |
-| <a id="messagesnextep"></a>`OFSC_API_MESSAGES_NEXT_EP`<br>Key: `messagesNextEP` | **Default:** `'https://onlyfans.com/api2/v2/chats/{}/messages?limit=100&id={}&order=desc&skip_users=all&skip_users_dups=1'`. Endpoint for next set of chat messages. |
-| <a id="favoriteep"></a>`OFSC_API_FAVORITE_EP`<br>Key: `favoriteEP` | **Default:** `'https://onlyfans.com/api2/v2/posts/{}/favorites/{}'`. Endpoint for liking or unliking a post. |
-| <a id="purchased_contentep"></a>`OFSC_PURCHASED_CONTENT_EP`<br>Key: `purchased_contentEP` | **Default:** `'https://onlyfans.com/api2/v2/posts/paid/all?limit=100&skip_users=all&format=infinite&offset={}&author={}'`. Endpoint for purchased content by user ID. |
-| <a id="purchased_contentall"></a>`OFSC_PURCHASED_CONTENT_ALL_EP`<br>Key: `purchased_contentALL` | **Default:** `'https://onlyfans.com/api2/v2/posts/paid/all?limit=100&skip_users=all&format=infinite&offset={}'`. Endpoint for all purchased content. |
-| <a id="messagespecific"></a>`OFSC_MESSAGE_SPECIFIC_EP`<br>Key: `messageSPECIFIC` | **Default:** `'https://onlyfans.com/api2/v2/chats/{}/messages?limit=10&order=desc&skip_users=all&firstId={}'`. Endpoint for specific chat messages (by first ID). |
-| <a id="labelsep"></a>`OFSC_LABELS_EP`<br>Key: `labelsEP` | **Default:** `'https://onlyfans.com/api2/v2/users/{}/labels?limit=100&offset={}&order=desc&non-empty=1'`. Endpoint for user's labels. |
-| <a id="labelledpostsep"></a>`OFSC_LABELLED_POSTS_EP`<br>Key: `labelledPostsEP` | **Default:** `'https://onlyfans.com/api2/v2/users/{}/posts?limit=100&offset={}&order=publish_date_desc&skip_users=all&counters=0&format=infinite&label={}'`. Endpoint for posts under a specific label. |
-| <a id="listep"></a>`OFSC_LIST_EP`<br>Key: `listEP` | **Default:** `'https://onlyfans.com/api2/v2/lists?offset={}&skip_users=all&limit=100&format=infinite'`. Endpoint for user's custom lists. |
-| <a id="listusersep"></a>`OFSC_LIST_USERS_EP`<br>Key: `listusersEP` | **Default:** `'https://onlyfans.com/api2/v2/lists/{}/users?offset={}&limit=100&format=infinite'`. Endpoint for users within a specific list. |
-
-</details>
-
-### Dynamic rule addresses
-
-Defined in `ofscraper/utils/of_env/values/url/dynamic.py`.
-
-| Variable / Key | Description |
-|---|---|
-| <a id="xagler_url"></a>`OF_XAGLER_URL`<br>Key: `XAGLER_URL` | **Default:** `'https://raw.githubusercontent.com/xagler/dynamic-rules/main/onlyfans.json'`. URL of the `xagler` OnlyFans dynamic signing rules JSON. |
-| <a id="rafa_url"></a>`OF_RAFA_URL`<br>Key: `RAFA_URL` | **Default:** `'https://raw.githubusercontent.com/rafa-9/dynamic-rules/main/rules.json'`. URL of the `rafa` OnlyFans dynamic signing rules JSON. |
-| <a id="digitalcriminals"></a>`OF_DIGITALCRIMINALS_URL`<br>Key: `DIGITALCRIMINALS` | **Default:** `'https://raw.githubusercontent.com/DATAHOARDERS/dynamic-rules/main/onlyfans.json'`. URL of the `digitalcriminals` OnlyFans dynamic signing rules JSON. |
-| <a id="dynamic_generic_url"></a>`OF_DYNAMIC_GENERIC_URL`<br>Key: `DYNAMIC_GENERIC_URL` | **Default:** `None`. The URL of the dynamic rule that `advanced_options.dynamic-mode-default` `generic` fetches. Unset, `generic` can't be used and the fallback sources are tried instead. |
-
-### Other addresses
-
-Defined in `ofscraper/utils/of_env/values/url/other_url.py`.
-
-#### CDM URL
-
-| Variable / Key | Description |
-|---|---|
-| <a id="cdrm"></a>`OFSC_CDRM_URL`<br>Key: `CDRM` | **Default:** `'https://cdrm-project.com/api/decrypt'`. URL of a self-hosted decryption server for the deprecated `cdrm` key mode. [Details](#cdrm-details). |
-
-##### <a id="cdrm-details"></a>`CDRM`
-
-**Environment variable:** `OFSC_CDRM_URL` · **Default:** `'https://cdrm-project.com/api/decrypt'`
-
-URL of a self-hosted decryption server for the deprecated `cdrm` key mode. It is sent the request headers, cookies included. The default, `cdrm-project.com`, isn't contacted: protected videos are skipped before download, with a message to use `manual` key mode. Set it only to a server you run yourself.
-
-#### Bad URL Host
-
-| Variable / Key | Description |
-|---|---|
-| <a id="bad_url_host"></a>`OFSC_BAD_URL_HOSTS`<br>Key: `BAD_URL_HOST` | **Default:** a list of 3 items (see the source). Regular expressions for hosts whose media is skipped and recorded in the database as downloaded with no file (a comma-separated list can be given in `OFSC_BAD_URL_HOSTS`). |
-
-#### Media Host
-
-| Variable / Key | Description |
-|---|---|
-| <a id="media_host_suffixes"></a>`OFSC_MEDIA_HOST_SUFFIXES`<br>Key: `MEDIA_HOST_SUFFIXES` | **Default:** `[]`. Extra domains (added to the built-in `onlyfans.com`) allowed to receive OnlyFans login cookies and headers during downloads (`ofscraper/utils/host_allowlist.py`). [Details](#media_host_suffixes-details). |
-
-##### <a id="media_host_suffixes-details"></a>`MEDIA_HOST_SUFFIXES`
-
-**Environment variable:** `OFSC_MEDIA_HOST_SUFFIXES` · **Default:** `[]`
-
-Extra domains (added to the built-in `onlyfans.com`) allowed to receive OnlyFans login cookies and headers during downloads (`ofscraper/utils/host_allowlist.py`). A host matches a domain or any subdomain of it, so `cdn.example.com` allows `media.cdn.example.com` but not `evil-cdn.example.com`; only http and https links match. A normal file on an unlisted host is downloaded without login credentials, with one warning per host. A DRM video whose manifest or licence URL is on an unlisted host isn't downloaded and fails with a warning naming the host. Adding a domain never removes the built-in ones. Fansly isn't checked because its token goes only to its API host.
-
-## Unused legacy defaults
-
-Defined in `ofscraper/utils/of_env/values/` for compatibility, but not currently read anywhere in the app.
-
-<details>
-<summary>Show unused legacy defaults (67 keys)</summary>
-
-| Variable / Key | Details |
-|---|---|
-| <a id="download_thread_min"></a>`DOWNLOAD_THREAD_MIN` | **Default:** `35` · **Defined in:** `ofscraper/utils/of_env/values/action/download.py` |
-| <a id="max_progress_bars"></a>`MAX_PROGRESS_BARS` | **Default:** `60` · **Defined in:** `ofscraper/utils/of_env/values/action/download.py` |
-| <a id="min_add_progress_bars"></a>`MIN_ADD_PROGRESS_BARS` | **Default:** `40` · **Defined in:** `ofscraper/utils/of_env/values/action/download.py` |
-| <a id="multiprogress_job_update_freq"></a>`MULTIPROGRESS_JOB_UPDATE_FREQ` | **Default:** `1.5` · **Defined in:** `ofscraper/utils/of_env/values/action/download.py` |
-| <a id="progress_job_update_freq"></a>`PROGRESS_JOB_UPDATE_FREQ` | **Default:** `2.5` · **Defined in:** `ofscraper/utils/of_env/values/action/download.py` |
-| <a id="overall_multi_progress_thread_sleep"></a>`OVERALL_MULTI_PROGRESS_THREAD_SLEEP` | **Default:** `0.1` · **Defined in:** `ofscraper/utils/of_env/values/action/download.py` |
-| <a id="job_multi_progress_thread_sleep"></a>`JOB_MULTI_PROGRESS_THREAD_SLEEP` | **Default:** `0.1` · **Defined in:** `ofscraper/utils/of_env/values/action/download.py` |
-| <a id="cdm_force_key"></a>`CDM_FORCE_KEY` | **Default:** `True` · **Defined in:** `ofscraper/utils/of_env/values/action/download.py` |
-| <a id="meta_force_key"></a>`META_FORCE_KEY` | **Default:** `True` · **Defined in:** `ofscraper/utils/of_env/values/action/download.py` |
-| <a id="download_force_key"></a>`DOWNLOAD_FORCE_KEY` | **Default:** `True` · **Defined in:** `ofscraper/utils/of_env/values/action/download.py` |
-| <a id="mpd_force_key"></a>`MPD_FORCE_KEY` | **Default:** `True` · **Defined in:** `ofscraper/utils/of_env/values/action/download.py` |
-| <a id="profile_force_key"></a>`PROFILE_FORCE_KEY` | **Default:** `False` · **Defined in:** `ofscraper/utils/of_env/values/action/download.py` |
-| <a id="remove_unviewable_metadata"></a>`REMOVE_UNVIEWABLE_METADATA` | **Default:** `False` · **Defined in:** `ofscraper/utils/of_env/values/action/metadata.py` |
-| <a id="proxy_mounts"></a>`OFSC_PROXY_MOUNTS`<br>Key: `PROXY_MOUNTS` | **Default:** `None` · **Defined in:** `ofscraper/utils/of_env/values/req/req.py` |
-| <a id="proxy_auth"></a>`OFSC_PROXY_AUTH`<br>Key: `PROXY_AUTH` | **Default:** `None` · **Defined in:** `ofscraper/utils/of_env/values/req/req.py` |
-| <a id="max_chunk_size"></a>`OFSC_MAX_CHUNK_SIZE`<br>Key: `MAX_CHUNK_SIZE` | **Default:** `134217728` · **Defined in:** `ofscraper/utils/of_env/values/req/req.py` |
-| <a id="min_chunk_size"></a>`OFSC_MIN_CHUNK_SIZE`<br>Key: `MIN_CHUNK_SIZE` | **Default:** `65536` · **Defined in:** `ofscraper/utils/of_env/values/req/req.py` |
-| <a id="chunk_update_count"></a>`OFSC_CHUNK_UPDATE_COUNT`<br>Key: `CHUNK_UPDATE_COUNT` | **Default:** `12` · **Defined in:** `ofscraper/utils/of_env/values/req/req.py` |
-| <a id="chunk_size_update_count"></a>`OFSC_CHUNK_SIZE_UPDATE_COUNT`<br>Key: `CHUNK_SIZE_UPDATE_COUNT` | **Default:** `15` · **Defined in:** `ofscraper/utils/of_env/values/req/req.py` |
-| <a id="chunk_memory_split"></a>`OFSC_CHUNK_MEMORY_SPLIT`<br>Key: `CHUNK_MEMORY_SPLIT` | **Default:** `64` · **Defined in:** `ofscraper/utils/of_env/values/req/req.py` |
-| <a id="chunk_file_split"></a>`OFSC_CHUNK_FILE_SPLIT`<br>Key: `CHUNK_FILE_SPLIT` | **Default:** `64` · **Defined in:** `ofscraper/utils/of_env/values/req/req.py` |
-| <a id="max_read_size"></a>`OFSC_MAX_READ_SIZE`<br>Key: `MAX_READ_SIZE` | **Default:** `16777216` · **Defined in:** `ofscraper/utils/of_env/values/req/req.py` |
-| <a id="req_semaphore_multi"></a>`OFSC_REQ_SEMAPHORE_MULTI`<br>Key: `REQ_SEMAPHORE_MULTI` | **Default:** `5` · **Defined in:** `ofscraper/utils/of_env/values/req/req.py` |
-| <a id="like_max_sems"></a>`OFSC_LIKE_MAX_SEMS`<br>Key: `LIKE_MAX_SEMS` | **Default:** `12` · **Defined in:** `ofscraper/utils/of_env/values/req/req.py` |
-| <a id="max_sems_batch_download"></a>`OFSC_MAX_SEMS_BATCH_DOWNLOAD`<br>Key: `MAX_SEMS_BATCH_DOWNLOAD` | **Default:** `12` · **Defined in:** `ofscraper/utils/of_env/values/req/req.py` |
-| <a id="max_sems_single_thread_download"></a>`OFSC_MAX_SEMS_SINGLE_THREAD_DOWNLOAD`<br>Key: `MAX_SEMS_SINGLE_THREAD_DOWNLOAD` | **Default:** `50` · **Defined in:** `ofscraper/utils/of_env/values/req/req.py` |
-| <a id="max_thread_workers"></a>`OFSC_MAX_THREAD_WORKERS`<br>Key: `MAX_THREAD_WORKERS` | **Default:** `20` · **Defined in:** `ofscraper/utils/of_env/values/req/req.py` |
-| <a id="of_auth_min_wait"></a>`OFSC_AUTH_MIN_WAIT`<br>Key: `OF_AUTH_MIN_WAIT` | **Default:** `3.0` · **Defined in:** `ofscraper/utils/of_env/values/req/req.py` |
-| <a id="of_auth_max_wait"></a>`OFSC_AUTH_MAX_WAIT`<br>Key: `OF_AUTH_MAX_WAIT` | **Default:** `3.0` · **Defined in:** `ofscraper/utils/of_env/values/req/req.py` |
-| <a id="auth_num_tries"></a>`OFSC_AUTH_NUM_TRIES`<br>Key: `AUTH_NUM_TRIES` | **Default:** `3` · **Defined in:** `ofscraper/utils/of_env/values/req/req.py` |
-| <a id="message_sleep_default"></a>`OFSC_MESSAGE_SLEEP_DEFAULT`<br>Key: `MESSAGE_SLEEP_DEFAULT` | **Default:** `0` · **Defined in:** `ofscraper/utils/of_env/values/req/req.py` |
-| <a id="max_pinned_individual_search"></a>`OFSC_MAX_PINNED_INDIVIDUAL_SEARCH`<br>Key: `MAX_PINNED_INDIVIDUAL_SEARCH` | **Default:** `10` · **Defined in:** `ofscraper/utils/of_env/values/req/api.py` |
-| <a id="api_paid_num_tries"></a>`OFSC_API_PAID_NUM_TRIES`<br>Key: `API_PAID_NUM_TRIES` | **Default:** `8` · **Defined in:** `ofscraper/utils/of_env/values/req/api.py` |
-| <a id="api_check_num_tries"></a>`OFSC_API_CHECK_NUM_TRIES`<br>Key: `API_CHECK_NUM_TRIES` | **Default:** `10` · **Defined in:** `ofscraper/utils/of_env/values/req/api.py` |
-| <a id="api_request_threadonly"></a>`OFSC_API_REQUEST_THREADONLY`<br>Key: `API_REQUEST_THREADONLY` | **Default:** `['Windows', 'Linux', 'Darwin']` · **Defined in:** `ofscraper/utils/of_env/values/req/api.py` |
-| <a id="mpd_session_sleep_init"></a>`OFSC_MPD_SESSION_SLEEP_INIT`<br>Key: `MPD_SESSION_SLEEP_INIT` | **Default:** `45` · **Defined in:** `ofscraper/utils/of_env/values/req/mpd.py`<br>MPD requests use the standard `SESSION_*` values. |
-| <a id="cdm_test_timeout"></a>`OFSC_CDM_TEST_TIMEOUT`<br>Key: `CDM_TEST_TIMEOUT` | **Default:** `30` · **Defined in:** `ofscraper/utils/of_env/values/req/cdm.py` |
-| <a id="cdm_min_wait"></a>`OFSC_CDM_MIN_WAIT`<br>Key: `CDM_MIN_WAIT` | **Default:** `1.5` · **Defined in:** `ofscraper/utils/of_env/values/req/cdm.py` |
-| <a id="cdm_max_wait"></a>`OFSC_CDM_MAX_WAIT`<br>Key: `CDM_MAX_WAIT` | **Default:** `6.0` · **Defined in:** `ofscraper/utils/of_env/values/req/cdm.py` |
-| <a id="cdm_test_num_tries"></a>`OFSC_CDM_TEST_NUM_TRIES`<br>Key: `CDM_TEST_NUM_TRIES` | **Default:** `2` · **Defined in:** `ofscraper/utils/of_env/values/req/cdm.py` |
-| <a id="refreshscreen"></a>`OFSC_REFRESH_SCREEN`<br>Key: `refreshScreen` | **Default:** `50` · **Defined in:** `ofscraper/utils/of_env/values/general.py` |
-| <a id="large_trace_chunk_size"></a>`OFSC_LARGE_TRACE_CHUNK_SIZE`<br>Key: `LARGE_TRACE_CHUNK_SIZE` | **Default:** `100` · **Defined in:** `ofscraper/utils/of_env/values/general.py` |
-| <a id="suppress_log_level"></a>`OFSC_SUPPRESS_LOG_LEVEL`<br>Key: `SUPPRESS_LOG_LEVEL` | **Default:** `21` · **Defined in:** `ofscraper/utils/of_env/values/main.py` |
-| <a id="premium_default"></a>`OFSC_PREMIUM_DEFAULT`<br>Key: `PREMIUM_DEFAULT` | **Default:** `'Premium'` · **Defined in:** `ofscraper/utils/of_env/values/main.py` |
-| <a id="threads_default"></a>`OFSC_THREADS_DEFAULT`<br>Key: `THREADS_DEFAULT` | **Default:** `2` · **Defined in:** `ofscraper/utils/of_env/values/main.py` |
-| <a id="avatar_default"></a>`OFSC_AVATAR_DEFAULT`<br>Key: `AVATAR_DEFAULT` | **Default:** `True` · **Defined in:** `ofscraper/utils/of_env/values/main.py` |
-| <a id="discord_thread_override"></a>`OFSC_DISCORD_THREAD_OVERRIDE`<br>Key: `DISCORD_THREAD_OVERRIDE` | **Default:** `False` · **Defined in:** `ofscraper/utils/of_env/values/main.py` |
-| <a id="env_files_default"></a>`OFSC_ENV_FILES_DEFAULT`<br>Key: `ENV_FILES_DEFAULT` | **Default:** `''` · **Defined in:** `ofscraper/utils/of_env/values/main.py` |
-| <a id="empty_media_default"></a>`OFSC_EMPTY_MEDIA_DEFAULT`<br>Key: `EMPTY_MEDIA_DEFAULT` | **Default:** `{}` · **Defined in:** `ofscraper/utils/of_env/values/main.py` |
-| <a id="hourly_expiry"></a>`OFSC_HOURLY_EXPIRY`<br>Key: `HOURLY_EXPIRY` | **Default:** `3600` · **Defined in:** `ofscraper/utils/of_env/values/time.py` |
-| <a id="size_timeout"></a>`OFSC_SIZE_TIMEOUT`<br>Key: `SIZE_TIMEOUT` | **Default:** `1209600` · **Defined in:** `ofscraper/utils/of_env/values/time.py` |
-| <a id="download_live_display"></a>`OFSC_DOWNLOAD_LIVE_DISPLAY`<br>Key: `DOWNLOAD_LIVE_DISPLAY` | **Default:** `True` · **Defined in:** `ofscraper/utils/of_env/values/live.py` |
-| <a id="logger_timeout"></a>`OFSC_LOGGER_TIMEOUT`<br>Key: `LOGGER_TIMEOUT` | **Default:** `0.4` · **Defined in:** `ofscraper/utils/of_env/values/logger.py` |
-| <a id="forced_thread_timeout"></a>`OFSC_FORCED_THREAD_TIMEOUT`<br>Key: `FORCED_THREAD_TIMEOUT` | **Default:** `5` · **Defined in:** `ofscraper/utils/of_env/values/logger.py` |
-| <a id="logname"></a>`OFSC_LOGNAME`<br>Key: `logname` | **Default:** `'ofscraper'` · **Defined in:** `ofscraper/utils/of_env/values/logger.py` |
-| <a id="usernameorlistchoices"></a>`usernameOrListChoices`<br>*(bare key only)* | **Default:** a dict of 3 entries (see the source) · **Defined in:** `ofscraper/utils/of_env/values/prompts.py`<br>Menu entries for picking creators interactively. Not read from the environment. |
-| <a id="preferences"></a>`OFSC_PREFERENCES_FILE`<br>Key: `preferences` | **Default:** `'pref_config.py'` · **Defined in:** `ofscraper/utils/of_env/values/path/files.py` |
-| <a id="databasefile"></a>`OFSC_DATABASE_FILE_NAME`<br>Key: `databaseFile` | **Default:** `'models.db'` · **Defined in:** `ofscraper/utils/of_env/values/path/files.py` |
-| <a id="requestauth"></a>`OFSC_REQUEST_AUTH_FILE_NAME`<br>Key: `requestAuth` | **Default:** `'request_auth.json'` · **Defined in:** `ofscraper/utils/of_env/values/path/files.py` |
-| <a id="max_text_worker"></a>`OFSC_MAX_TEXT_WORKER`<br>Key: `MAX_TEXT_WORKER` | **Default:** `30` · **Defined in:** `ofscraper/utils/of_env/values/path/length.py` |
-| <a id="initep"></a>`OFSC_API_INIT_EP`<br>Key: `initEP` | **Default:** `'https://onlyfans.com/api2/v2/init'` · **Defined in:** `ofscraper/utils/of_env/values/url/url.py`<br>Initial API endpoint for session initialisation. |
-| <a id="subscriptionsep"></a>`OFSC_API_SUBSCRIPTIONS_EP`<br>Key: `subscriptionsEP` | **Default:** `'https://onlyfans.com/api2/v2/subscriptions/subscribes?offset={}&limit=10&type=all&format=infinite'` · **Defined in:** `ofscraper/utils/of_env/values/url/url.py`<br>Endpoint for all subscriptions. |
-| <a id="posturl"></a>`OFSC_POST_URL`<br>Key: `postURL` | **Default:** `'https://onlyfans.com/{}/{}'` · **Defined in:** `ofscraper/utils/of_env/values/url/url.py`<br>Base URL for a post on OnlyFans. |
-| <a id="donateep"></a>`OFSC_DONATE_EP`<br>Key: `donateEP` | **Default:** `'https://www.buymeacoffee.com/excludedBittern'` · **Defined in:** `ofscraper/utils/of_env/values/url/url.py`<br>The original author's donation link. |
-| <a id="highlightspecific"></a>`OFSC_HIGHLIGHT_SPECIFIC_EP`<br>Key: `highlightSPECIFIC` | **Default:** `'https://onlyfans.com/api2/v2/stories/highlights/{}'` · **Defined in:** `ofscraper/utils/of_env/values/url/url.py`<br>Endpoint for a specific highlight story. |
-| <a id="storiesspecific"></a>`OFSC_STORIES_SPECIFIC_EP`<br>Key: `storiesSPECIFIC` | **Default:** `'https://onlyfans.com/api2/v2/stories/{}'` · **Defined in:** `ofscraper/utils/of_env/values/url/url.py`<br>Endpoint for a specific story. |
-| <a id="messagetablespecific"></a>`OFSC_MESSAGE_TABLE_SPECIFIC_URL`<br>Key: `messageTableSPECIFIC` | **Default:** `'https://onlyfans.com/my/chats/{}/?id={}'` · **Defined in:** `ofscraper/utils/of_env/values/url/url.py`<br>Web UI URL for specific messages. |
-
-</details>
 
