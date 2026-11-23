@@ -43,3 +43,7 @@ redirects:
   command-reference/shared-options/scrape-metadata-options/post-filter-args: using-the-scraper/batch-scraping-and-bot-actions/basic-actions/selecting-posts/README.md
   command-reference/shared-options/scrape-metadata-options/general-scraper-args: using-the-scraper/batch-scraping-and-bot-actions/README.md
   command-reference/shared-options/scrape-metadata-options/advanced-search-and-processing-options: using-the-scraper/batch-scraping-and-bot-actions/advanced-args.md
+  getting-started/config-options/options/performance-options/values-to-pick: getting-started/config-options/performance-options/README.md
+  getting-started/config-options/options/download-options/advanced-download-options: getting-started/config-options/options/advanced-config-options.md
+  getting-started/config-options/options/download-options/download-toggles: getting-started/config-options/download-options/README.md
+  getting-started/config-options/options/download-options/media-filtering-options: getting-started/config-options/download-options/README.md
