@@ -27,7 +27,7 @@ These docs cover **cloakedkeys/OF-Scraper-Community**. Its releases start at **3
 
 ## Paid content (`--scrape-paid`)
 
-* **Skip a model** with `--excluded-username`, which now applies to `--scrape-paid` for both downloads and metadata runs. See [`--excluded-username`](command-reference/shared-options/scrape-metadata-options/user-selection-options.md). ([#121](https://github.com/cloakedkeys/OF-Scraper-Community/pull/121))
+* **Skip a model** with `--excluded-username`, which now applies to `--scrape-paid` for both downloads and metadata runs. See [`--excluded-username`](using-the-scraper/batch-scraping-and-bot-actions/model-selection-sorting/README.md#exclude-specific-models). ([#121](https://github.com/cloakedkeys/OF-Scraper-Community/pull/121))
 * **`--scrape-paid` no longer crashes** with `UnboundLocalError` on every run. ([#122](https://github.com/cloakedkeys/OF-Scraper-Community/pull/122))
 * **A Purchases scan that stops early** (HTTP error, unexpected response or exception) now logs a warning ending in "Purchases may be incomplete." ([#113](https://github.com/cloakedkeys/OF-Scraper-Community/pull/113))
 * **Deleted accounts found by the paid scan** are no longer also put through the normal scrape, where each one failed with `KeyError: 'avatar'`. Their purchases are still downloaded by the paid pass. ([#129](https://github.com/cloakedkeys/OF-Scraper-Community/pull/129))
@@ -42,7 +42,7 @@ These docs cover **cloakedkeys/OF-Scraper-Community**. Its releases start at **3
 
 * **`docker stop` and SIGTERM** stop a daemon-mode container promptly instead of waiting for Docker to kill it. ([#93](https://github.com/cloakedkeys/OF-Scraper-Community/pull/93))
 * **SIGTERM or Ctrl+C while the daemon waits between passes** exits cleanly instead of failing with `ValueError: task_done() called too many times` and exit status 1. ([#126](https://github.com/cloakedkeys/OF-Scraper-Community/pull/126))
-* **Trigger the next pass early** with SIGUSR1 (`docker kill --signal=SIGUSR1 <container>`) while the daemon is waiting. Docker/Linux only. See [`--daemon`](command-reference/shared-options/scrape-metadata-options/general-scraper-args.md). ([#125](https://github.com/cloakedkeys/OF-Scraper-Community/pull/125))
+* **Trigger the next pass early** with SIGUSR1 (`docker kill --signal=SIGUSR1 <container>`) while the daemon is waiting. Docker/Linux only. See [`--daemon`](using-the-scraper/batch-scraping-and-bot-actions/README.md#trigger-the-next-pass-early). ([#125](https://github.com/cloakedkeys/OF-Scraper-Community/pull/125))
 
 ## Docker
 
@@ -122,7 +122,7 @@ See [Docker](installation/docker.md) for details.
 
 ## Skips, size limits, `ofscraper db` and Stash (3.16.6)
 
-* **Size limits:** a file outside `-sm` / `-sx` is skipped, not failed, and tried again next run. A DRM video is checked as a whole. Rows the old behaviour saved as downloaded are repaired on first start. See [Media Filters Options](command-reference/shared-options/common-option-groups/media-filters-options.md#how-the-size-limits-work). ([#321](https://github.com/cloakedkeys/OF-Scraper-Community/pull/321), [#326](https://github.com/cloakedkeys/OF-Scraper-Community/pull/326), [#359](https://github.com/cloakedkeys/OF-Scraper-Community/pull/359))
+* **Size limits:** a file outside `-sm` / `-sx` is skipped, not failed, and tried again next run. A DRM video is checked as a whole. Rows the old behaviour saved as downloaded are repaired on first start. See [How the size limits work](using-the-scraper/batch-scraping-and-bot-actions/basic-actions/selecting-posts/README.md#how-the-size-limits-work). ([#321](https://github.com/cloakedkeys/OF-Scraper-Community/pull/321), [#326](https://github.com/cloakedkeys/OF-Scraper-Community/pull/326), [#359](https://github.com/cloakedkeys/OF-Scraper-Community/pull/359))
 * **`skip_download_script`:** `false` skips for this run only; `skip-permanent` skips for good, and `--retry-permanent-skips` or `ofscraper db --unmark-permanent-skips` undo it. See [Script Options](getting-started/config-options/script-options.md#skip-download-script-skip_download_script). ([#357](https://github.com/cloakedkeys/OF-Scraper-Community/pull/357), [#362](https://github.com/cloakedkeys/OF-Scraper-Community/pull/362))
 * **`ofscraper db` only reads:** databases open read-only, older databases work, and `--post-id` / `--media-id` match. See [Database Command](page/database-command.md). ([#374](https://github.com/cloakedkeys/OF-Scraper-Community/pull/374), [#365](https://github.com/cloakedkeys/OF-Scraper-Community/pull/365), [#362](https://github.com/cloakedkeys/OF-Scraper-Community/pull/362))
 * **Stash sync** copies your downloads' details into Stash. See [Organize Downloads in Stash](using-the-scraper/recipes/stash.md). ([#140](https://github.com/cloakedkeys/OF-Scraper-Community/pull/140))

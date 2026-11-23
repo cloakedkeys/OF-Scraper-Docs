@@ -5,5 +5,5 @@ How to run OF-Scraper: through the menus, by picking creators, or from the comma
 * [Using Prompts](using-prompts/README.md)
 * [Username selection or Fuzzy Search](username-selection-or-fuzzy-search.md)
 * [Basic Automation with command-line](batch-scraping-and-bot-actions/README.md)
-* [Scripts](recipes/scripts.md)
+* [Scraping Individual Posts or Media](scraping-individual-posts-or-media.md)
 * [Recipes](recipes/README.md)

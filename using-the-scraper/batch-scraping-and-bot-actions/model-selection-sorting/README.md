@@ -16,6 +16,8 @@ Pass a comma-separated list of creators to scrape:
 ofscraper --username name1,name2
 ```
 
+`--username` (`-u`; also `--usernames`, `--users`, `--user`) isn't case-sensitive: usernames match in any case, and an all-digit value also matches an account ID.
+
 #### Selecting all users
 
 ```sh
@@ -80,11 +82,28 @@ ofscraper --current-price free --active-subscription --username ALL
 
 ### Exclude specific models
 
-Takes precedence over `--username`, including `--username ALL`:
+`--excluded-username` (`-eu`) takes a comma-separated list and takes precedence over `--username`, including `--username ALL`:
 
 ```sh
 ofscraper --excluded-username username
 ```
+
+For example, `-u user1,user2 -eu user2` processes only `user1`.
+
+#### With --scrape-paid
+
+> ℹ️ **Since 3.15.0.** 3.14.7 and earlier ignore `--excluded-username` during `--scrape-paid`. See [Fork Changes](../../../fork-changes.md).
+
+The exclusion also applies to `--scrape-paid`, for both downloads and metadata runs, so you can skip one model that keeps failing without giving up the rest of the paid scan. Names are matched case-insensitively.
+
+```bash
+ofscraper --scrape-paid --excluded-username modelname
+ofscraper metadata --scrape-paid update --excluded-username modelname,othermodel
+```
+
+* A skipped model is logged (`Skipping <name>_<id>: excluded by --excluded-username`) and left out of the run's totals.
+* Its profile is still looked up to learn its username.
+* A deleted account can only be excluded by the username recorded for it in an earlier run. Without one it shows as `modeldeleted_<id>` and can't be matched by name.
 
 ### Filter by regular price
 
@@ -98,7 +117,26 @@ See [Price Filtering/Sort](price-filtering-sort.md).
 
 ### Advanced filtering
 
-[User List Filter Options](../../../command-reference/shared-options/scrape-metadata-options/account-filter-args/)
+Every filter, with its short form, is in [User List Filter Options](../../../reference/cli.md#user-list-filter-options) and [Advanced User List Filter Options](../../../reference/cli.md#advanced-user-list-filter-options). Filters can be combined.
+
+**Price:** `--current-price`, `--renewal-price`, `--promo-price` and `--regular-price` take `paid` or `free`. `--promo-price` uses the lowest promotional price, claimable or not, otherwise the regular price. The `-min` and `-max` forms (for example `--promo-price-max`) keep accounts whose price is at or above, or at or below, the given value. See [Price Filtering/Sort](price-filtering-sort.md) for how each price is worked out.
+
+**Account flags** (pick one of each pair):
+
+| Keep accounts | Option |
+|---|---|
+| Whose "last seen" time is visible / hidden | `--last-seen-only` / `--last-seen-skip` |
+| With / without a claimable promotional price | `--promo-only` / `--promo-skip` |
+| With / without any promotional price, claimable or not | `--all-promo-only` / `--all-promo-skip` |
+| In / not in a free trial (normally paid accounts) | `--free-trial-only` / `--free-trial-skip` |
+| With an active / expired subscription | `--active-subscription` / `--expired-subscription` |
+| With the "renew" flag on / off | `--renew-on` / `--renew-off` |
+
+**Dates:** `--last-seen-after`, `--last-seen-before`, `--expired-after`, `--expired-before`, `--subscribed-after` and `--subscribed-before` take a date. See [Valid Inputs](../basic-actions/selecting-posts/README.md#valid-inputs) for the formats.
+
+* The "last seen" time isn't available for every account.
+* When a model is set to renew, the expired date (and the `expired` sort) refers to the renewal date.
+* The subscription date isn't always reliable for expired accounts. Consider `--expired-after` (`-ea`) or `--expired-before` (`-eb`) instead.
 
 ***
 
@@ -157,6 +195,9 @@ Combine multiple lists by repeating `--userlist`:
 ```sh
 ofscraper --userlist "tiktok" --userlist "tiktok2"
 ```
+
+* Without `--userlist`, the list in `default_user_list` in `config.json` is used (`main` unless you change it).
+* Built-in lists: `main` (also `ofscraper.main`) means all your subscriptions. `ofscraper.active` and `ofscraper.expired` are your active and expired subscriptions. These names are reserved, so don't give any of your own lists these names.
 
 ***
 

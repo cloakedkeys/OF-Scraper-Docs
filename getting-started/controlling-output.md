@@ -10,7 +10,7 @@ description: various options for output
 
 ### Discord
 
-Sends output to your Discord channel.
+Sends output to your Discord channel. Set the level with `--discord` (`-dc`).
 
 > ℹ️ Discord logs contain only the log message, whereas other logs include additional details like function calls and line numbers.
 
@@ -30,7 +30,7 @@ Sends output to your Discord channel.
 
 ### Output
 
-Outputs to the console.
+Outputs to the console. Set the level with `--output` (`-p`). `--no-live-screen` (`-nl`, also `--no-live`, `--no-rich`) turns off the live displays: panels, spinners and progress bars.
 
 > ℹ️ For clear console output, set the logging level to `NORMAL` or lower to avoid excessive messages.
 
@@ -47,7 +47,7 @@ Outputs to the console.
 
 ### Log
 
-Outputs to a log file in the config folder (`~/.config/ofscraper/logging/`).
+Outputs to a log file in the config folder (`~/.config/ofscraper/logging/`). Set the level with `--log` (`-l`).
 
 *In ascending output order:*
 

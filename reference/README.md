@@ -18,6 +18,7 @@ The list pages are built from the code itself, so they match what the program ac
 <tr><td><strong>🗄️ Database tables</strong></td><td>What OF-Scraper remembers about each creator, and what writes each record.</td><td><a href="database.md">database.md</a></td></tr>
 <tr><td><strong>🧭 How settings and files work</strong></td><td>Which setting wins, which files get written, and where everything is saved.</td><td><a href="how-it-works.md">how-it-works.md</a></td></tr>
 <tr><td><strong>🧩 Hooks for add-ons</strong></td><td>Functions and events that code such as the GUI patch can use instead of copies of the scraper's files.</td><td><a href="hooks.md">hooks.md</a></td></tr>
+<tr><td><strong>🧪 Testing</strong></td><td>How to install the test dependencies and run the test suite from a clone.</td><td><a href="testing.md">testing.md</a></td></tr>
 </tbody></table>
 
 ## Common questions

@@ -44,42 +44,14 @@ With this config, the generated path is:
 
 ## dir\_path and filename
 
-> ℹ️ You can use placeholders without underscores (`_`).
+Every placeholder, with which template accepts it, is in [Placeholders](../../../reference/placeholders.md) in the Technical Reference. You can use placeholders without underscores (`_`), for example `{modelusername}`.
 
-| Placeholder | Meaning |
-|---|---|
-| `{response_type}` | `Posts`, `Messages`, `Archived`, `Stories`, `Profile`, `Streams` (paid content maps to `Messages` by default) |
-| `{post_id}` | ID of the post |
-| `{media_id}` | ID of the media |
-| `{file_name}` | The filename; videos include the quality (e.g. `source`, `720`) |
-| `{only_file_name}` | The filename without quality on videos |
-| `{original_filename}` | Filename as sent by OnlyFans (may or may not include `source`; `None` when the media has no URL). On Fansly it's the Fansly media ID; for text files it's the cleaned-up post text. |
-| `{media_type}` | `Images`, `Audios`, `Videos`, `Forced_skipped`, or `Text` (for text files) |
-| `{quality}` | Quality of the media; non-videos are always `source` |
-| `{value}` | Whether the content is categorised as `Paid` or `Free` |
-| `{model_id}` | Unique ID number for the creator |
-| `{first_letter}` | First letter of the creator's username |
-| `{site_name}` | `Onlyfans` or `Fansly` |
-| `{text}` | The post or message text. File name truncation is tested to fit within OS limits, though setting a `textlength` limit is still advisable. |
-| `{date}` | The post date, formatted with the `date` config setting |
-| `{model_username}` | The creator's username |
-| `{username}` | The creator's username |
-| `{profile}` | The currently active profile |
-| `{my_username}` | The authorised account's username |
-| `{my_id}` | The ID number for the authorised account |
-| `{label}` | The label assigned to the post, or the text `None` when the post has no label |
-| `{download_type}` | `Protected` or `Normal`, depending on whether decryption is needed |
-| `{current_price}` | `Free` if the current price is 0 dollars, otherwise `Paid` (`Unknown_Price` when the creator's details aren't loaded) |
-| `{regular_price}` | `Free` if the regular price is 0 dollars, otherwise `Paid` (`Unknown_Price` when the creator's details aren't loaded) |
-| `{promo_price}` | `Free` if the promo price is 0 dollars, otherwise `Paid` (`Unknown_Price` when the creator's details aren't loaded) |
-| `{renewal_price}` | `Free` if the renewal price is 0 dollars, otherwise `Paid` (`Unknown_Price` when the creator's details aren't loaded) |
-| `{args}` | The passed arguments namespace; access keys with dot (`.`) syntax |
-| `{config}` | The config dictionary; access keys with bracket (`[]`) syntax |
-| `{modelObj}` | The creator data class; access properties with dot (`.`) syntax |
-| `{config_path}` or `{configpath}` | Path to the current config directory |
-| `{root}` | A `pathlib.Path` of `{save_location}`: the save location with the Fansly subfolder on Fansly runs. It is the media root unless `dir_format` or `file_format` uses `{site_name}`. |
-| `{save_location}` | The configured save location. On Fansly runs it is `<save location>/Fansly`, even when `{site_name}` in `dir_format` or `file_format` drops that folder from the media path. |
-| `{user_name}` | The creator's username, the same as `{model_username}` (alias: `{username}`) |
+A few things worth knowing:
+
+* `{original_filename}` is the filename as sent by OnlyFans (it may or may not include `source`). On Fansly it's the Fansly media ID.
+* `{site_name}` is `Onlyfans` or `Fansly`.
+* `{text}` file name truncation is tested to fit within OS limits, though setting a `textlength` limit is still advisable.
+* `{root}` is the media root unless `dir_format` or `file_format` uses `{site_name}`. `{save_location}` is `<save location>/Fansly` on Fansly runs, even when `{site_name}` in `dir_format` or `file_format` drops that folder from the media path.
 
 ### dir\_path
 
@@ -89,13 +61,9 @@ The relative directory path within `save_location` where files are stored.
 
 ### filename
 
-The file's name segment in the saved path.
+The file's name segment in the saved path. It can also use `{ext}`, the file extension.
 
 > ℹ️ Include a unique element (such as `text`, `media_id`, `post_id`, or `filename`) to avoid naming conflicts.
-
-| Placeholder | Meaning |
-|---|---|
-| `{ext}` | The file extension of the media |
 
 ***
 
@@ -112,7 +80,7 @@ Some placeholders behave differently for text files:
 * `quality` is always `source`
 * `media_type` is always `"Text"`
 
-[Downloading Text Files](../../../using-the-scraper/batch-scraping-and-bot-actions/basic-actions/selecting-posts/downloading-text-files.md)
+[Downloading Text Files](../../../using-the-scraper/batch-scraping-and-bot-actions/basic-actions/selecting-posts/README.md#downloading-text-files)
 
 ***
 

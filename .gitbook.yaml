@@ -1,0 +1,45 @@
+# Space-level settings for Git Sync. gitbook-docs.yaml maps this space to the
+# repository root; this file only adds redirects for pages that were removed
+# or moved. Paths are relative to the root: old page path -> new page file.
+redirects:
+  request-change-to-doc: README.md
+  requirements: installation/pre-install-guide/README.md
+  testing: reference/testing.md
+  scraping-individual-posts-or-media: using-the-scraper/scraping-individual-posts-or-media.md
+  getting-started/advanced-customization: getting-started/config-options/options/advanced-config-options.md
+  getting-started/config-options/performance-options/values-to-pick: getting-started/config-options/performance-options/README.md
+  getting-started/config-options/download-options/advanced-download-options: getting-started/config-options/options/advanced-config-options.md
+  getting-started/config-options/download-options/download-toggles: getting-started/config-options/download-options/README.md
+  getting-started/config-options/download-options/media-filtering-options: getting-started/config-options/download-options/README.md
+  using-the-scraper/using-prompts/old-menu: using-the-scraper/using-prompts/README.md
+  using-the-scraper/batch-scraping-and-bot-actions/scripting-tips: installation/binary-releases.md
+  using-the-scraper/batch-scraping-and-bot-actions/enable-label-scan: using-the-scraper/batch-scraping-and-bot-actions/basic-actions/selecting-posts/README.md
+  using-the-scraper/batch-scraping-and-bot-actions/basic-actions/multiple-actions: using-the-scraper/batch-scraping-and-bot-actions/basic-actions/README.md
+  using-the-scraper/batch-scraping-and-bot-actions/basic-actions/selecting-posts/deleted-models: using-the-scraper/batch-scraping-and-bot-actions/basic-actions/selecting-posts/README.md
+  using-the-scraper/batch-scraping-and-bot-actions/basic-actions/selecting-posts/downloading-text-files: using-the-scraper/batch-scraping-and-bot-actions/basic-actions/selecting-posts/README.md
+  content-check-modes/table-columns: content-check-modes/table-management/README.md
+  content-check-modes/table-management/pre-3.10.7-filtering: content-check-modes/table-management/README.md
+  page/schema: reference/database.md
+  page/creating-metadata: page/README.md
+  page/metadata-location: page/README.md
+  command-reference/main-scraper-options: command-reference/README.md
+  command-reference/metadata-check-mode-options: page/README.md
+  command-reference/content-check-mode-args: content-check-modes/README.md
+  command-reference/manual-mode-args: using-the-scraper/scraping-individual-posts-or-media.md
+  command-reference/shared-options: command-reference/README.md
+  command-reference/shared-options/common-option-groups: command-reference/README.md
+  command-reference/shared-options/common-option-groups/global-args: using-the-scraper/batch-scraping-and-bot-actions/advanced-args.md
+  command-reference/shared-options/common-option-groups/logging: getting-started/controlling-output.md
+  command-reference/shared-options/common-option-groups/filename-modification-options: using-the-scraper/batch-scraping-and-bot-actions/README.md
+  command-reference/shared-options/common-option-groups/media-filters-options: using-the-scraper/batch-scraping-and-bot-actions/basic-actions/selecting-posts/README.md
+  command-reference/shared-options/common-option-groups/download-options: reference/cli.md
+  command-reference/shared-options/common-option-groups/advanced-args: using-the-scraper/batch-scraping-and-bot-actions/advanced-args.md
+  command-reference/shared-options/common-option-groups/script-options: getting-started/config-options/script-options.md
+  command-reference/shared-options/scrape-metadata-options: command-reference/README.md
+  command-reference/shared-options/scrape-metadata-options/account-filter-args: using-the-scraper/batch-scraping-and-bot-actions/model-selection-sorting/README.md
+  command-reference/shared-options/scrape-metadata-options/account-filter-args/advanced-user-filters: using-the-scraper/batch-scraping-and-bot-actions/model-selection-sorting/README.md
+  command-reference/shared-options/scrape-metadata-options/user-selection-options: using-the-scraper/batch-scraping-and-bot-actions/model-selection-sorting/README.md
+  command-reference/shared-options/scrape-metadata-options/account-sorting-args: using-the-scraper/batch-scraping-and-bot-actions/model-selection-sorting/README.md
+  command-reference/shared-options/scrape-metadata-options/post-filter-args: using-the-scraper/batch-scraping-and-bot-actions/basic-actions/selecting-posts/README.md
+  command-reference/shared-options/scrape-metadata-options/general-scraper-args: using-the-scraper/batch-scraping-and-bot-actions/README.md
+  command-reference/shared-options/scrape-metadata-options/advanced-search-and-processing-options: using-the-scraper/batch-scraping-and-bot-actions/advanced-args.md

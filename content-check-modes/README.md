@@ -143,3 +143,12 @@ In each mode, creator data is cached (3 days for `msg_check`). Add `--force` to 
 ```sh
 ofscraper msg_check --url url --force
 ```
+
+### Other check options
+
+The full list for each command is in [Command-line options](../reference/cli.md#commands). Run `ofscraper <subcommand> --help` to see it too.
+
+* **Text:** `--text` (`-tn`) downloads text alongside the media tied to it, and `--text-only` (`-tp`) downloads only text. They work in `post_check`, `msg_check` and `paid_check` (not `story_check`), and can't be used together.
+* **Post areas (`post_check` only):** `--check-area` (`-ca`) picks the areas: `all`, `archived`, `timeline`, `pinned`, `labels` or `streams`, separated by spaces. `--timeline-strict` (`-tls`) removes pinned and archived posts when `timeline` is picked.
+* **Table filters:** `-ucl, --unlocked` or `-lc, --locked`, `-dwl, --downloaded` or `-ndw, --not-downloaded`, `-pf, --posted-after`, `-pb, --posted-before`, `-mid, --media-id`, `-pd, --post-id`, `-to, --protected-only` or `-no, --normal-only`, `-lx, --length-max`, `-lm, --length-min`, `-mt, --mediatype`, `-mdc, --media-desc`, `-sm, --size-min` and `-sx, --size-max`.
+* **Sorting:** `-mst, --media-sort` here takes `number`, `username`, `downloaded`, `unlocked`, `length`, `mediatype`, `post_date`, `post_media_count`, `responsetype`, `price`, `post_id`, `media_id` or `text`.

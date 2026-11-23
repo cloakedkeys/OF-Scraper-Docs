@@ -42,11 +42,23 @@ Manual mode downloads again even if the file is already in the database.
 
 Check `get_info` in `manual.py` to see the full range of URL formats accepted by manual mode.
 
+### Manual mode options
+
+```sh
+ofscraper manual [options]
+```
+
+* **Sources:** give exactly one of `--url` (`-u`), one or more URLs separated by spaces or commas, or `--file` (`-f`), a file with one URL or post ID per line.
+* **`--force` (`-fo`):** fetches the post information from the API again instead of using the cache.
+* **Text:** `--text` (`-tn`) downloads text alongside the media tied to it, and `--text-only` (`-tp`) downloads only text. They can't be used together.
+
+The full list is under [`manual`](../reference/cli.md#manual) in Command-line options.
+
 ***
 
 ## Scraping Individual Media
 
-1. **Run a content check mode:** See [Content Check Modes](content-check-modes/).
+1. **Run a content check mode:** See [Content Check Modes](../content-check-modes/).
 2. **Select rows to download:** Click a row's **Download Cart** cell, or use the cart keys `a`, `e`, or `u`. (`;` and `'` copy the highlighted cell's value into that column's filter.)
    * Only unlocked media can be added; rows showing `Not Unlocked` or `Unknown` can't be added.
    * Media marked for download shows `[added]`.

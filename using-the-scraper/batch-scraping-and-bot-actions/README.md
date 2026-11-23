@@ -90,13 +90,24 @@ For daemon mode to run, you must select at least one scraping action.
 ofscraper --daemon 10 --posts all --action like,download
 ```
 
-This runs at least every 10 minutes. If a run takes longer than 10 minutes, the next run starts immediately after the previous one finishes.
+This runs at least every 10 minutes. If a run takes longer than 10 minutes, the next run starts immediately after the previous one finishes. `--daemon` (`-d`) takes the interval in minutes, and decimals are allowed.
 
-On Linux and in Docker, send `SIGUSR1` while the daemon is waiting between runs to start the next run early. It is ignored while a run is active:
+### Trigger the next pass early
+
+> ℹ️ **Since 3.15.0, Docker/Linux.** See [Fork Changes](../../fork-changes.md).
+
+While the daemon is waiting between runs, send `SIGUSR1` to start the next run without restarting it:
 
 ```sh
 docker kill --signal=SIGUSR1 <container>
 ```
+
+Outside Docker, `kill -USR1 <pid>` does the same.
+
+* The signal is ignored during an active run. Repeated signals don't queue extra runs.
+* After the triggered run, the normal interval starts again.
+* SIGTERM and Ctrl+C still shut the daemon down, including while it's waiting between runs.
+* Native Windows has no SIGUSR1, so this isn't available there.
 
 ***
 
@@ -109,6 +120,21 @@ docker kill --signal=SIGUSR1 <container>
 ```sh
 ofscraper --text-type letter
 ```
+
+* `word` splits the text placeholder into words (on `space_replacer`, or a space) and counts words.
+* `letter` counts characters.
+
+### Other filename options
+
+These override the matching [File Output Options](../../getting-started/config-options/file-output-options/README.md) for one run:
+
+| Option | What it does | Example |
+|---|---|---|
+| `--textlength` (`-tl`) | Maximum length of the text placeholder, in the `--text-type` unit. Keeps long post text within OS limits. | `-tt letter -tl 10` keeps at most 10 characters |
+| `--space-replacer` (`-sr`) | Replaces spaces in the filename text with the given character, for file systems or apps that don't handle spaces well. | `-sr _` turns `This File.txt` into `This_File.txt` |
+| `--original` (`-g`) | Turns off truncation of long file paths, so names aren't shortened. | `-g` |
+
+When truncation happens, it uses the `--text-type` unit, the `--textlength` length and the current OS limits.
 
 ***
 

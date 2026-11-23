@@ -18,7 +18,7 @@ Customise the final file path for downloads:
 
 Customise which files are downloaded:
 
-* [Media Filtering Options](download-options/media-filtering-options.md)
+* [Media Filtering Options](download-options/README.md#media-filtering-options)
 
 ***
 

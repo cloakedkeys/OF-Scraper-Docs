@@ -47,7 +47,7 @@ The container is managed by an entrypoint script that creates a non-root user to
 * **Non-root containers start.** With `docker run --user 1234:1234` or compose `user:`, the entrypoint skips user creation and `chown`, and runs as that user. Mounted folders must already be writable by it.
 * **ffmpeg works on arm64.** Every image includes ffmpeg: amd64 uses `pyffmpeg`'s ffmpeg, and arm64 uses a static ffmpeg 9.0.2.
 * **`docker stop` works in daemon mode.** SIGTERM stops the scraper promptly instead of waiting for Docker to kill it, including while it's waiting between passes.
-* **Start the next daemon pass early** with `docker kill --signal=SIGUSR1 <container>`. See [`--daemon`](../command-reference/shared-options/scrape-metadata-options/general-scraper-args.md).
+* **Start the next daemon pass early** with `docker kill --signal=SIGUSR1 <container>`. See [`--daemon`](../using-the-scraper/batch-scraping-and-bot-actions/README.md#trigger-the-next-pass-early).
 
 ### User and Group Identity
 

@@ -68,7 +68,7 @@ python -m ofscraper.commands.postgres_export <folder>
 
 ## Tools that run on their own
 
-`stash_sync`, `recover_collisions`, `move_creator_files` and `scripts/creator_names.py` work on PostgreSQL when you add `--postgres`. They find it only through `OFSC_DATABASE_URL` in the environment they are run in, not through the scraper's `env_files`. See [Organize Downloads in Stash](../using-the-scraper/recipes/stash.md), [Recover Filename Collisions](../using-the-scraper/recipes/recover-filename-collisions.md) for each tool, and [POSTGRESQL.md](https://github.com/cloakedkeys/OF-Scraper-Community/blob/main/POSTGRESQL.md) for its `--postgres` options.
+`stash_sync`, `recover_collisions`, `move_creator_files` and `scripts/creator_names.py` work on PostgreSQL when you add `--postgres`. They find it only through `OFSC_DATABASE_URL` in the environment they are run in, not through the scraper's `env_files`. See [Organize Downloads in Stash](../using-the-scraper/recipes/stash.md), [Recover Filename Collisions](../using-the-scraper/recipes/recover-filename-collisions.md) and [Move a Creator's Files](../using-the-scraper/recipes/move-creator-files.md) for each tool, and [POSTGRESQL.md](https://github.com/cloakedkeys/OF-Scraper-Community/blob/main/POSTGRESQL.md) for its `--postgres` options.
 
 ## What is different
 

@@ -8,7 +8,7 @@ OF-Scraper is a command-line tool that lets you download media from OnlyFans and
 
 ## Installation
 
-* [Requirements](requirements.md)
+* [Requirements](installation/pre-install-guide/README.md#requirements)
 * [Install](installation/)
 
 ***
@@ -17,3 +17,9 @@ OF-Scraper is a command-line tool that lets you download media from OnlyFans and
 
 * [Getting Started and Settings](getting-started/)
 * [FAQ/Common Issues](faq/)
+
+***
+
+## Found a mistake in these docs?
+
+Found a mistake, something out of date, or a page that doesn't make sense? Open an issue on [GitHub Issues](https://github.com/cloakedkeys/OF-Scraper-Community/issues) and say which page and what's wrong.

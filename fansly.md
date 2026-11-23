@@ -98,14 +98,14 @@ Fansly credentials are kept in `fansly_auth.json` in the profile folder, not in 
 
 ## Livestreams
 
-These options only apply to Fansly profiles and do nothing on OnlyFans.
+These options only apply to Fansly profiles and do nothing on OnlyFans. They're accepted by the main program (no subcommand).
 
 | Option | What it does |
 | --- | --- |
 | `--live` | Record the selected creators who are live now (all followed creators without `-u`), then continue |
 | `--live-watch` | Keep checking who is live and record them. With `--daemon` it runs beside the scheduled scrapes |
-| `--live-interval` | Seconds between live checks in `--live-watch` (default 60, plus up to 10 seconds of jitter) |
-| `--live-max` | Most livestreams recorded at the same time (default 2) |
+| `--live-interval` | Seconds between live checks in `--live-watch` (whole number, at least 10; default 60, plus up to 10 seconds of jitter) |
+| `--live-max` | Most livestreams recorded at the same time (whole number, at least 1; default 2) |
 | `--live-chat` | Also save the livestream chat to a `.jsonl` file. Off by default |
 
 Recordings are saved as MP4 with a `.json` file beside them. If a recording drops, it continues in a new part. Stopping a recording (Ctrl+C with `--live`, or daemon shutdown) tells ffmpeg to finish and close the file, so what was recorded is kept. ffmpeg is killed only if it hasn't exited after 15 seconds.
