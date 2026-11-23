@@ -1,5 +1,16 @@
 # Downloading Content
 
+## Contents
+
+* [Selecting Posts](#selecting-posts)
+* [Labels](#labels)
+* [Downloading Text Files](#downloading-text-files)
+* [Bypass dupe check](#bypass-dupe-check)
+* [Filtering media](#filtering-media)
+* [Filter Post by Date](#filter-post-by-date)
+* [Filtering Timed Post (Promotional)](#filtering-timed-post-promotional)
+* [Search entire paid page](#search-entire-paid-page)
+
 ## Selecting Posts
 
 ### By post type

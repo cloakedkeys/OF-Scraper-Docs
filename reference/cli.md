@@ -1,4 +1,4 @@
-> ℹ️ This page is copied from the fork's `reference/` folder and is regenerated there. Don't edit it here; run `scripts/sync_reference.py` to refresh it.
+<!-- Copied from the fork's reference/ folder. Don't edit by hand: edit the fork and run scripts/sync_reference.py. -->
 
 # Command-line reference
 

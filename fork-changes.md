@@ -8,6 +8,35 @@ These docs cover **cloakedkeys/OF-Scraper-Community**. Its releases start at **3
 
 > ℹ️ **`ofscraper` 3.14.7 and older on PyPI have none of the changes below.** Install `ofscraper-community`, or update `ofscraper`. See [Install](installation/).
 
+## Contents
+
+* [Downloads and file names](#downloads-and-file-names)
+* [DRM (protected video)](#drm-protected-video)
+* [Paid content (`--scrape-paid`)](#paid-content-scrape-paid)
+* [Metadata](#metadata)
+* [Daemon mode](#daemon-mode)
+* [Docker](#docker)
+* [Fansly (3.16.0)](#fansly-3.16.0)
+* [Requests and downloads (3.16.0)](#requests-and-downloads-3.16.0)
+* [Login and logs (3.16.0)](#login-and-logs-3.16.0)
+* [Command line (3.16.0 and 3.16.1)](#command-line-3.16.0-and-3.16.1)
+* [Settings and environment (3.16.0 and 3.16.1)](#settings-and-environment-3.16.0-and-3.16.1)
+* [Database, rate limits and likes (3.16.1)](#database-rate-limits-and-likes-3.16.1)
+* [Scripts and docs (3.15.1 to 3.16.1)](#scripts-and-docs-3.15.1-to-3.16.1)
+* [Downloads, logs and output (3.16.2)](#downloads-logs-and-output-3.16.2)
+* [Resume and install (3.16.3 and 3.16.4)](#resume-and-install-3.16.3-and-3.16.4)
+* [Fansly labels and quality (3.16.5)](#fansly-labels-and-quality-3.16.5)
+* [Skips, size limits, `ofscraper db` and Stash (3.16.6)](#skips-size-limits-ofscraper-db-and-stash-3.16.6)
+* [Security and scripts (3.16.7)](#security-and-scripts-3.16.7)
+* [Stopping, Esc and the check table (3.16.8 and 3.16.9)](#stopping-esc-and-the-check-table-3.16.8-and-3.16.9)
+* [Fansly streams and UTF-8 scripts (3.16.10)](#fansly-streams-and-utf-8-scripts-3.16.10)
+* [Downloads after an IP change (3.16.11 to 3.16.13)](#downloads-after-an-ip-change-3.16.11-to-3.16.13)
+* [Check table and creator picker (3.17.0)](#check-table-and-creator-picker-3.17.0)
+* [Settings, scans and labels (3.17.0)](#settings-scans-and-labels-3.17.0)
+* [Fansly links, rate limits and Python (3.17.1)](#fansly-links-rate-limits-and-python-3.17.1)
+* [Python](#python)
+* [Version check](#version-check)
+
 ## Downloads and file names
 
 * **Different media no longer overwrite each other** when a file name template gives them the same name (for example a template built on `{text}` or `{model_username}`). The download is saved as `name_<media_id>` instead, and the database records the name each file was actually saved under. Controlled by [`filename_collision`](getting-started/config-options/file-output-options/#filename_collision). ([#116](https://github.com/cloakedkeys/OF-Scraper-Community/pull/116))

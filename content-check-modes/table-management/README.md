@@ -1,5 +1,15 @@
 # Table Management
 
+## Contents
+
+* [Tabs](#tabs)
+* [Columns](#columns)
+* [Picking media (the cart)](#picking-media-the-cart)
+* [Downloading](#downloading)
+* [Opening the download folder](#opening-the-download-folder)
+* [Sorting the table](#sorting-the-table)
+* [Filtering of the table](#filtering-of-the-table)
+
 ## Tabs
 
 * **DataTable:** every media item, a page at a time.

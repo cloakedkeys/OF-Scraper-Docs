@@ -1,5 +1,36 @@
 # FAQ/Common Issues
 
+## Contents
+
+* [1. Missing Post](#id-1.-missing-post)
+* [2. Number of users doesn't match account number](#id-2.-number-of-users-doesnt-match-account-number)
+* [3. Missing Models](#id-3.-missing-models)
+* [4. Lots of tempvideo or tempaudio files](#id-4.-lots-of-tempvideo-or-tempaudio-files)
+* [5. Something is not working](#id-5.-something-is-not-working)
+* [6. FFMPEG](#id-6.-ffmpeg)
+* [7. ofscraper not found](#id-7.-ofscraper-not-found)
+* [8. Can this download locked content](#id-8.-can-this-download-locked-content)
+* [9. Status Down](#id-9.-status-down)
+* [10. 404 Response](#id-10.-404-response)
+* [11. Request taking a long time](#id-11.-request-taking-a-long-time)
+* [12. 429 Response](#id-12.-429-response)
+* [13. 409 Response](#id-13.-409-response)
+* [14. Scrape entire paid page or --scrape-paid should I do it](#id-14.-scrape-entire-paid-page-or-scrape-paid-should-i-do-it)
+* [15. FFmpeg shared library not found Error](#id-15.-ffmpeg-shared-library-not-found-error)
+* [16. CDM Issues](#id-16.-cdm-issues)
+* [17. Trouble logging in](#id-17.-trouble-logging-in)
+* [18. Support For Network Drives](#id-18.-support-for-network-drives)
+* [19. "Double check auth info"](#id-19.-double-check-auth-info)
+* [20. "No accounts found during scan"](#id-20.-no-accounts-found-during-scan)
+* [21. Files download fine but are counted as "failed"](#id-21.-files-download-fine-but-are-counted-as-failed)
+* [22. Some messages or new posts are missing](#id-22.-some-messages-or-new-posts-are-missing)
+* [23. ffmpeg isn't found even though it's installed](#id-23.-ffmpeg-isnt-found-even-though-its-installed)
+* [24. It says to update to 3.14.7](#id-24.-it-says-to-update-to-3.14.7)
+* [25. Two files saved with the same name overwrote each other](#id-25.-two-files-saved-with-the-same-name-overwrote-each-other)
+* [26. Fansly login or download problems](#id-26.-fansly-login-or-download-problems)
+* [27. Downloads fail with 403 after a reconnect or VPN switch](#id-27.-downloads-fail-with-403-after-a-reconnect-or-vpn-switch)
+* [28. Files skipped by the size limits or skip script come back](#id-28.-files-skipped-by-the-size-limits-or-skip-script-come-back)
+
 ## 1. Missing Post
 
 Some creators delete content, which prevents OF-Scraper from accessing it.

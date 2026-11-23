@@ -1,5 +1,16 @@
 # Model Filtering/Sorting
 
+## Contents
+
+* [Filter/Sort List By Price](#filter-sort-list-by-price)
+* [Selecting Specific models from command-line](#selecting-specific-models-from-command-line)
+* [Filtering username list](#filtering-username-list)
+* [Sorting username list](#sorting-username-list)
+* [Retrieving specific list](#retrieving-specific-list)
+* [Blocking list of Names](#blocking-list-of-names)
+
+***
+
 ***
 
 ## Filter/Sort List By Price

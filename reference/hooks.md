@@ -1,8 +1,10 @@
+<!-- Copied by hand from the fork's reference/hooks.md. Don't edit by hand here: change it in the fork first, then copy it over. -->
+
 # Hooks for add-ons
 
 Code that runs in the same process as the scraper, such as the GUI patch or a plugin, can use the functions and events on this page instead of shipping changed copies of the scraper's files. Each entry gives the module, how to call it, what it gives back, and, where it matters, how it behaves with PostgreSQL on. The [GUI patch migration map](#gui-patch-migration-map) at the end says which part of the GUI patch's copied files each one can replace.
 
-> ℹ️ **In releases after 3.17.1.** This page is copied by hand from the fork's `reference/hooks.md`. Change it there first. Check an entry against the code before relying on it.
+> ℹ️ **In releases after 3.17.1.** Check an entry against the code before relying on it.
 
 ## Quick reference
 

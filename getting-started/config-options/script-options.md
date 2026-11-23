@@ -2,6 +2,15 @@
 
 See [Scripts](../../using-the-scraper/recipes/scripts.md) for examples.
 
+## Contents
+
+* [After Action Script (`after_action_script`)](#after-action-script-after_action_script)
+* [Post Script (`post_script`)](#post-script-post_script)
+* [Naming Script (`naming_script`)](#naming-script-naming_script)
+* [After Download Script (`after_download_script`)](#after-download-script-after_download_script)
+* [Skip Download Script (`skip_download_script`)](#skip-download-script-skip_download_script)
+* [How scripts run](#how-scripts-run)
+
 ## After Action Script (`after_action_script`)
 
 Runs after an action for a creator completes. Configure with `--after-action-script` or `after_action_script` in `config.json`.
