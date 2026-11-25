@@ -9,8 +9,6 @@ layout:
 
 Code that runs in the same process as the scraper, such as the GUI patch or a plugin, can use the functions and events on this page instead of shipping changed copies of the scraper's files. Each entry gives the module, how to call it, what it gives back, and, where it matters, how it behaves with PostgreSQL on. The [GUI patch migration map](#gui-patch-migration-map) at the end says which part of the GUI patch's copied files each one can replace.
 
-> ℹ️ **Since 3.18.0.** Check an entry against the code before relying on it.
-
 ## Contents
 
 - [Quick reference](#quick-reference)

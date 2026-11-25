@@ -80,4 +80,4 @@ python -m ofscraper.commands.postgres_export <folder>
 ## What doesn't use it yet
 
 * **Merge Databases** works on `user_data.db` files only, and says so on its screen.
-* **The GUI patch:** scraping, downloads, metadata updates and the check tables go through the scraper, so they use PostgreSQL. Its results table, purge and "new since last run" read the `user_data.db` files themselves, so they see only the old files. Developers: [Hooks for add-ons](../reference/hooks.md) lists the reads the GUI can use instead.
+* **The GUI patch:** scraping, downloads, metadata updates and the check tables go through the scraper, so they use PostgreSQL. Its results table, purge and "new since last run" read the `user_data.db` files themselves, so they see only the old files. Developers: [Hooks for add-ons](../reference/hooks.md#database-reads) lists the reads the GUI can use instead.
